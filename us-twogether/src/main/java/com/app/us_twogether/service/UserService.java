@@ -24,6 +24,8 @@ public class UserService {
         if (userRepository.existsById(newUser.getUsername())) {
             throw new DataAlreadyExistsException("Usuário '" + newUser.getUsername() + "' já está cadastrado.");
         }
+        ValidationsCPF(newUser.getCpf());
+        newUser.getNotificationUser();
         return userRepository.save(newUser);
     }
 
