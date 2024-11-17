@@ -2,6 +2,7 @@ package com.app.us_twogether.service;
 
 import com.app.us_twogether.exception.DataAlreadyExistsException;
 import com.app.us_twogether.model.User;
+import com.app.us_twogether.repository.NotificationUserRepository;
 import com.app.us_twogether.repository.UserRepository;
 import com.app.us_twogether.util.ValidationCPF;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,9 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private NotificationUserRepository notificationUserRepository;
+
     public Optional<User> findByUsername(String username) {
         return userRepository.findById(username);
     }
@@ -25,7 +29,6 @@ public class UserService {
             throw new DataAlreadyExistsException("Usuário '" + newUser.getUsername() + "' já está cadastrado.");
         }
         ValidationsCPF(newUser.getCpf());
-        newUser.getNotificationUser();
         return userRepository.save(newUser);
     }
 
@@ -39,6 +42,7 @@ public class UserService {
             user.setEmail(updatedUser.getEmail());
             user.setPhoneNumber(updatedUser.getPhoneNumber());
             user.setType(updatedUser.getType());
+            user.setNotificationUser(updatedUser.getNotificationUser());
 
             if (ValidationsCPF(updatedUser.getCpf())) {
                 user.setCpf(updatedUser.getCpf());
