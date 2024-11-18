@@ -4,7 +4,6 @@ import com.app.us_twogether.exception.DataAlreadyExistsException;
 import com.app.us_twogether.model.User;
 import com.app.us_twogether.repository.NotificationUserRepository;
 import com.app.us_twogether.repository.UserRepository;
-import com.app.us_twogether.util.ValidationCPF;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -28,7 +27,6 @@ public class UserService {
         if (userRepository.existsById(newUser.getUsername())) {
             throw new DataAlreadyExistsException("Usuário '" + newUser.getUsername() + "' já está cadastrado.");
         }
-        ValidationsCPF(newUser.getCpf());
         return userRepository.save(newUser);
     }
 
@@ -43,11 +41,6 @@ public class UserService {
             user.setPhoneNumber(updatedUser.getPhoneNumber());
             user.setType(updatedUser.getType());
             user.setNotificationUser(updatedUser.getNotificationUser());
-
-            if (ValidationsCPF(updatedUser.getCpf())) {
-                user.setCpf(updatedUser.getCpf());
-            }
-
             return Optional.of(userRepository.save(user));
         }
 
@@ -56,18 +49,6 @@ public class UserService {
 
     public List<User> getAllUsers() {
         return userRepository.findAll();
-    }
 
-    public Boolean ValidationsCPF(String cpf) {
-        if (userRepository.findBycpf(cpf).isPresent()) {
-            throw new DataAlreadyExistsException("O CPF '" + cpf + "' já foi cadastrado.");
-        }
-        if (cpf == null) {
-            return false;
-        }
-
-        ValidationCPF.Valid(cpf); //valida se o CPF é válido
-
-        return true;
     }
 }
