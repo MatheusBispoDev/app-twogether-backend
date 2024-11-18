@@ -20,7 +20,7 @@ public class TokenService {
     public String generateToken(User user){
         try {
             Algorithm algorithm = Algorithm.HMAC256(secret);
-            String token = JWT.create().withIssuer("ustwogether-auth-api").withSubject(user.getUsername()).withExpiresAt(generateExpirationDate()).sign(algorithm);
+            String token = JWT.create().withIssuer("ustwogether-auth-api").withSubject(user.getUsername()).sign(algorithm);
 
             return token;
         } catch (JWTCreationException exception) {
@@ -36,9 +36,5 @@ public class TokenService {
         } catch (JWTCreationException exception) {
             return "";
         }
-    }
-
-    private Instant generateExpirationDate() {
-        return LocalDateTime.now().plusHours(2).toInstant(ZoneOffset.of("-03:00"));
     }
 }
