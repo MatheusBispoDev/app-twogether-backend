@@ -30,12 +30,6 @@ public class UserController {
         return userService.getAllUsers();
     }
 
-    @PostMapping
-    public ResponseEntity<User> createUser(@RequestBody User user) {
-        User savedUser = userService.saveUser(user);
-        return ResponseEntity.ok(savedUser);
-    }
-
     @PutMapping("/{username}")
     public ResponseEntity<User> updateUser(
             @PathVariable String username,
