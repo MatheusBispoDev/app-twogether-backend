@@ -1,7 +1,4 @@
 package com.app.us_twogether.dto;
 
-public class NotificationUserDTO {
-    private int NotificationUserId;
-    private String title;
-    private String description;
+public record NotificationUserDTO(int NotificationUserId, String title, String description) {
 }

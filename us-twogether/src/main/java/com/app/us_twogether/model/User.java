@@ -43,6 +43,15 @@ public class User implements UserDetails {
         this.type = type;
     }
 
+    public User(String username, String password){
+        this.username = username;
+        this.password = password;
+        this.name = "";
+        this.email = "";
+        this.phoneNumber = "";
+        this.type = "";
+    }
+
     @PrePersist
     public void setDefaultNotificationUser() {
         if (this.notificationUser == null) {
@@ -52,30 +61,30 @@ public class User implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of();
+        return List.of(() -> "read");
     }
 
     @Override
     public boolean isAccountNonExpired() {
         //Todo: Fazer validação
-        return UserDetails.super.isAccountNonExpired();
+        return true;
     }
 
     @Override
     public boolean isAccountNonLocked() {
         //Todo: Fazer validação
-        return UserDetails.super.isAccountNonLocked();
+        return true;
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
         //Todo: Fazer validação
-        return UserDetails.super.isCredentialsNonExpired();
+        return true;
     }
 
     @Override
     public boolean isEnabled() {
         //Todo: Fazer validação
-        return UserDetails.super.isEnabled();
+        return true;
     }
 }
