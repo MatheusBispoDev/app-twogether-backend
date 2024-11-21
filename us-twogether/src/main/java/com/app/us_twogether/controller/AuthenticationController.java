@@ -9,11 +9,8 @@ import com.app.us_twogether.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-
-
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -42,8 +39,7 @@ public class AuthenticationController {
 
     @PostMapping("/register")
     public ResponseEntity register(@RequestBody @Valid UserDTO userDTO){
-        String encryptedPassword = new BCryptPasswordEncoder().encode(userDTO.password());
-        User newUser = new User(userDTO.username(), encryptedPassword, userDTO.name(), userDTO.email(), userDTO.phoneNumber(), userDTO.type());
+        User newUser = new User(userDTO.username(), userDTO.password(), userDTO.name(), userDTO.email(), userDTO.phoneNumber(), userDTO.type());
 
         userService.saveUser(newUser);
 
