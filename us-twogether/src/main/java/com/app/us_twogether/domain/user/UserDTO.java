@@ -1,4 +1,4 @@
-package com.app.us_twogether.dto;
+package com.app.us_twogether.domain.user;
 
 import com.app.us_twogether.model.NotificationUser;
 

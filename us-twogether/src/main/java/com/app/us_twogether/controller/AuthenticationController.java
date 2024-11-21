@@ -1,9 +1,9 @@
 package com.app.us_twogether.controller;
 
-import com.app.us_twogether.dto.AuthenticationDTO;
-import com.app.us_twogether.dto.LoginResponseDTO;
-import com.app.us_twogether.dto.UserDTO;
-import com.app.us_twogether.model.User;
+import com.app.us_twogether.domain.user.AuthenticationDTO;
+import com.app.us_twogether.domain.user.LoginResponseDTO;
+import com.app.us_twogether.domain.user.UserDTO;
+import com.app.us_twogether.domain.user.User;
 import com.app.us_twogether.security.TokenService;
 import com.app.us_twogether.service.UserService;
 import jakarta.validation.Valid;

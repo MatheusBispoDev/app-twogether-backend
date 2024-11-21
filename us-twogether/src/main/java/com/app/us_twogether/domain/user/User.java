@@ -1,6 +1,7 @@
-package com.app.us_twogether.model;
+package com.app.us_twogether.domain.user;
 
 import com.app.us_twogether.config.DefaultNotificationUserLoader;
+import com.app.us_twogether.model.NotificationUser;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -66,25 +67,21 @@ public class User implements UserDetails {
 
     @Override
     public boolean isAccountNonExpired() {
-        //Todo: Fazer validação
         return true;
     }
 
     @Override
     public boolean isAccountNonLocked() {
-        //Todo: Fazer validação
         return true;
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
-        //Todo: Fazer validação
         return true;
     }
 
     @Override
     public boolean isEnabled() {
-        //Todo: Fazer validação
         return true;
     }
 }
