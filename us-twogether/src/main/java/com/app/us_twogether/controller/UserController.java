@@ -24,11 +24,6 @@ public class UserController {
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    @GetMapping
-    public List<User> getAllUsers() {
-        return userService.getAllUsers();
-    }
-
     @PutMapping("/{username}")
     public ResponseEntity<User> updateUser(
             @PathVariable String username,
