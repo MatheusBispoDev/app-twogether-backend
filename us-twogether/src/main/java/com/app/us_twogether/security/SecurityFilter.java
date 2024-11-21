@@ -31,10 +31,12 @@ public class SecurityFilter extends OncePerRequestFilter {
             var username = tokenService.validateToken(token);
             UserDetails user = userRepository.findByUsername(username);
 
-            //faz a verificacoes das permissoes do usuario (token ativo)
-            var authentication = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
-            //salva a autenticacao do usuario na requisicao para ser usada em outros contextos
-            SecurityContextHolder.getContext().setAuthentication(authentication);
+            if (user != null) {
+                //faz a verificacoes das permissoes do usuario (token ativo)
+                var authentication = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
+                //salva a autenticacao do usuario na requisicao para ser usada em outros contextos
+                SecurityContextHolder.getContext().setAuthentication(authentication);
+            }
         }
         //vai para o proximo filtro, pois já finalizamos a validação do token
         filterChain.doFilter(request, response);
