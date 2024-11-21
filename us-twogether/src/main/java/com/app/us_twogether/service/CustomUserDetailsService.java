@@ -1,6 +1,6 @@
 package com.app.us_twogether.service;
 
-import com.app.us_twogether.model.User;
+import com.app.us_twogether.domain.user.User;
 import com.app.us_twogether.repository.UserRepository;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -21,7 +21,7 @@ public class CustomUserDetailsService implements UserDetailsService {
         UserDetails userEntity = userRepository.findByUsername(username);
 
         if (userEntity == null) {
-            throw new UsernameNotFoundException("User not found: " + username);
+            throw new UsernameNotFoundException("Usuário não encontrado: " + username);
         }
 
         return new User(userEntity.getUsername(), userEntity.getPassword());

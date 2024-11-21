@@ -1,7 +1,6 @@
 package com.app.us_twogether.controller;
 
-import com.app.us_twogether.dto.UserDTO;
-import com.app.us_twogether.model.User;
+import com.app.us_twogether.domain.user.User;
 import com.app.us_twogether.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

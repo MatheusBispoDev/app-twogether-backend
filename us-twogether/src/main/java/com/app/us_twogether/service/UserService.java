@@ -1,7 +1,7 @@
 package com.app.us_twogether.service;
 
 import com.app.us_twogether.exception.DataAlreadyExistsException;
-import com.app.us_twogether.model.User;
+import com.app.us_twogether.domain.user.User;
 import com.app.us_twogether.repository.NotificationUserRepository;
 import com.app.us_twogether.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
