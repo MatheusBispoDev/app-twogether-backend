@@ -47,8 +47,4 @@ public class UserService {
         return Optional.empty();
     }
 
-    public List<User> getAllUsers() {
-        return userRepository.findAll();
-
-    }
 }
