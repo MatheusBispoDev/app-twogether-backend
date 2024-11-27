@@ -1,6 +1,6 @@
 package com.app.us_twogether.domain.user;
 
-import com.app.us_twogether.model.NotificationUser;
+import com.app.us_twogether.domain.notificationUser.NotificationUser;
 
 public record UserDTO(String username,
          NotificationUser notificationUser,

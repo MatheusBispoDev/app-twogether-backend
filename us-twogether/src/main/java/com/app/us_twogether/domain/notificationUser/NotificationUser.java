@@ -1,4 +1,4 @@
-package com.app.us_twogether.model;
+package com.app.us_twogether.domain.notificationUser;
 
 import jakarta.persistence.*;
 import lombok.Data;
