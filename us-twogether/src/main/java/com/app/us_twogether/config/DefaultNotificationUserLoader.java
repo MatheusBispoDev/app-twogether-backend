@@ -1,6 +1,6 @@
 package com.app.us_twogether.config;
 
-import com.app.us_twogether.model.NotificationUser;
+import com.app.us_twogether.domain.notificationUser.NotificationUser;
 import com.app.us_twogether.repository.NotificationUserRepository;
 import jakarta.annotation.PostConstruct;
 import lombok.Getter;

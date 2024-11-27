@@ -1,7 +1,7 @@
 package com.app.us_twogether.domain.user;
 
 import com.app.us_twogether.config.DefaultNotificationUserLoader;
-import com.app.us_twogether.model.NotificationUser;
+import com.app.us_twogether.domain.notificationUser.NotificationUser;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
