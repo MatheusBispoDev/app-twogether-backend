@@ -1,6 +1,5 @@
-package com.app.us_twogether.user;
+package com.app.us_twogether.domain.user;
 
-import com.app.us_twogether.domain.user.User;
 import com.app.us_twogether.security.TokenService;
 import com.app.us_twogether.service.UserService;
 import jakarta.transaction.Transactional;

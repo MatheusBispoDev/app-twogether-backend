@@ -1,8 +1,7 @@
-package com.app.us_twogether.user;
+package com.app.us_twogether.domain.user;
 
 import com.app.us_twogether.config.DefaultNotificationUserLoader;
 import com.app.us_twogether.domain.notificationUser.NotificationUser;
-import com.app.us_twogether.domain.user.User;
 import com.app.us_twogether.exception.DataAlreadyExistsException;
 import com.app.us_twogether.repository.NotificationUserRepository;
 import com.app.us_twogether.service.UserService;
