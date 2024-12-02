@@ -8,7 +8,6 @@ import com.app.us_twogether.security.TokenService;
 import com.app.us_twogether.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -39,13 +38,11 @@ public class AuthenticationController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<String> register(@RequestBody @Valid UserDTO userDTO){
+    public ResponseEntity register(@RequestBody @Valid UserDTO userDTO){
         User newUser = new User(userDTO.username(), userDTO.password(), userDTO.name(), userDTO.email(), userDTO.phoneNumber(), userDTO.type());
 
-        String spaceTokenShared = userService.saveUser(newUser);
+        userService.saveUser(newUser);
 
-        return ResponseEntity
-                .status(HttpStatus.ACCEPTED)
-                .body(spaceTokenShared);
+        return ResponseEntity.ok().build();
     }
 }
