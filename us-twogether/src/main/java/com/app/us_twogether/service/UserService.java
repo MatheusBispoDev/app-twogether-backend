@@ -1,5 +1,6 @@
 package com.app.us_twogether.service;
 
+import com.app.us_twogether.domain.space.Space;
 import com.app.us_twogether.exception.DataAlreadyExistsException;
 import com.app.us_twogether.domain.user.User;
 import com.app.us_twogether.repository.NotificationUserRepository;
@@ -17,17 +18,24 @@ public class UserService {
     private UserRepository userRepository;
 
     @Autowired
+    private SpaceService spaceService;
+
+    @Autowired
     private NotificationUserRepository notificationUserRepository;
 
     public Optional<User> findByUsername(String username) {
         return userRepository.findById(username);
     }
 
-    public User saveUser(User newUser) {
+    public String saveUser(User newUser) {
         if (userRepository.existsById(newUser.getUsername())) {
             throw new DataAlreadyExistsException("Usuário '" + newUser.getUsername() + "' já está cadastrado.");
         }
-        return userRepository.save(newUser);
+        userRepository.save(newUser);
+
+        Space space = spaceService.createSpace("US " + newUser.getName() + " - TwoGether ", newUser);
+
+        return space.getSharedToken();
     }
 
     public Optional<User> updateUser(String username, User updatedUser) {

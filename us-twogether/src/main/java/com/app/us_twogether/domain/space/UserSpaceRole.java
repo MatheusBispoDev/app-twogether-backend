@@ -2,10 +2,12 @@ package com.app.us_twogether.domain.space;
 
 import com.app.us_twogether.domain.user.User;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
+import com.app.us_twogether.domain.space.AccessLevel;
+import lombok.Data;
 
 @Entity
 @Table(name = "tb_user_space_role")
+@Data
 public class UserSpaceRole {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -37,8 +37,6 @@ public class UserController {
         UsernamePasswordAuthenticationToken authentication =
                 (UsernamePasswordAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
 
-        System.out.println("Update: " + authentication.getName());
-
         Optional<User> updated = userService.updateUser(authentication.getName(), updatedUser);
         return updated.map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
