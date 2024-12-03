@@ -37,7 +37,7 @@ public class User implements UserDetails {
     @Column(nullable = false)
     private String type;
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private List<UserSpaceRole> userRoles = new ArrayList<>();
+    private List<UserSpaceRole> userSpaceRoles = new ArrayList<>();
 
     public User() {}
 

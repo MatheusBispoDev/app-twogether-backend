@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/ustwogether/api/v1/users")
+@RequestMapping("${app.api.base-url}/users")
 public class UserController {
 
     @Autowired

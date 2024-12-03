@@ -5,6 +5,7 @@ import com.app.us_twogether.domain.user.LoginResponseDTO;
 import com.app.us_twogether.domain.user.UserDTO;
 import com.app.us_twogether.domain.user.User;
 import com.app.us_twogether.security.TokenService;
+import com.app.us_twogether.service.SpaceService;
 import com.app.us_twogether.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("auth")
+@RequestMapping("${app.api.base-url}/auth")
 public class AuthenticationController {
 
     @Autowired
@@ -26,6 +27,8 @@ public class AuthenticationController {
     private UserService userService;
     @Autowired
     private TokenService tokenService;
+    @Autowired
+    private SpaceService spaceService;
 
     @PostMapping("/login")
     public ResponseEntity login(@RequestBody @Valid AuthenticationDTO authenticationDTO){
@@ -42,6 +45,8 @@ public class AuthenticationController {
         User newUser = new User(userDTO.username(), userDTO.password(), userDTO.name(), userDTO.email(), userDTO.phoneNumber(), userDTO.type());
 
         userService.saveUser(newUser);
+
+        spaceService.createSpace(newUser);
 
         return ResponseEntity.ok().build();
     }

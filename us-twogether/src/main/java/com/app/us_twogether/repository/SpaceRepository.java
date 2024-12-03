@@ -9,5 +9,4 @@ import java.util.Optional;
 @Repository
 public interface SpaceRepository extends JpaRepository<Space, Integer> {
     Optional<Space> findBySharedToken(String sharedToken);
-    Optional<Space> findBy(String sharedToken);
 }

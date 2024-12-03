@@ -1,6 +1,5 @@
 package com.app.us_twogether.service;
 
-import com.app.us_twogether.domain.space.Space;
 import com.app.us_twogether.exception.DataAlreadyExistsException;
 import com.app.us_twogether.domain.user.User;
 import com.app.us_twogether.repository.NotificationUserRepository;
@@ -8,7 +7,6 @@ import com.app.us_twogether.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -18,24 +16,18 @@ public class UserService {
     private UserRepository userRepository;
 
     @Autowired
-    private SpaceService spaceService;
-
-    @Autowired
     private NotificationUserRepository notificationUserRepository;
 
     public Optional<User> findByUsername(String username) {
         return userRepository.findById(username);
     }
 
-    public String saveUser(User newUser) {
+    public void saveUser(User newUser) {
         if (userRepository.existsById(newUser.getUsername())) {
             throw new DataAlreadyExistsException("Usuário '" + newUser.getUsername() + "' já está cadastrado.");
         }
+
         userRepository.save(newUser);
-
-        Space space = spaceService.createSpace("US " + newUser.getName() + " - TwoGether ", newUser);
-
-        return space.getSharedToken();
     }
 
     public Optional<User> updateUser(String username, User updatedUser) {
