@@ -1,6 +1,5 @@
 package com.app.us_twogether.domain.space;
 
-import com.app.us_twogether.domain.user.User;
 import jakarta.persistence.*;
 import lombok.Data;
 

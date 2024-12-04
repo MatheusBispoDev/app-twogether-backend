@@ -11,6 +11,7 @@ import java.util.Optional;
 
 @Repository
 public interface UserSpaceRoleRepository extends JpaRepository<UserSpaceRole, Integer> {
-    boolean existsByUserAndSpace(Optional<User> user, Space space);
-    Space findByUserAndAccessLevel(User user, AccessLevel accessLevel);
+    boolean existsByUserAndSpace(User user, Space space);
+    boolean existsByUserAndAccessLevel(User user, AccessLevel accessLevel);
+    Optional<UserSpaceRole> findByUserAndSpace(User user, Space space);
 }
