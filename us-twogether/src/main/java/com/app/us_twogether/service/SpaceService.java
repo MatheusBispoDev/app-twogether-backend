@@ -72,8 +72,14 @@ public class SpaceService {
     public void addUserToSpaceByToken(String token, User userInvited, AccessLevel acessLevel) {
         Space space = spaceRepository.findBySharedToken(token).orElseThrow(() -> new ResourceNotFoundException("Espaço não encontrado para o Token fornecido"));
 
-        if (validateAccessLevelUserUS(userInvited)) {
+        if (userSpaceRoleRepository.existsByUserAndSpace(userInvited, space)) {
             throw new DataAlreadyExistsException("Usuário já está associado a este espaço");
+        }
+
+        Integer usersWithAcessUs = userSpaceRoleRepository.countUsersBySpaceAndRole(space.getSpaceId(), AccessLevel.US);
+
+        if (acessLevel == AccessLevel.US && usersWithAcessUs >= 2) {
+            throw new DataAlreadyExistsException("O limite de usuários como Owner já foi atingido");
         }
 
         UserSpaceRole userSpaceRole = new UserSpaceRole();
@@ -112,11 +118,11 @@ public class SpaceService {
         spaceRepository.delete(space);
     }
 
-    private UserSpaceRole findUserRoleByUserAndSpace(User user, Space space){
+    private UserSpaceRole findUserRoleByUserAndSpace(User user, Space space) {
         return userSpaceRoleRepository.findByUserAndSpace(user, space).orElseThrow(() -> new ResourceNotFoundException("Acesso de usuário não encontrado"));
     }
 
-    private User findUserByUsername(String username){
+    private User findUserByUsername(String username) {
         return userService.findByUsername(username).orElseThrow(() -> new ResourceNotFoundException("Usuário não encontrado"));
     }
 

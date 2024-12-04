@@ -102,7 +102,7 @@ public class SpaceController {
         return ResponseEntity.ok("Espaço deletado com sucesso!");
     }
 
-    public User findUserByAuthentication(UsernamePasswordAuthenticationToken authentication) {
+    private User findUserByAuthentication(UsernamePasswordAuthenticationToken authentication) {
         return userService.findByUsername(authentication.getName()).orElseThrow(() -> new UsernameNotFoundException("Usuário não encontrado"));
     }
 }
