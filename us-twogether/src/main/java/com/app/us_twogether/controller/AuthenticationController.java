@@ -46,8 +46,6 @@ public class AuthenticationController {
 
         userService.saveUser(newUser);
 
-        spaceService.createSpace(newUser);
-
         return ResponseEntity.ok().build();
     }
 }
