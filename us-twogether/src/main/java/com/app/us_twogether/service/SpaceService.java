@@ -87,9 +87,10 @@ public class SpaceService {
     public void changeSpaceUserAccessLevel(User userOwner, String usernameToUpdate, AccessLevel acessLevel) {
         Space space = findSpaceByUser(userOwner);
 
-        User userToUpdate = userService.findByUsername(usernameToUpdate).orElseThrow(() -> new ResourceNotFoundException("Usuário não encontrado"));
+        User userToUpdate = findUserByUsername(usernameToUpdate);
 
-        UserSpaceRole userSpaceRole = userSpaceRoleRepository.findByUserAndSpace(userToUpdate, space).orElseThrow(() -> new ResourceNotFoundException("Acesso de usuário não encontrado"));
+        UserSpaceRole userSpaceRole = findUserRoleByUserAndSpace(userToUpdate, space);
+
         userSpaceRole.setAccessLevel(acessLevel);
 
         userSpaceRoleRepository.save(userSpaceRole);
@@ -98,9 +99,9 @@ public class SpaceService {
     public void removeUserFromSpace(User userOwner, String usernameToRemove) {
         Space space = findSpaceByUser(userOwner);
 
-        User userToRemove = userService.findByUsername(usernameToRemove).orElseThrow(() -> new ResourceNotFoundException("Usuário não encontrado"));
+        User userToRemove = findUserByUsername(usernameToRemove);
 
-        UserSpaceRole userSpaceRole = userSpaceRoleRepository.findByUserAndSpace(userToRemove, space).orElseThrow(() -> new ResourceNotFoundException("Acesso de usuário não encontrado"));
+        UserSpaceRole userSpaceRole = findUserRoleByUserAndSpace(userToRemove, space);
 
         userSpaceRoleRepository.delete(userSpaceRole);
     }
@@ -109,6 +110,14 @@ public class SpaceService {
         Space space = findSpaceByUser(user);
 
         spaceRepository.delete(space);
+    }
+
+    private UserSpaceRole findUserRoleByUserAndSpace(User user, Space space){
+        return userSpaceRoleRepository.findByUserAndSpace(user, space).orElseThrow(() -> new ResourceNotFoundException("Acesso de usuário não encontrado"));
+    }
+
+    private User findUserByUsername(String username){
+        return userService.findByUsername(username).orElseThrow(() -> new ResourceNotFoundException("Usuário não encontrado"));
     }
 
     private String generateSharedSpaceToken() {
