@@ -2,6 +2,7 @@ package com.app.us_twogether.controller;
 
 import com.app.us_twogether.domain.space.AccessLevel;
 import com.app.us_twogether.domain.space.SpaceDTO;
+import com.app.us_twogether.domain.space.SpaceWithUsersDTO;
 import com.app.us_twogether.domain.user.User;
 import com.app.us_twogether.service.SpaceService;
 import com.app.us_twogether.service.UserService;
@@ -33,6 +34,17 @@ public class SpaceController {
         SpaceDTO spaceTokenShared = spaceService.getSharedLink(user);
 
         return ResponseEntity.ok(spaceTokenShared);
+    }
+
+    @GetMapping()
+    public ResponseEntity<SpaceWithUsersDTO> getSpaceUser(){
+        UsernamePasswordAuthenticationToken authentication = (org.springframework.security.authentication.UsernamePasswordAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
+
+        User user = findUserByAuthentication(authentication);
+
+        SpaceWithUsersDTO space = spaceService.getSpaceWithUsers(user);
+
+        return ResponseEntity.ok(space);
     }
 
     @PostMapping
@@ -68,13 +80,14 @@ public class SpaceController {
 
     @PutMapping("/join/{usernameToUpdate}/{accessLevel}")
     public ResponseEntity<String> changeSpaceUserAccessLevel(@PathVariable String usernameToUpdate, @PathVariable AccessLevel accessLevel) {
+        if (accessLevel == AccessLevel.US) {
+            //TODO Tratamento para melhorar a Exceção
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Alteração de acesso para Owner só pode ser feito via compartilhamento de link.");
+        }
+
         UsernamePasswordAuthenticationToken authentication = (org.springframework.security.authentication.UsernamePasswordAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
 
         User userOwner = findUserByAuthentication(authentication);
-
-        if (accessLevel == AccessLevel.US) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Alteração de acesso para Owner só pode ser feito via compartilhamento de link.");
-        }
 
         spaceService.changeSpaceUserAccessLevel(userOwner, usernameToUpdate, accessLevel);
 

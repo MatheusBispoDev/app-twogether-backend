@@ -1,9 +1,6 @@
 package com.app.us_twogether.service;
 
-import com.app.us_twogether.domain.space.AccessLevel;
-import com.app.us_twogether.domain.space.Space;
-import com.app.us_twogether.domain.space.SpaceDTO;
-import com.app.us_twogether.domain.space.UserSpaceRole;
+import com.app.us_twogether.domain.space.*;
 import com.app.us_twogether.domain.user.User;
 import com.app.us_twogether.exception.DataAlreadyExistsException;
 import com.app.us_twogether.repository.SpaceRepository;
@@ -13,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -116,6 +114,13 @@ public class SpaceService {
         UserSpaceRole userSpaceRole = findUserRoleByUserAndSpace(userToRemove, space);
 
         userSpaceRoleRepository.delete(userSpaceRole);
+    }
+
+    public SpaceWithUsersDTO getSpaceWithUsers(User user) {
+        Space space = findSpaceByUser(user);
+        List<UserAccessDTO> users = userSpaceRoleRepository.findUsersBySpaceId(space.getSpaceId()).orElseThrow(() -> new ResourceNotFoundException("Usuário não encontrados no espaço não encontrado"));
+
+        return new SpaceWithUsersDTO(space.getName(), space.getSharedToken(), users);
     }
 
     public void deleteSpace(User user) {
