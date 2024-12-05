@@ -1,6 +1,7 @@
 package com.app.us_twogether.controller;
 
 import com.app.us_twogether.domain.space.AccessLevel;
+import com.app.us_twogether.domain.space.SpaceDTO;
 import com.app.us_twogether.domain.user.User;
 import com.app.us_twogether.service.SpaceService;
 import com.app.us_twogether.service.UserService;
@@ -23,26 +24,26 @@ public class SpaceController {
     private UserService userService;
 
     @GetMapping("/shared")
-    public ResponseEntity<String> getSharedLink() {
+    public ResponseEntity<SpaceDTO> getSharedLink() {
 
         UsernamePasswordAuthenticationToken authentication = (org.springframework.security.authentication.UsernamePasswordAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
 
         User user = findUserByAuthentication(authentication);
 
-        String spaceTokenShared = spaceService.getSharedLink(user);
+        SpaceDTO spaceTokenShared = spaceService.getSharedLink(user);
 
         return ResponseEntity.ok(spaceTokenShared);
     }
 
     @PostMapping
-    public ResponseEntity<String> createSpace() {
+    public ResponseEntity<SpaceDTO> createSpace() {
         UsernamePasswordAuthenticationToken authentication = (org.springframework.security.authentication.UsernamePasswordAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
 
         User user = findUserByAuthentication(authentication);
 
-        spaceService.createSpace(user);
+        SpaceDTO newSpace = spaceService.createSpace(user);
 
-        return ResponseEntity.ok("Espaço criado com sucesso!");
+        return ResponseEntity.ok(newSpace);
     }
 
     @PostMapping("/join/{token}")

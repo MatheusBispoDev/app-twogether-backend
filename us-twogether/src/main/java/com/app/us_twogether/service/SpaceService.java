@@ -2,6 +2,7 @@ package com.app.us_twogether.service;
 
 import com.app.us_twogether.domain.space.AccessLevel;
 import com.app.us_twogether.domain.space.Space;
+import com.app.us_twogether.domain.space.SpaceDTO;
 import com.app.us_twogether.domain.space.UserSpaceRole;
 import com.app.us_twogether.domain.user.User;
 import com.app.us_twogether.exception.DataAlreadyExistsException;
@@ -37,7 +38,7 @@ public class SpaceService {
         this.userSpaceRoleRepository = userSpaceRoleRepository;
     }
 
-    public void createSpace(User creator) {
+    public SpaceDTO createSpace(User creator) {
         if (validateAccessLevelUserUS(creator)) {
             throw new DataAlreadyExistsException("Usuário '" + creator.getUsername() + "' já possue um Espaço criado.");
         }
@@ -45,7 +46,7 @@ public class SpaceService {
         String sharedToken = generateSharedSpaceToken();
 
         Space newSpace = new Space();
-        newSpace.setName("US " + creator.getName() + " - TwoGether ");
+        newSpace.setName(creator.getName());
         newSpace.setSharedToken(sharedToken);
 
         UserSpaceRole role = new UserSpaceRole();
@@ -55,9 +56,11 @@ public class SpaceService {
 
         spaceRepository.save(newSpace);
         userSpaceRoleRepository.save(role);
+
+        return new SpaceDTO(newSpace.getName(), newSpace.getSharedToken());
     }
 
-    public String getSharedLink(User user) {
+    public SpaceDTO getSharedLink(User user) {
         Space space = findSpaceByUser(user);
 
         if (space.getSharedToken().isEmpty()) {
@@ -66,7 +69,9 @@ public class SpaceService {
             spaceRepository.save(space);
         }
 
-        return endpoint + baseUrl + "/spaces/join/" + space.getSharedToken();
+        String sharedToken = endpoint + baseUrl + "/spaces/join/" + space.getSharedToken();
+
+        return new SpaceDTO(space.getName(), sharedToken);
     }
 
     public void addUserToSpaceByToken(String token, User userInvited, AccessLevel acessLevel) {
@@ -88,6 +93,7 @@ public class SpaceService {
         userSpaceRole.setAccessLevel(acessLevel);
 
         userSpaceRoleRepository.save(userSpaceRole);
+        space.setName("US " + space.getName() + " " + userInvited.getName() + " - TwoGether");
     }
 
     public void changeSpaceUserAccessLevel(User userOwner, String usernameToUpdate, AccessLevel acessLevel) {
