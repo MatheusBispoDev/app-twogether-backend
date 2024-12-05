@@ -12,7 +12,7 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-public interface UserSpaceRoleRepository extends JpaRepository<UserSpaceRole, Integer> {
+public interface UserSpaceRoleRepository extends JpaRepository<UserSpaceRole, Long> {
     boolean existsByUserAndSpace(User user, Space space);
     boolean existsByUserAndAccessLevel(User user, AccessLevel accessLevel);
     Optional<UserSpaceRole> findByUserAndSpace(User user, Space space);
