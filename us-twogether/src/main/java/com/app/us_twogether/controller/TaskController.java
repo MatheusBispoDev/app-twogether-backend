@@ -1,17 +1,12 @@
 package com.app.us_twogether.controller;
 
 import com.app.us_twogether.domain.space.Space;
-import com.app.us_twogether.domain.space.SpaceDTO;
-import com.app.us_twogether.domain.task.Task;
 import com.app.us_twogether.domain.task.TaskDTO;
 import com.app.us_twogether.domain.user.User;
 import com.app.us_twogether.service.TaskService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
