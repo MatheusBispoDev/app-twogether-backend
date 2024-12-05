@@ -1,1 +1,1 @@
-# pp-twogether-backend
+# app-twogether-backend
