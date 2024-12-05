@@ -129,7 +129,11 @@ public class SpaceService {
         spaceRepository.delete(space);
     }
 
-    private UserSpaceRole findUserRoleByUserAndSpace(User user, Space space) {
+    public Space findSpaceByUser(User user) {
+        return spaceRepository.findByUserOwnerSpace(user).orElseThrow(() -> new ResourceNotFoundException("Espaço não encontrado para o usuário fornecido"));
+    }
+
+    public UserSpaceRole findUserRoleByUserAndSpace(User user, Space space) {
         return userSpaceRoleRepository.findByUserAndSpace(user, space).orElseThrow(() -> new ResourceNotFoundException("Acesso de usuário não encontrado"));
     }
 
@@ -139,10 +143,6 @@ public class SpaceService {
 
     private String generateSharedSpaceToken() {
         return UUID.randomUUID().toString();
-    }
-
-    private Space findSpaceByUser(User user) {
-        return spaceRepository.findByUserOwnerSpace(user).orElseThrow(() -> new ResourceNotFoundException("Espaço não encontrado para o usuário fornecido"));
     }
 
     private boolean validateAccessLevelUserUS(User user) {
