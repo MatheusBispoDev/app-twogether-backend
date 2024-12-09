@@ -19,7 +19,7 @@ import java.util.List;
 @Data
 @EqualsAndHashCode(of = "username")
 public class User implements UserDetails {
-    //TODO: Alterar a chave primaria para Long
+    //TODO: Alterar a chave primaria para Long e alterar o relacionamento do notificationUser para o UserSpaceRole
     @Id
     @Column(nullable = false, unique = true)
     private String username;

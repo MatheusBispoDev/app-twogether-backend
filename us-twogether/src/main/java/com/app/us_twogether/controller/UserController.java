@@ -23,10 +23,9 @@ public class UserController {
         UsernamePasswordAuthenticationToken authentication =
                 (UsernamePasswordAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
 
-        Optional<User> user = userService.findByUsername(authentication.getName());
+        User user = userService.findByUsername(authentication.getName());
 
-        return user.map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.notFound().build());
+        return ResponseEntity.ok(user);
     }
 
     @PutMapping()
