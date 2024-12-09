@@ -119,7 +119,7 @@ public class SpaceService {
     public SpaceWithUsersDTO getSpaceWithUsers(User user) {
         Space space = findSpaceByUser(user);
         //TODO: Melhorar Excecao
-        List<UserAccessDTO> users = userSpaceRoleRepository.findUsersBySpaceId(space.getSpaceId()).orElseThrow(() -> new ResourceNotFoundException("Usuário não encontrados no espaço não encontrado"));
+        List<UserAccessDTO> users = userSpaceRoleRepository.findUsersBySpaceId(space.getSpaceId()).orElseThrow(() -> new ResourceNotFoundException("Usuários não encontrados no espaço"));
 
         return new SpaceWithUsersDTO(space.getName(), space.getSharedToken(), users);
     }

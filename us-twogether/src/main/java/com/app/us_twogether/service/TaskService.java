@@ -34,12 +34,10 @@ public class TaskService {
 
     public void createTask(String usernameCreation, Long spaceId, TaskDTO taskDTO) {
         Space space = spaceService.findSpaceById(spaceId);
-
         User user = userService.findByUsername(usernameCreation);
-        validateUserAndSpace(user, space, "Usuário não possui esse espaço");
 
         User userResponsible = userService.findByUsername(validateUsernameResponsible(usernameCreation, taskDTO.userResponsible()));
-        validateUserAndSpace(userResponsible, space, "Usuário responsável não possui acesso a esse espaço");
+        validateUserAndSpace(userResponsible, space);
 
         Task newTask = new Task();
         newTask.setSpaceId(space);
@@ -57,12 +55,12 @@ public class TaskService {
         taskRepository.save(newTask);
     }
 
-    public TaskDTO updateTask(TaskDTO updatedTask, Long taskId) {
+    public TaskDTO updateTask(Long taskId, TaskDTO updatedTask) {
         Task existingTask = findTaskById(taskId);
 
         if (!existingTask.getUserResponsible().getUsername().equals(updatedTask.userResponsible())) {
             User userResponsible = userService.findByUsername(updatedTask.userResponsible());
-            validateUserAndSpace(userResponsible, existingTask.getSpaceId(), "Usuário responsável não possui acesso a esse espaço");
+            validateUserAndSpace(userResponsible, existingTask.getSpaceId());
             existingTask.setUserResponsible(userResponsible);
         }
 
@@ -123,10 +121,11 @@ public class TaskService {
                 task.getDateEnd(), task.getTimeEnd(), task.getObservation(), task.isCompleted());
     }
 
-    private boolean validateUserAndSpace(User user, Space space, String message) {
+    private boolean validateUserAndSpace(User user, Space space) {
+        //TODO Implementar validação de acesso no SpaceAccessInterceptor
         if (!userSpaceRoleRepository.existsByUserAndSpace(user, space)) {
             //TODO melhorar excecao
-            throw new DataAlreadyExistsException(message);
+            throw new DataAlreadyExistsException("Usuário responsável não possui acesso a esse espaço");
         }
         return true;
     }
