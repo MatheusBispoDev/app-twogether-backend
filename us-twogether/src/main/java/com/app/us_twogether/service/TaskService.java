@@ -13,8 +13,15 @@ import org.apache.kafka.common.errors.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.util.List;
+
 @Service
 public class TaskService {
+
+    @Autowired
+    UserService userService;
 
     @Autowired
     TaskRepository taskRepository;
@@ -25,12 +32,19 @@ public class TaskService {
     @Autowired
     private UserSpaceRoleRepository userSpaceRoleRepository;
 
-    public void createTask(User user, Space space, TaskDTO taskDTO) {
+    public void createTask(String usernameCreation, Long spaceId, TaskDTO taskDTO) {
+        Space space = spaceService.findSpaceById(spaceId);
+
+        User user = userService.findByUsername(usernameCreation);
+        validateUserAndSpace(user, space, "Usuário não possui esse espaço");
+
+        User userResponsible = userService.findByUsername(validateUsernameResponsible(usernameCreation, taskDTO.userResponsible()));
+        validateUserAndSpace(userResponsible, space, "Usuário responsável não possui acesso a esse espaço");
+
         Task newTask = new Task();
-        newTask.setTaskId(taskDTO.taskId());
         newTask.setSpaceId(space);
         newTask.setUserCreation(user);
-        newTask.setUserResponsible(taskDTO.userResponsible());
+        newTask.setUserResponsible(userResponsible);
         newTask.setTitle(taskDTO.title());
         newTask.setDescription(taskDTO.description());
         newTask.setDateCreation(taskDTO.dateCreation());
@@ -38,50 +52,104 @@ public class TaskService {
         newTask.setDateCompletion(taskDTO.dateCompletion());
         newTask.setTimeCompletion(taskDTO.timeCompletion());
         newTask.setAttachment(taskDTO.attachment());
-        newTask.setCompleted(taskDTO.completed());
+        newTask.setCompleted(false);
 
         taskRepository.save(newTask);
     }
 
-    public void updateTask(User user, Space space, TaskDTO updatedTask) {
-        Task existingTask = findTaskById(updatedTask.taskId());
+    public TaskDTO updateTask(TaskDTO updatedTask, Long taskId) {
+        Task existingTask = findTaskById(taskId);
 
-        existingTask.setUserResponsible(updatedTask.userResponsible());
+        if (!existingTask.getUserResponsible().getUsername().equals(updatedTask.userResponsible())) {
+            User userResponsible = userService.findByUsername(updatedTask.userResponsible());
+            validateUserAndSpace(userResponsible, existingTask.getSpaceId(), "Usuário responsável não possui acesso a esse espaço");
+            existingTask.setUserResponsible(userResponsible);
+        }
+
         existingTask.setTitle(updatedTask.title());
         existingTask.setDescription(updatedTask.description());
         existingTask.setDateCompletion(updatedTask.dateCompletion());
         existingTask.setTimeCompletion(updatedTask.timeCompletion());
         existingTask.setAttachment(updatedTask.attachment());
-        existingTask.setCompleted(updatedTask.completed());
 
         taskRepository.save(existingTask);
+
+        return castTaskToDTO(existingTask);
     }
 
-    public void deletedTask(User user, Space space, Long taskId) {
+    public void deletedTask(Long taskId) {
         Task existingTask = findTaskById(taskId);
 
         taskRepository.delete(existingTask);
     }
 
-    public TaskDTO getTask(User user, Space space, Long taskId) {
+    public TaskDTO getTask(Long taskId) {
         Task existingTask = findTaskById(taskId);
 
-        return new TaskDTO(existingTask.getTaskId(), existingTask.getUserResponsible(), existingTask.getTitle(), existingTask.getDescription(),
-                existingTask.getObservation(), existingTask.getDateCreation(), existingTask.getTimeCreation(), existingTask.getDateCompletion(),
-                existingTask.getTimeCompletion(), existingTask.getDateEnd(), existingTask.getTimeEnd(), existingTask.getObservation(), existingTask.isCompleted());
+        return castTaskToDTO(existingTask);
     }
 
-    public void validAccessLevelUser(User user, Space space) {
+    public List<TaskDTO> getAllTaskFromSpace(Long spaceId) {
+        Space space = spaceService.findSpaceById(spaceId);
+        return taskRepository.findBySpace(space).orElseThrow(() -> new ResourceNotFoundException("Tasks não encontradas"));
+    }
+
+    public TaskDTO completedTask(Long taskId) {
+        Task existingTask = findTaskById(taskId);
+
+        boolean isCompleted = true;
+        LocalDate localDate = LocalDate.now();
+        LocalTime localTime = LocalTime.now();
+
+        if (existingTask.isCompleted()) {
+            localDate = null;
+            localTime = null;
+            isCompleted = false;
+        }
+
+        existingTask.setDateEnd(localDate);
+        existingTask.setTimeEnd(localTime);
+        existingTask.setCompleted(isCompleted);
+
+        taskRepository.save(existingTask);
+
+        return castTaskToDTO(existingTask);
+    }
+
+    private TaskDTO castTaskToDTO(Task task) {
+        return new TaskDTO(task.getTaskId(), task.getUserCreation().getUsername(), task.getUserResponsible().getUsername(),
+                task.getTitle(), task.getDescription(), task.getObservation(), task.getDateCreation(),
+                task.getTimeCreation(), task.getDateCompletion(), task.getTimeCompletion(),
+                task.getDateEnd(), task.getTimeEnd(), task.getObservation(), task.isCompleted());
+    }
+
+    private boolean validateUserAndSpace(User user, Space space, String message) {
+        if (!userSpaceRoleRepository.existsByUserAndSpace(user, space)) {
+            //TODO melhorar excecao
+            throw new DataAlreadyExistsException(message);
+        }
+        return true;
+    }
+
+    private void validateAccessLevelUser(User user, Space space) {
+        //TODO Implementar nivel de acesso
         UserSpaceRole userSpaceRole = spaceService.findUserRoleByUserAndSpace(user, space);
 
         if (userSpaceRole.getAccessLevel() == AccessLevel.INVITED) {
-            //TODO Melhorar Excecao
+            //TODO Melhorar Excecao e Validação de nível de acesso
             throw new DataAlreadyExistsException("Usuário sem acesso a tal funcionalidade");
         }
     }
 
     private Task findTaskById(Long taskId) {
         return taskRepository.findById(taskId).orElseThrow(() -> new ResourceNotFoundException("Task não encontrada"));
+    }
+
+    private String validateUsernameResponsible(String usernameCreation, String usernameResponsible) {
+        if (!usernameCreation.equals(usernameResponsible)) {
+            return usernameResponsible;
+        }
+        return usernameCreation;
     }
 
 }

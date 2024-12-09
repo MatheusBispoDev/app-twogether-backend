@@ -11,7 +11,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -117,6 +116,6 @@ public class SpaceController {
     }
 
     private User findUserByAuthentication(UsernamePasswordAuthenticationToken authentication) {
-        return userService.findByUsername(authentication.getName()).orElseThrow(() -> new UsernameNotFoundException("Usuário não encontrado"));
+        return userService.findByUsername(authentication.getName());
     }
 }

@@ -118,6 +118,7 @@ public class SpaceService {
 
     public SpaceWithUsersDTO getSpaceWithUsers(User user) {
         Space space = findSpaceByUser(user);
+        //TODO: Melhorar Excecao
         List<UserAccessDTO> users = userSpaceRoleRepository.findUsersBySpaceId(space.getSpaceId()).orElseThrow(() -> new ResourceNotFoundException("Usuário não encontrados no espaço não encontrado"));
 
         return new SpaceWithUsersDTO(space.getName(), space.getSharedToken(), users);
@@ -130,15 +131,22 @@ public class SpaceService {
     }
 
     public Space findSpaceByUser(User user) {
+        //TODO: Melhorar Excecao
         return spaceRepository.findByUserOwnerSpace(user).orElseThrow(() -> new ResourceNotFoundException("Espaço não encontrado para o usuário fornecido"));
     }
 
     public UserSpaceRole findUserRoleByUserAndSpace(User user, Space space) {
+        //TODO: Melhorar Excecao
         return userSpaceRoleRepository.findByUserAndSpace(user, space).orElseThrow(() -> new ResourceNotFoundException("Acesso de usuário não encontrado"));
     }
 
+    public Space findSpaceById(Long spaceId){
+        //TODO: Melhorar Excecao
+        return spaceRepository.findById(spaceId).orElseThrow(() -> new ResourceNotFoundException("Espaço não encontrado para o usuário fornecido"));
+    }
+
     private User findUserByUsername(String username) {
-        return userService.findByUsername(username).orElseThrow(() -> new ResourceNotFoundException("Usuário não encontrado"));
+        return userService.findByUsername(username);
     }
 
     private String generateSharedSpaceToken() {

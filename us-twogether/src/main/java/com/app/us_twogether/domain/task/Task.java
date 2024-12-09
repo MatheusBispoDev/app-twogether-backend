@@ -16,13 +16,13 @@ public class Task {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long taskId;
     @ManyToOne
-    @JoinColumn(name = "space_id")
+    @JoinColumn(name = "space_id", nullable = false)
     private Space spaceId;
     @ManyToOne
-    @JoinColumn(name = "user_creation")
+    @JoinColumn(name = "user_creation", nullable = false)
     private User userCreation;
     @ManyToOne
-    @JoinColumn(name = "user_responsible")
+    @JoinColumn(name = "user_responsible", nullable = false)
     private User userResponsible;
     @Column(nullable = false)
     private String title;
