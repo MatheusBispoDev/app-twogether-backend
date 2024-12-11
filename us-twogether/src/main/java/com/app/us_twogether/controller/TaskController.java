@@ -22,10 +22,10 @@ public class TaskController {
     TaskService taskService;
 
     @PostMapping("/{spaceId}/task")
-    public ResponseEntity<String> createTask(@AuthenticationPrincipal UserDetails userDetails, @PathVariable Long spaceId, @RequestBody @Valid TaskDTO taskDTO) {
-        taskService.createTask(userDetails.getUsername(), spaceId, taskDTO);
+    public ResponseEntity<TaskDTO> createTask(@AuthenticationPrincipal UserDetails userDetails, @PathVariable Long spaceId, @RequestBody @Valid TaskDTO taskDTO) {
+        TaskDTO newTask = taskService.createTask(userDetails.getUsername(), spaceId, taskDTO);
 
-        return ResponseEntity.ok("Task criada com sucesso");
+        return ResponseEntity.ok(newTask);
     }
 
     @PutMapping("/{spaceId}/task/{taskId}")

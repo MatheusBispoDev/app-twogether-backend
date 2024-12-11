@@ -32,7 +32,7 @@ public class TaskService {
     @Autowired
     private UserSpaceRoleRepository userSpaceRoleRepository;
 
-    public void createTask(String usernameCreation, Long spaceId, TaskDTO taskDTO) {
+    public TaskDTO createTask(String usernameCreation, Long spaceId, TaskDTO taskDTO) {
         Space space = spaceService.findSpaceById(spaceId);
         User user = userService.findByUsername(usernameCreation);
 
@@ -53,6 +53,8 @@ public class TaskService {
         newTask.setCompleted(false);
 
         taskRepository.save(newTask);
+
+        return castTaskToDTO(newTask);
     }
 
     public TaskDTO updateTask(Long taskId, TaskDTO updatedTask) {
