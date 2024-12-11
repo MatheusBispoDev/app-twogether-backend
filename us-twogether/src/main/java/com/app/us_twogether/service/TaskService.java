@@ -21,13 +21,13 @@ import java.util.List;
 public class TaskService {
 
     @Autowired
-    UserService userService;
-
-    @Autowired
-    TaskRepository taskRepository;
+    private UserService userService;
 
     @Autowired
     private SpaceService spaceService;
+
+    @Autowired
+    TaskRepository taskRepository;
 
     @Autowired
     private UserSpaceRoleRepository userSpaceRoleRepository;
@@ -69,6 +69,9 @@ public class TaskService {
         existingTask.setDateCompletion(updatedTask.dateCompletion());
         existingTask.setTimeCompletion(updatedTask.timeCompletion());
         existingTask.setAttachment(updatedTask.attachment());
+        existingTask.setDateEnd(updatedTask.dateEnd());
+        existingTask.setTimeEnd(updatedTask.timeEnd());
+        existingTask.setCompleted(updatedTask.completed());
 
         taskRepository.save(existingTask);
 
@@ -87,9 +90,9 @@ public class TaskService {
         return castTaskToDTO(existingTask);
     }
 
-    public List<TaskDTO> getAllTaskFromSpace(Long spaceId) {
+    public List<TaskDTO> getAllTaskFromSpace(Long spaceId, LocalDate dateCompletion) {
         Space space = spaceService.findSpaceById(spaceId);
-        return taskRepository.findBySpace(space).orElseThrow(() -> new ResourceNotFoundException("Tasks não encontradas"));
+        return taskRepository.findBySpaceAndDate(space, dateCompletion).orElseThrow(() -> new ResourceNotFoundException("Tasks não encontradas"));
     }
 
     public TaskDTO completedTask(Long taskId) {
@@ -98,12 +101,6 @@ public class TaskService {
         boolean isCompleted = true;
         LocalDate localDate = LocalDate.now();
         LocalTime localTime = LocalTime.now();
-
-        if (existingTask.isCompleted()) {
-            localDate = null;
-            localTime = null;
-            isCompleted = false;
-        }
 
         existingTask.setDateEnd(localDate);
         existingTask.setTimeEnd(localTime);
