@@ -3,7 +3,6 @@ package com.app.us_twogether.controller;
 import com.app.us_twogether.domain.task.TaskDTO;
 import com.app.us_twogether.service.TaskService;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
@@ -57,7 +56,7 @@ public class TaskController {
     }
 
     @GetMapping("/{spaceId}/task")
-    public ResponseEntity<List<TaskDTO>> getAllTaskFromSpace(@PathVariable Long spaceId, @RequestParam(required = true) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dateCompletion) {
+    public ResponseEntity<List<TaskDTO>> getAllTaskFromSpace(@PathVariable Long spaceId, @RequestParam() @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dateCompletion) {
         List<TaskDTO> tasks = taskService.getAllTaskFromSpace(spaceId, dateCompletion);
 
         return ResponseEntity.ok(tasks);

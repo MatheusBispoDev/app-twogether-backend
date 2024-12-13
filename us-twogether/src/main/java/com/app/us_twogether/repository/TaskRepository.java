@@ -17,5 +17,5 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
             "task.dateEnd, task.timeEnd, task.attachment, task.completed) " +
             "FROM Task task " +
             "WHERE task.spaceId = :space AND task.dateCompletion = :dateCompletion")
-    Optional<List<TaskDTO>> findBySpaceAndDate(@Param("space") Space space, @Param("dateCompletion") LocalDate dateCompletion);
+    List<TaskDTO> findBySpaceAndDate(@Param("space") Space space, @Param("dateCompletion") LocalDate dateCompletion);
 }
