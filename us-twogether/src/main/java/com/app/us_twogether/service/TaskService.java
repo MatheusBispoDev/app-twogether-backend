@@ -94,7 +94,7 @@ public class TaskService {
 
     public List<TaskDTO> getAllTaskFromSpace(Long spaceId, LocalDate dateCompletion) {
         Space space = spaceService.findSpaceById(spaceId);
-        return taskRepository.findBySpaceAndDate(space, dateCompletion).orElseThrow(() -> new ResourceNotFoundException("Tasks não encontradas"));
+        return taskRepository.findBySpaceAndDate(space, dateCompletion);
     }
 
     public TaskDTO completedTask(Long taskId) {
@@ -120,13 +120,12 @@ public class TaskService {
                 task.getDateEnd(), task.getTimeEnd(), task.getObservation(), task.isCompleted());
     }
 
-    private boolean validateUserAndSpace(User user, Space space) {
+    private void validateUserAndSpace(User user, Space space) {
         //TODO Implementar validação de acesso no SpaceAccessInterceptor
         if (!userSpaceRoleRepository.existsByUserAndSpace(user, space)) {
             //TODO melhorar excecao
             throw new DataAlreadyExistsException("Usuário responsável não possui acesso a esse espaço");
         }
-        return true;
     }
 
     private void validateAccessLevelUser(User user, Space space) {
