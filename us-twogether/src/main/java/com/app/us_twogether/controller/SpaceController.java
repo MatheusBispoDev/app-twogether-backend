@@ -80,7 +80,6 @@ public class SpaceController {
     @PutMapping("/join/{usernameToUpdate}/{accessLevel}")
     public ResponseEntity<String> changeSpaceUserAccessLevel(@PathVariable String usernameToUpdate, @PathVariable AccessLevel accessLevel) {
         if (accessLevel == AccessLevel.US) {
-            //TODO Tratamento para melhorar a Exceção
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Alteração de acesso para Owner só pode ser feito via compartilhamento de link.");
         }
 

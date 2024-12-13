@@ -3,6 +3,7 @@ package com.app.us_twogether.service;
 import com.app.us_twogether.domain.space.*;
 import com.app.us_twogether.domain.user.User;
 import com.app.us_twogether.exception.DataAlreadyExistsException;
+import com.app.us_twogether.exception.DataNotFoundException;
 import com.app.us_twogether.repository.SpaceRepository;
 import com.app.us_twogether.repository.UserSpaceRoleRepository;
 import org.apache.kafka.common.errors.ResourceNotFoundException;
@@ -118,8 +119,8 @@ public class SpaceService {
 
     public SpaceWithUsersDTO getSpaceWithUsers(User user) {
         Space space = findSpaceByUser(user);
-        //TODO: Melhorar Excecao
-        List<UserAccessDTO> users = userSpaceRoleRepository.findUsersBySpaceId(space.getSpaceId()).orElseThrow(() -> new ResourceNotFoundException("Usuários não encontrados no espaço"));
+
+        List<UserAccessDTO> users = userSpaceRoleRepository.findUsersBySpaceId(space.getSpaceId()).orElseThrow(() -> new DataNotFoundException("Usuários não encontrados no espaço"));
 
         return new SpaceWithUsersDTO(space.getName(), space.getSharedToken(), users);
     }
@@ -131,18 +132,15 @@ public class SpaceService {
     }
 
     public Space findSpaceByUser(User user) {
-        //TODO: Melhorar Excecao
-        return spaceRepository.findByUserOwnerSpace(user).orElseThrow(() -> new ResourceNotFoundException("Espaço não encontrado para o usuário fornecido"));
+        return spaceRepository.findByUserOwnerSpace(user).orElseThrow(() -> new DataNotFoundException("Espaço não encontrado para o usuário fornecido"));
     }
 
     public UserSpaceRole findUserRoleByUserAndSpace(User user, Space space) {
-        //TODO: Melhorar Excecao
-        return userSpaceRoleRepository.findByUserAndSpace(user, space).orElseThrow(() -> new ResourceNotFoundException("Acesso de usuário não encontrado"));
+        return userSpaceRoleRepository.findByUserAndSpace(user, space).orElseThrow(() -> new DataNotFoundException("Acesso de usuário não encontrado"));
     }
 
     public Space findSpaceById(Long spaceId){
-        //TODO: Melhorar Excecao
-        return spaceRepository.findById(spaceId).orElseThrow(() -> new ResourceNotFoundException("Espaço não encontrado para o usuário fornecido"));
+        return spaceRepository.findById(spaceId).orElseThrow(() -> new DataNotFoundException("Espaço não encontrado para o usuário fornecido"));
     }
 
     private User findUserByUsername(String username) {

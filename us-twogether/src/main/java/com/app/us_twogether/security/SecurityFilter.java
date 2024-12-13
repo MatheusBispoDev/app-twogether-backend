@@ -1,5 +1,6 @@
 package com.app.us_twogether.security;
 
+import com.app.us_twogether.exception.DataNotFoundException;
 import com.app.us_twogether.repository.UserRepository;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -28,14 +29,13 @@ public class SecurityFilter extends OncePerRequestFilter {
 
         if (token != null) {
             var username = tokenService.validateToken(token);
-            UserDetails user = userRepository.findByUsername(username);
+            UserDetails user = userRepository.findByUsername(username).orElseThrow(() -> new DataNotFoundException("Usuário com token não foi encontrado"));
 
-            if (user != null) {
-                //faz a verificacoes das permissoes do usuario (token ativo)
-                var authentication = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
-                //salva a autenticacao do usuario na requisicao para ser usada em outros contextos
-                SecurityContextHolder.getContext().setAuthentication(authentication);
-            }
+            //faz a verificacoes das permissoes do usuario (token ativo)
+            var authentication = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
+            //salva a autenticacao do usuario na requisicao para ser usada em outros contextos
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+
         }
         //vai para o proximo filtro, pois já finalizamos a validação do token
         filterChain.doFilter(request, response);

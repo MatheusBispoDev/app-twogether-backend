@@ -123,7 +123,6 @@ public class TaskService {
     private void validateUserAndSpace(User user, Space space) {
         //TODO Implementar validação de acesso no SpaceAccessInterceptor
         if (!userSpaceRoleRepository.existsByUserAndSpace(user, space)) {
-            //TODO melhorar excecao
             throw new DataAlreadyExistsException("Usuário responsável não possui acesso a esse espaço");
         }
     }
