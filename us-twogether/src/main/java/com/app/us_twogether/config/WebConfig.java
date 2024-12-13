@@ -19,6 +19,7 @@ public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(spaceAccessInterceptor)
-                .addPathPatterns(apiBaseUrl + "/spaces/{spaceId}/task/**");
+                .addPathPatterns(apiBaseUrl + "/spaces/{spaceId}/task/**")
+                .addPathPatterns(apiBaseUrl + "/spaces/{spaceId}/reminders/**");
     }
 }
