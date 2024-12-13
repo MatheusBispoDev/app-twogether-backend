@@ -9,7 +9,6 @@ import org.springframework.data.repository.query.Param;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
 
 public interface TaskRepository extends JpaRepository<Task, Long> {
     @Query("SELECT new com.app.us_twogether.domain.task.TaskDTO(task.taskId, task.userCreation.username, task.userResponsible.username, task.title, " +
