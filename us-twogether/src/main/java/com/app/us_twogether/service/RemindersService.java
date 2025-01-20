@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 
@@ -79,8 +80,9 @@ public class RemindersService {
     public ReminderDTO completedReminders(Long remindersId) {
         //TODO Adicionar agendamento de completed e retirar requisição do controlller
         Reminder reminder = findRemindersById(remindersId);
+        LocalDateTime completion = reminder.getDateCompletion().atTime(reminder.getTimeCompletion());
 
-        if (reminder.getDateCompletion().isBefore(LocalDate.now()) && reminder.getTimeCompletion().isBefore(LocalTime.now())) {
+        if (completion.isBefore(LocalDateTime.now())) {
             reminder.setCompleted(true);
             remindersRepository.save(reminder);
         }
