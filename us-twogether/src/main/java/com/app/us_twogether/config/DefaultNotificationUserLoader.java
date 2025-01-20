@@ -17,6 +17,7 @@ public class DefaultNotificationUserLoader {
 
     @PostConstruct
     public void init() {
+        //TODO Acrescentar inserção de dados via arquivo Data (INSERT Banco de dados)
         if (notificationUserRepository.count() == 0) {
             notificationUserRepository.save(new NotificationUser(1, "TOTAL", "Será notificado todas as atualizações no sistema"));
             notificationUserRepository.save(new NotificationUser(2, "SOMENTE ATIVIDADES", "Será notificado somente o contexto de atividades"));

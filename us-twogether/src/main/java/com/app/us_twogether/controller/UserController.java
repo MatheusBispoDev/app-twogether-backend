@@ -8,11 +8,10 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/ustwogether/api/v1/users")
+@RequestMapping("${app.api.base-url}/users")
 public class UserController {
 
     @Autowired
@@ -24,10 +23,9 @@ public class UserController {
         UsernamePasswordAuthenticationToken authentication =
                 (UsernamePasswordAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
 
-        Optional<User> user = userService.findByUsername(authentication.getName());
+        User user = userService.findByUsername(authentication.getName());
 
-        return user.map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.notFound().build());
+        return ResponseEntity.ok(user);
     }
 
     @PutMapping()
@@ -36,8 +34,6 @@ public class UserController {
 
         UsernamePasswordAuthenticationToken authentication =
                 (UsernamePasswordAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
-
-        System.out.println("Update: " + authentication.getName());
 
         Optional<User> updated = userService.updateUser(authentication.getName(), updatedUser);
         return updated.map(ResponseEntity::ok)

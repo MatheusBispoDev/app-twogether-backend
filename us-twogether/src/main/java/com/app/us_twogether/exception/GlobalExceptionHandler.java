@@ -13,4 +13,18 @@ public class GlobalExceptionHandler {
                 .status(HttpStatus.CONFLICT) // 409 Conflict
                 .body(ex.getMessage());
     }
+
+    @ExceptionHandler(UnauthorizedAccessException.class)
+    public  ResponseEntity<String> handleUnauthorizedAccessException(UnauthorizedAccessException ex) {
+        return ResponseEntity
+                .status(HttpStatus.FORBIDDEN) // 409 Conflict
+                .body(ex.getMessage());
+    }
+
+    @ExceptionHandler(DataNotFoundException.class)
+    public ResponseEntity<String> handleDataNotFoundException(DataNotFoundException ex){
+        return ResponseEntity
+                .status(HttpStatus.NOT_FOUND) // 404 Not Found
+                .body(ex.getMessage());
+    }
 }
