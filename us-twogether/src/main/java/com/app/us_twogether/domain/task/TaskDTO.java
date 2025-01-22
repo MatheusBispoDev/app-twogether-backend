@@ -1,7 +1,5 @@
 package com.app.us_twogether.domain.task;
 
-import com.app.us_twogether.domain.user.User;
-
 import java.time.LocalDate;
 import java.time.LocalTime;
 
