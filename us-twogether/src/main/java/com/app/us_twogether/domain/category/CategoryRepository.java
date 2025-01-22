@@ -1,6 +1,5 @@
-package com.app.us_twogether.repository.category;
+package com.app.us_twogether.domain.category;
 
-import com.app.us_twogether.domain.category.Category;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

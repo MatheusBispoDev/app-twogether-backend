@@ -1,4 +1,4 @@
-package com.app.us_twogether.controller.category;
+package com.app.us_twogether.domain.category;
 
 import org.springframework.web.bind.annotation.*;
 

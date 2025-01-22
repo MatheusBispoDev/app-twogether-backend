@@ -1,10 +1,6 @@
-package com.app.us_twogether.service.category;
+package com.app.us_twogether.domain.category;
 
-import com.app.us_twogether.domain.category.Category;
-import com.app.us_twogether.domain.category.CategoryDTO;
-import com.app.us_twogether.domain.category.SubCategoryDTO;
 import com.app.us_twogether.domain.space.Space;
-import com.app.us_twogether.repository.category.CategoryRepository;
 import com.app.us_twogether.service.SpaceService;
 import org.apache.kafka.common.errors.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;

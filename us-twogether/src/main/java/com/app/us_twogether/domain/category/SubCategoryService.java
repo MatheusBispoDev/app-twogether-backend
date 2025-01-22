@@ -1,6 +1,5 @@
-package com.app.us_twogether.service.category;
+package com.app.us_twogether.domain.category;
 
-import com.app.us_twogether.domain.category.Category;
 import jakarta.persistence.*;
 import lombok.Data;
 

@@ -1,7 +1,5 @@
-package com.app.us_twogether.controller.category;
+package com.app.us_twogether.domain.category;
 
-import com.app.us_twogether.domain.category.CategoryDTO;
-import com.app.us_twogether.service.category.CategoryService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
