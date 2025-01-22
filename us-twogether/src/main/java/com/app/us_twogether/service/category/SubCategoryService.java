@@ -1,12 +1,13 @@
-package com.app.us_twogether.domain.category;
+package com.app.us_twogether.service.category;
 
+import com.app.us_twogether.domain.category.Category;
 import jakarta.persistence.*;
 import lombok.Data;
 
 @Entity
 @Table(name = "tb_sub_category")
 @Data
-public class SubCategory {
+public class SubCategoryService {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long subCategoryId;
@@ -15,9 +16,7 @@ public class SubCategory {
     @JoinColumn(name = "category_id", nullable = false)
     private Category category;
 
-    @Column(nullable = false)
     private String title;
 
-    @Column(nullable = false)
     private String color;
 }
