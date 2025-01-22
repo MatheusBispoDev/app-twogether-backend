@@ -1,6 +1,8 @@
 package com.app.us_twogether.domain.category;
 
+import com.app.us_twogether.domain.category.subCategory.SubCategoryResponse;
+
 import java.util.List;
 
-public record CategoryResponseDTO(Long categoryId, String title, String color, List<SubCategoryDTO> subCategories) {
+public record CategoryResponseDTO(Long categoryId, String title, String color, List<SubCategoryResponse> subCategories) {
 }

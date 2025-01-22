@@ -1,5 +1,6 @@
 package com.app.us_twogether.domain.category;
 
+import com.app.us_twogether.domain.category.subCategory.SubCategory;
 import com.app.us_twogether.domain.space.Space;
 import jakarta.persistence.*;
 import lombok.Data;
