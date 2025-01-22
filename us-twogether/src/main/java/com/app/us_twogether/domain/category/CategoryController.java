@@ -22,10 +22,10 @@ public class CategoryController {
     }
 
     @PutMapping("/{spaceId}/category/{categoryId}")
-    public ResponseEntity<CategoryResponseDTO> updateCategory(@PathVariable Long categoryId, @RequestBody @Valid CategoryRequestDTO updatedCategoryDTO) {
-        CategoryResponseDTO category = categoryService.updateCategory(categoryId, updatedCategoryDTO);
+    public ResponseEntity<CategoryResponseDTO> updateCategory(@PathVariable Long categoryId, @RequestBody @Valid CategoryRequestDTO category) {
+        CategoryResponseDTO updatedCategory = categoryService.updateCategory(categoryId, category);
 
-        return ResponseEntity.ok(category);
+        return ResponseEntity.ok(updatedCategory);
     }
 
     @DeleteMapping("/{spaceId}/category/{categoryId}")
