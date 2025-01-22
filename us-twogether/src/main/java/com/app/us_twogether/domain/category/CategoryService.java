@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class CategoryService {
@@ -18,26 +17,31 @@ public class CategoryService {
     @Autowired
     private SpaceService spaceService;
 
-    public void createCategory(Long spaceId, CategoryDTO categoryDTO){
+    @Autowired
+    private CategoryMapper categoryMapper;
+
+    public CategoryResponseDTO createCategory(Long spaceId, CategoryRequestDTO category){
         Space space = spaceService.findSpaceById(spaceId);
 
-        Category category = new Category();
-        category.setSpace(space);
-        category.setTitle(categoryDTO.title());
-        category.setColor(categoryDTO.color());
+        Category newCategory = new Category();
+        newCategory.setSpace(space);
+        newCategory.setTitle(category.title());
+        newCategory.setColor(category.color());
 
-        categoryRepository.save(category);
+        categoryRepository.save(newCategory);
+
+        return categoryMapper.toResponseDTO(newCategory);
     }
 
-    public CategoryDTO updateCategory(Long categoryId, CategoryDTO updatedDTO){
-        Category existingCategory = findCategoryById(categoryId);
+    public CategoryResponseDTO updateCategory(Long categoryId, CategoryRequestDTO category){
+        Category updatedDTO = findCategoryById(categoryId);
 
-        existingCategory.setTitle(updatedDTO.title());
-        existingCategory.setColor(updatedDTO.color());
+        updatedDTO.setTitle(category.title());
+        updatedDTO.setColor(category.color());
 
-        categoryRepository.save(existingCategory);
+        categoryRepository.save(updatedDTO);
 
-        return updatedDTO;
+        return categoryMapper.toResponseDTO(updatedDTO);
     }
 
     public void deletedCategory(Long categoryId) {
@@ -46,27 +50,19 @@ public class CategoryService {
         categoryRepository.delete(existingCategory);
     }
 
-    public CategoryDTO getCategory(Long categoryId){
+    public CategoryResponseDTO getCategory(Long categoryId){
         Category category = findCategoryById(categoryId);
 
-        return castCategoryToDTO(category);
+        return categoryMapper.toResponseDTO(category);
     }
 
-    public List<CategoryDTO> getAllCategories(Long spaceId){
+    public List<CategoryResponseDTO> getAllCategories(Long spaceId){
         List<Category> categories = categoryRepository.findByAllCategorySpace(spaceId);
 
-        return categories.stream().map((this::castCategoryToDTO)).collect(Collectors.toList());
+        return categories.stream().map(categoryMapper::toResponseDTO).toList();
     }
 
     private Category findCategoryById(Long categoryId) {
         return categoryRepository.findById(categoryId).orElseThrow(() -> new ResourceNotFoundException("Categoria não encontrada"));
-    }
-
-    private CategoryDTO castCategoryToDTO(Category category){
-        List<SubCategoryDTO> subCategories = category.getSubCategories().stream()
-                .map(subCategory -> new SubCategoryDTO(subCategory.getSubCategoryId(), subCategory.getTitle(), subCategory.getTitle()))
-                .collect(Collectors.toList());
-
-        return new CategoryDTO(category.getCategoryId(), subCategories, category.getTitle(), category.getColor());
     }
 }

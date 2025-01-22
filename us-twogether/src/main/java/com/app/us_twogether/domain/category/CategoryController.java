@@ -15,15 +15,15 @@ public class CategoryController {
     private CategoryService categoryService;
 
     @PostMapping("/{spaceId}/category")
-    public ResponseEntity<CategoryDTO> createCategory(@PathVariable Long spaceId, @RequestBody @Valid CategoryDTO categoryDTO) {
-        categoryService.createCategory(spaceId, categoryDTO);
+    public ResponseEntity<CategoryResponseDTO> createCategory(@PathVariable Long spaceId, @RequestBody @Valid CategoryRequestDTO category) {
+        CategoryResponseDTO newCategory = categoryService.createCategory(spaceId, category);
 
-        return ResponseEntity.ok(categoryDTO);
+        return ResponseEntity.ok(newCategory);
     }
 
     @PutMapping("/{spaceId}/category/{categoryId}")
-    public ResponseEntity<CategoryDTO> updateCategory(@PathVariable Long categoryId, @RequestBody @Valid CategoryDTO updatedCategoryDTO) {
-        CategoryDTO category = categoryService.updateCategory(categoryId, updatedCategoryDTO);
+    public ResponseEntity<CategoryResponseDTO> updateCategory(@PathVariable Long categoryId, @RequestBody @Valid CategoryRequestDTO updatedCategoryDTO) {
+        CategoryResponseDTO category = categoryService.updateCategory(categoryId, updatedCategoryDTO);
 
         return ResponseEntity.ok(category);
     }
@@ -36,15 +36,15 @@ public class CategoryController {
     }
 
     @GetMapping("/{spaceId}/category/{categoryId}")
-    public ResponseEntity<CategoryDTO> getCategory(@PathVariable Long categoryId) {
-        CategoryDTO category = categoryService.getCategory(categoryId);
+    public ResponseEntity<CategoryResponseDTO> getCategory(@PathVariable Long categoryId) {
+        CategoryResponseDTO category = categoryService.getCategory(categoryId);
 
         return ResponseEntity.ok(category);
     }
 
     @GetMapping("/{spaceId}/categories")
-    public ResponseEntity<List<CategoryDTO>> getAllCategoryFromSpace(@PathVariable Long spaceId) {
-        List<CategoryDTO> categories = categoryService.getAllCategories(spaceId);
+    public ResponseEntity<List<CategoryResponseDTO>> getAllCategoryFromSpace(@PathVariable Long spaceId) {
+        List<CategoryResponseDTO> categories = categoryService.getAllCategories(spaceId);
 
         return ResponseEntity.ok(categories);
     }
