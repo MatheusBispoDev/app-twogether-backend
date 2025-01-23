@@ -44,7 +44,7 @@ public class CategoryController {
 
     @GetMapping("/{spaceId}/categories")
     public ResponseEntity<List<CategoryResponseDTO>> getAllCategoryFromSpace(@PathVariable Long spaceId) {
-        List<CategoryResponseDTO> categories = categoryService.getAllCategories(spaceId);
+        List<CategoryResponseDTO> categories = categoryService.getAllCategoriesFromSpace(spaceId);
 
         return ResponseEntity.ok(categories);
     }

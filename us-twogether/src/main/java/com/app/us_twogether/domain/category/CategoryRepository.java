@@ -12,5 +12,5 @@ public interface CategoryRepository extends JpaRepository<Category, Long> {
     @Query("SELECT category FROM Category category " +
             "LEFT JOIN FETCH category.subCategories " +
             "WHERE category.space.spaceId = :spaceId")
-    List<Category> findByAllCategorySpace(@Param("spaceId") Long spaceId);
+    List<Category> getAllCategoriesFromSpace(@Param("spaceId") Long spaceId);
 }

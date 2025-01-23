@@ -56,8 +56,8 @@ public class CategoryService {
         return categoryMapper.toResponseDTO(category);
     }
 
-    public List<CategoryResponseDTO> getAllCategories(Long spaceId){
-        List<Category> categories = categoryRepository.findByAllCategorySpace(spaceId);
+    public List<CategoryResponseDTO> getAllCategoriesFromSpace(Long spaceId){
+        List<Category> categories = categoryRepository.getAllCategoriesFromSpace(spaceId);
 
         return categories.stream().map(categoryMapper::toResponseDTO).toList();
     }
