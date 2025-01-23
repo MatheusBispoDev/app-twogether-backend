@@ -1,7 +1,7 @@
 package com.app.us_twogether.domain.category;
 
 import com.app.us_twogether.domain.category.subCategory.SubCategory;
-import com.app.us_twogether.domain.category.subCategory.SubCategoryResponse;
+import com.app.us_twogether.domain.category.subCategory.SubCategoryResponseDTO;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -18,8 +18,8 @@ public class CategoryMapper {
         );
     }
 
-    public SubCategoryResponse toSubCategoryResponseDTO(SubCategory subCategory) {
-        return new SubCategoryResponse(
+    public SubCategoryResponseDTO toSubCategoryResponseDTO(SubCategory subCategory) {
+        return new SubCategoryResponseDTO(
                 subCategory.getSubCategoryId(),
                 subCategory.getTitle(),
                 subCategory.getColor()
