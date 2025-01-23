@@ -3,7 +3,6 @@ package com.app.us_twogether.domain.category.subCategory;
 import com.app.us_twogether.domain.category.Category;
 import com.app.us_twogether.domain.category.CategoryMapper;
 import com.app.us_twogether.domain.category.CategoryRepository;
-import com.app.us_twogether.domain.category.CategoryResponseDTO;
 import org.apache.kafka.common.errors.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
