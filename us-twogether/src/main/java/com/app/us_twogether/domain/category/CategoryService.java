@@ -51,10 +51,14 @@ public class CategoryService {
         categoryRepository.delete(existingCategory);
     }
 
-    public CategoryResponseDTO getCategory(Long categoryId){
+    public CategoryResponseDTO getResponseCategory(Long categoryId){
         Category category = findCategoryById(categoryId);
 
         return categoryMapper.toResponseDTO(category);
+    }
+
+    public Category getCategory(Long categoryId){
+        return findCategoryById(categoryId);
     }
 
     public List<CategoryResponseDTO> getAllCategoriesFromSpace(Long spaceId){

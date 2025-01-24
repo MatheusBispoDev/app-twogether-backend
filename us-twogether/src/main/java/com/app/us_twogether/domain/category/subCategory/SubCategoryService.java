@@ -51,10 +51,14 @@ public class SubCategoryService {
         subCategoryRepository.delete(subCategory);
     }
 
-    public SubCategoryResponseDTO getSubCategory(Long categoryId, Long subCategoryId){
+    public SubCategoryResponseDTO getReponseSubCategory(Long categoryId, Long subCategoryId){
         SubCategory subCategory = getSubCategoryByCategory(categoryId, subCategoryId);
 
         return categoryMapper.toSubCategoryResponseDTO(subCategory);
+    }
+
+    public SubCategory getSubCategory(Long subCategoryId){
+        return findSubCategoryById(subCategoryId);
     }
 
     public List<SubCategoryResponseDTO> getAllSubCategoriesFromCategory(Long categoryId){

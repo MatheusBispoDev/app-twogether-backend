@@ -37,7 +37,7 @@ public class CategoryController {
 
     @GetMapping("/{spaceId}/category/{categoryId}")
     public ResponseEntity<CategoryResponseDTO> getCategory(@PathVariable Long categoryId) {
-        CategoryResponseDTO category = categoryService.getCategory(categoryId);
+        CategoryResponseDTO category = categoryService.getResponseCategory(categoryId);
 
         return ResponseEntity.ok(category);
     }

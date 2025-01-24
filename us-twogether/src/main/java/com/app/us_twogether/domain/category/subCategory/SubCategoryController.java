@@ -38,7 +38,7 @@ public class SubCategoryController {
 
     @GetMapping("/{spaceId}/category/{categoryId}/sub/{subCategoryId}")
     public ResponseEntity<SubCategoryResponseDTO> getSubCategory(@PathVariable Long categoryId, @PathVariable Long subCategoryId) {
-        SubCategoryResponseDTO subCategory = subCategoryService.getSubCategory(categoryId, subCategoryId);
+        SubCategoryResponseDTO subCategory = subCategoryService.getReponseSubCategory(categoryId, subCategoryId);
 
         return ResponseEntity.ok(subCategory);
     }
