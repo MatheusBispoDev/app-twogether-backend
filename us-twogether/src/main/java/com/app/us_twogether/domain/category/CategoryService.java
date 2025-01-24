@@ -27,6 +27,7 @@ public class CategoryService {
         newCategory.setSpace(space);
         newCategory.setTitle(category.title());
         newCategory.setColor(category.color());
+        newCategory.setCategoryType(category.categoryType());
 
         categoryRepository.save(newCategory);
 

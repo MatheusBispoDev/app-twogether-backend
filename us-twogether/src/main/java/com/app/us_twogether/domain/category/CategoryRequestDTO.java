@@ -1,4 +1,9 @@
 package com.app.us_twogether.domain.category;
 
-public record CategoryRequestDTO(String title, String color) {
+import jakarta.validation.constraints.NotNull;
+
+public record CategoryRequestDTO(String title,
+                                 String color,
+                                 @NotNull(message = "CategoryType cannot be null")
+                                 CategoryType categoryType) {
 }

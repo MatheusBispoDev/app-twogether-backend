@@ -14,7 +14,8 @@ public class CategoryMapper {
                 category.getColor(),
                 category.getSubCategories().stream()
                         .map(this::toSubCategoryResponseDTO)
-                        .toList()
+                        .toList(),
+                category.getCategoryType()
         );
     }
 

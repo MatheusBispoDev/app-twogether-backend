@@ -28,4 +28,7 @@ public class Category {
 
     @Column(nullable = false)
     private String color;
+
+    @Enumerated(EnumType.STRING)
+    private CategoryType categoryType;
 }
