@@ -2,6 +2,7 @@ package com.app.us_twogether.domain.category;
 
 import com.app.us_twogether.domain.category.subCategory.SubCategory;
 import com.app.us_twogether.domain.space.Space;
+import com.app.us_twogether.domain.task.Task;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -22,6 +23,9 @@ public class Category {
 
     @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<SubCategory> subCategories = new ArrayList<>();
+
+    @OneToMany(mappedBy = "category")
+    private List<Task> tasks;
 
     @Column(nullable = false)
     private String title;

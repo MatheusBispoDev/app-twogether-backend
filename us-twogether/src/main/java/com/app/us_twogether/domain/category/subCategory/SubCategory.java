@@ -1,8 +1,11 @@
 package com.app.us_twogether.domain.category.subCategory;
 
 import com.app.us_twogether.domain.category.Category;
+import com.app.us_twogether.domain.task.Task;
 import jakarta.persistence.*;
 import lombok.Data;
+
+import java.util.List;
 
 @Entity
 @Table(name = "tb_sub_category")
@@ -15,6 +18,9 @@ public class SubCategory {
     @ManyToOne
     @JoinColumn(name = "category_id", nullable = false)
     private Category category;
+
+    @OneToMany(mappedBy = "subCategory")
+    private List<Task> tasks;
 
     @Column(nullable = false)
     private String title;

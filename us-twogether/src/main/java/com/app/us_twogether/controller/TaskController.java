@@ -1,6 +1,7 @@
 package com.app.us_twogether.controller;
 
 import com.app.us_twogether.domain.task.TaskDTO;
+import com.app.us_twogether.domain.task.TaskRequestDTO;
 import com.app.us_twogether.service.TaskService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,14 +22,14 @@ public class TaskController {
     TaskService taskService;
 
     @PostMapping("/{spaceId}/task")
-    public ResponseEntity<TaskDTO> createTask(@AuthenticationPrincipal UserDetails userDetails, @PathVariable Long spaceId, @RequestBody @Valid TaskDTO taskDTO) {
+    public ResponseEntity<TaskDTO> createTask(@AuthenticationPrincipal UserDetails userDetails, @PathVariable Long spaceId, @RequestBody @Valid TaskRequestDTO taskDTO) {
         TaskDTO newTask = taskService.createTask(userDetails.getUsername(), spaceId, taskDTO);
 
         return ResponseEntity.ok(newTask);
     }
 
     @PutMapping("/{spaceId}/task/{taskId}")
-    public ResponseEntity<TaskDTO> updateTask(@PathVariable Long taskId, @RequestBody @Valid TaskDTO updatedtaskDTO) {
+    public ResponseEntity<TaskDTO> updateTask(@PathVariable Long taskId, @RequestBody @Valid TaskRequestDTO updatedtaskDTO) {
         TaskDTO task = taskService.updateTask(taskId, updatedtaskDTO);
 
         return ResponseEntity.ok(task);
