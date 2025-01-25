@@ -40,7 +40,7 @@ public class ReminderService {
 
     public ReminderResponseDTO createReminder(String usernameCreation, Long spaceId, ReminderRequestDTO reminder) {
         Space space = spaceService.findSpaceById(spaceId);
-        User user = userService.findByUsername(usernameCreation);
+        User user = userService.getUser(usernameCreation);
 
         Category category = categoryService.getCategory(reminder.categoryId());
         SubCategory subCategory = subCategoryService.getSubCategory(reminder.subCategoryId());

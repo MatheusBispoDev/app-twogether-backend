@@ -2,10 +2,9 @@ package com.app.us_twogether.domain.user;
 
 import com.app.us_twogether.exception.DataAlreadyExistsException;
 import com.app.us_twogether.exception.DataNotFoundException;
+import org.apache.kafka.common.errors.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.Optional;
 
 @Service
 public class UserService {
@@ -13,32 +12,39 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
 
-    public User findByUsername(String username) {
+    @Autowired
+    private UserMapper userMapper;
+
+    public UserResponseDTO findByUsername(String username) {
+        User user = userRepository.findById(username).orElseThrow(() -> new DataNotFoundException("Usuário não encontrado"));
+
+        return userMapper.toResponseDTO(user);
+    }
+
+    public User getUser(String username) {
         return userRepository.findById(username).orElseThrow(() -> new DataNotFoundException("Usuário não encontrado"));
     }
 
-    public void saveUser(User newUser) {
+    public UserResponseDTO createUser(User newUser) {
         if (userRepository.existsById(newUser.getUsername())) {
             throw new DataAlreadyExistsException("Usuário '" + newUser.getUsername() + "' já está cadastrado.");
         }
 
-        userRepository.save(newUser);
+        User user = userRepository.save(newUser);
+
+        return userMapper.toResponseDTO(user);
     }
 
-    public Optional<User> updateUser(String username, User updatedUser) {
-        Optional<User> existingUser = userRepository.findById(username);
+    public UserResponseDTO updateUser(String username, UserRequestDTO user) {
+        User updatedUser = userRepository.findById(username).orElseThrow(() -> new ResourceNotFoundException("Usuário não encontrado"));
 
-        if (existingUser.isPresent()) {
-            User user = existingUser.get();
-            user.setPassword(updatedUser.getPassword());
-            user.setName(updatedUser.getName());
-            user.setEmail(updatedUser.getEmail());
-            user.setPhoneNumber(updatedUser.getPhoneNumber());
-            user.setType(updatedUser.getType());
-            return Optional.of(userRepository.save(user));
-        }
+        updatedUser.setPassword(user.password());
+        updatedUser.setName(user.name());
+        updatedUser.setEmail(user.email());
+        updatedUser.setPhoneNumber(user.phoneNumber());
+        updatedUser.setType(user.type());
 
-        return Optional.empty();
+        return userMapper.toResponseDTO(userRepository.save(updatedUser));
     }
 
 }

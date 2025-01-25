@@ -144,7 +144,7 @@ public class SpaceService {
     }
 
     private User findUserByUsername(String username) {
-        return userService.findByUsername(username);
+        return userService.getUser(username);
     }
 
     private String generateSharedSpaceToken() {

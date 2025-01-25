@@ -52,7 +52,7 @@ public class SpaceAccessInterceptor implements HandlerInterceptor {
     }
 
     private boolean isAuthorized(String authUsername, Long spaceId) {
-        User user = userService.findByUsername(authUsername);
+        User user = userService.getUser(authUsername);
         Space space = spaceService.findSpaceById(spaceId);
         return userSpaceRoleRepository.existsByUserAndSpace(user, space);
     }
