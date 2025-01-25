@@ -19,10 +19,10 @@ public class UserAutomationTest {
     public void testCreateUser(){
         // Criar e salvar um User que referencia o NotificationUser padrão
         User user = new User("john_doe", "1234", "John Doe", "john@example.com", "11932178425", "US");
-        userService.saveUser(user);
+        userService.createUser(user);
 
         // Busca o usuário cadastrado
-        User savedUser = (userService.findByUsername("john_doe"));
+        User savedUser = (userService.getUser("john_doe"));
 
         // Validações
         assertThat(savedUser.getUsername()).isEqualTo("john_doe");
@@ -32,10 +32,10 @@ public class UserAutomationTest {
     public void testCreateDuplicateUser(){
         // Criar e salvar um User que referencia o NotificationUser padrão
         User user = new User("john_doe", "1234", "John Doe", "john@example.com", "11932178425", "US");
-        userService.saveUser(user);
+        userService.createUser(user);
 
         // Testar se o sistema lança uma exceção ao criar outro usuário com o mesmo username
-        assertThrows(DataAlreadyExistsException.class, () -> userService.saveUser(user));
+        assertThrows(DataAlreadyExistsException.class, () -> userService.createUser(user));
     }
 
     @Test
@@ -44,13 +44,13 @@ public class UserAutomationTest {
         User user = new User("john_doe", "1234", "John Doe", "john@example.com", "11932178425", "US");
 
         // Salvo o usuário
-        userService.saveUser(user);
+        userService.createUser(user);
 
         // Busca o usuário cadastrado
-        User savedUser = (userService.findByUsername("john_doe"));
+        User savedUser = (userService.getUser("john_doe"));
 
         // Crio um usuário para alterar os dados
-        User updatedUser = new User("john_doe", "4321", "Roger", "roger@example.com", "11945345678", "US");
+        UserRequestDTO updatedUser = new UserRequestDTO("john_doe", "4321", "Roger", "roger@example.com", "11945345678", "US");
 
         userService.updateUser("john_doe", updatedUser);
 
@@ -67,10 +67,10 @@ public class UserAutomationTest {
         User user = new User("john_doe", "1234", "John Doe", "john@example.com", "11932178425", "US");
 
         // Salvo o usuário
-        userService.saveUser(user);
+        userService.createUser(user);
 
         // Busca o usuário cadastrado
-        User savedUser = (userService.findByUsername("john_doe"));
+        User savedUser = (userService.getUser("john_doe"));
 
         // Validações
         assertThat(savedUser).isNotNull();
