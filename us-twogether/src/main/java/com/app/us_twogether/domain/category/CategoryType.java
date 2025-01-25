@@ -1,7 +1,7 @@
 package com.app.us_twogether.domain.category;
 
 public enum CategoryType {
-    ATIVITY,
+    ACTIVITY,
     REVENUE,
     EXPENSE,
     ACCOUNT

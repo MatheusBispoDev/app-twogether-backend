@@ -33,7 +33,7 @@ public class SubCategoryController {
     public ResponseEntity<String> deleteSubCategory(@PathVariable Long subCategoryId) {
         subCategoryService.deletedSubCategory(subCategoryId);
 
-        return ResponseEntity.ok("Category deletada com sucesso");
+        return ResponseEntity.ok("Sub Categoria deletada com sucesso");
     }
 
     @GetMapping("/{spaceId}/category/{categoryId}/sub/{subCategoryId}")
