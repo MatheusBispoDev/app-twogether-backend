@@ -6,7 +6,6 @@ import com.app.us_twogether.exception.UnauthorizedAccessException;
 import com.app.us_twogether.repository.UserSpaceRoleRepository;
 import com.app.us_twogether.domain.space.SpaceService;
 import com.app.us_twogether.service.UserService;
-import io.micrometer.common.lang.Nullable;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;

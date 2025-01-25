@@ -65,8 +65,6 @@ public class SpaceService {
             spaceRepository.save(space);
         }
 
-        String sharedToken = endpoint + baseUrl + "/spaces/join/" + space.getSharedToken();
-
         return spaceMapper.toResponseDTO(space);
     }
 

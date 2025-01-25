@@ -1,7 +1,10 @@
 package com.app.us_twogether.domain.space;
 
+import org.springframework.stereotype.Component;
+
 import java.util.List;
 
+@Component
 public class SpaceMapper {
 
     public SpaceResponseDTO toResponseDTO(Space space){
