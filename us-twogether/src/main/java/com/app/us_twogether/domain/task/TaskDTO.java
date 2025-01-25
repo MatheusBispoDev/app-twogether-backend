@@ -11,4 +11,4 @@ public record TaskDTO(Long taskId, String userCreation, String userResponsible,
                       Long subCategoryId, String subCategoryTitle, String subCategoryColor,
                       String title, String description, String observation, LocalDate dateCreation,
                       LocalTime timeCreation, LocalDate dateCompletion, LocalTime timeCompletion,
-                      LocalDate dateEnd, LocalTime timeEnd, String attachment, boolean completed) {}
+                      LocalDate dateEnd, LocalTime timeEnd, String attachment, boolean completed) { }
