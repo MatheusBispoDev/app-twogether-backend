@@ -1,10 +1,9 @@
-package com.app.us_twogether.repository;
+package com.app.us_twogether.domain.user;
 
 import com.app.us_twogether.domain.space.AccessLevel;
 import com.app.us_twogether.domain.space.Space;
 import com.app.us_twogether.domain.space.UserAccessDTO;
 import com.app.us_twogether.domain.space.UserSpaceRole;
-import com.app.us_twogether.domain.user.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

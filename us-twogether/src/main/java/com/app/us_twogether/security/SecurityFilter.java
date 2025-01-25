@@ -1,7 +1,7 @@
 package com.app.us_twogether.security;
 
 import com.app.us_twogether.exception.DataNotFoundException;
-import com.app.us_twogether.repository.UserRepository;
+import com.app.us_twogether.domain.user.UserRepository;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

@@ -3,9 +3,9 @@ package com.app.us_twogether.config;
 import com.app.us_twogether.domain.space.Space;
 import com.app.us_twogether.domain.user.User;
 import com.app.us_twogether.exception.UnauthorizedAccessException;
-import com.app.us_twogether.repository.UserSpaceRoleRepository;
-import com.app.us_twogether.service.SpaceService;
-import com.app.us_twogether.service.UserService;
+import com.app.us_twogether.domain.user.UserSpaceRoleRepository;
+import com.app.us_twogether.domain.space.SpaceService;
+import com.app.us_twogether.domain.user.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,8 +29,10 @@ public class SpaceAccessInterceptor implements HandlerInterceptor {
     @Autowired
     SpaceService spaceService;
 
+
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+        @SuppressWarnings("unchecked")
         Map<String, String> pathVariables = (Map<String, String>) request.getAttribute(HandlerMapping.URI_TEMPLATE_VARIABLES_ATTRIBUTE);
 
         try {
@@ -50,7 +52,7 @@ public class SpaceAccessInterceptor implements HandlerInterceptor {
     }
 
     private boolean isAuthorized(String authUsername, Long spaceId) {
-        User user = userService.findByUsername(authUsername);
+        User user = userService.getUser(authUsername);
         Space space = spaceService.findSpaceById(spaceId);
         return userSpaceRoleRepository.existsByUserAndSpace(user, space);
     }

@@ -1,11 +1,10 @@
-package com.app.us_twogether.service;
+package com.app.us_twogether.domain.space;
 
-import com.app.us_twogether.domain.space.*;
 import com.app.us_twogether.domain.user.User;
 import com.app.us_twogether.exception.DataAlreadyExistsException;
 import com.app.us_twogether.exception.DataNotFoundException;
-import com.app.us_twogether.repository.SpaceRepository;
-import com.app.us_twogether.repository.UserSpaceRoleRepository;
+import com.app.us_twogether.domain.user.UserSpaceRoleRepository;
+import com.app.us_twogether.domain.user.UserService;
 import org.apache.kafka.common.errors.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -21,6 +20,9 @@ public class SpaceService {
     private SpaceRepository spaceRepository;
 
     @Autowired
+    private SpaceMapper spaceMapper;
+
+    @Autowired
     private UserSpaceRoleRepository userSpaceRoleRepository;
 
     @Autowired
@@ -32,12 +34,7 @@ public class SpaceService {
     @Value("${app.api.endpoint}")
     private String endpoint;
 
-    public SpaceService(SpaceRepository spaceRepository, UserSpaceRoleRepository userSpaceRoleRepository) {
-        this.spaceRepository = spaceRepository;
-        this.userSpaceRoleRepository = userSpaceRoleRepository;
-    }
-
-    public SpaceDTO createSpace(User creator) {
+    public SpaceResponseDTO createSpace(User creator) {
         if (validateAccessLevelUserUS(creator)) {
             throw new DataAlreadyExistsException("Usuário '" + creator.getUsername() + "' já possue um Espaço criado.");
         }
@@ -56,11 +53,11 @@ public class SpaceService {
         spaceRepository.save(newSpace);
         userSpaceRoleRepository.save(role);
 
-        return new SpaceDTO(newSpace.getName(), newSpace.getSharedToken());
+        return spaceMapper.toResponseDTO(newSpace);
     }
 
-    public SpaceDTO getSharedLink(User user) {
-        Space space = findSpaceByUser(user);
+    public SpaceResponseDTO getSharedLink(Long spaceId) {
+        Space space = findSpaceById(spaceId);
 
         if (space.getSharedToken().isEmpty()) {
             String token = generateSharedSpaceToken();
@@ -68,9 +65,7 @@ public class SpaceService {
             spaceRepository.save(space);
         }
 
-        String sharedToken = endpoint + baseUrl + "/spaces/join/" + space.getSharedToken();
-
-        return new SpaceDTO(space.getName(), sharedToken);
+        return spaceMapper.toResponseDTO(space);
     }
 
     public void addUserToSpaceByToken(String token, User userInvited, AccessLevel acessLevel) {
@@ -92,11 +87,10 @@ public class SpaceService {
         userSpaceRole.setAccessLevel(acessLevel);
 
         userSpaceRoleRepository.save(userSpaceRole);
-        space.setName("US " + space.getName() + " " + userInvited.getName() + " - TwoGether");
     }
 
-    public void changeSpaceUserAccessLevel(User userOwner, String usernameToUpdate, AccessLevel acessLevel) {
-        Space space = findSpaceByUser(userOwner);
+    public void changeSpaceUserAccessLevel(Long spaceId, String usernameToUpdate, AccessLevel acessLevel) {
+        Space space = findSpaceById(spaceId);
 
         User userToUpdate = findUserByUsername(usernameToUpdate);
 
@@ -107,8 +101,8 @@ public class SpaceService {
         userSpaceRoleRepository.save(userSpaceRole);
     }
 
-    public void removeUserFromSpace(User userOwner, String usernameToRemove) {
-        Space space = findSpaceByUser(userOwner);
+    public void removeUserFromSpace(Long spaceId, String usernameToRemove) {
+        Space space = findSpaceById(spaceId);
 
         User userToRemove = findUserByUsername(usernameToRemove);
 
@@ -117,22 +111,28 @@ public class SpaceService {
         userSpaceRoleRepository.delete(userSpaceRole);
     }
 
-    public SpaceWithUsersDTO getSpaceWithUsers(User user) {
-        Space space = findSpaceByUser(user);
+    public SpaceWithUsersDTO getSpaceWithUsers(Long spaceId) {
+        Space space = findSpaceById(spaceId);
 
         List<UserAccessDTO> users = userSpaceRoleRepository.findUsersBySpaceId(space.getSpaceId()).orElseThrow(() -> new DataNotFoundException("Usuários não encontrados no espaço"));
 
-        return new SpaceWithUsersDTO(space.getName(), space.getSharedToken(), users);
+        return spaceMapper.toSpaceWithUsersDTO(space, users);
     }
 
-    public void deleteSpace(User user) {
-        Space space = findSpaceByUser(user);
+    public SpaceResponseDTO updatedSpace(Long spaceId, String spaceName){
+        Space space = findSpaceById(spaceId);
+
+        space.setName(spaceName);
+
+        spaceRepository.save(space);
+
+        return spaceMapper.toResponseDTO(space);
+    }
+
+    public void deleteSpace(Long spaceId) {
+        Space space = findSpaceById(spaceId);
 
         spaceRepository.delete(space);
-    }
-
-    public Space findSpaceByUser(User user) {
-        return spaceRepository.findByUserOwnerSpace(user).orElseThrow(() -> new DataNotFoundException("Espaço não encontrado para o usuário fornecido"));
     }
 
     public UserSpaceRole findUserRoleByUserAndSpace(User user, Space space) {
@@ -144,7 +144,7 @@ public class SpaceService {
     }
 
     private User findUserByUsername(String username) {
-        return userService.findByUsername(username);
+        return userService.getUser(username);
     }
 
     private String generateSharedSpaceToken() {

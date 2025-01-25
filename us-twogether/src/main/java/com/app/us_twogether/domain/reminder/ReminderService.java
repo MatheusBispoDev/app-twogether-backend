@@ -6,8 +6,8 @@ import com.app.us_twogether.domain.category.subCategory.SubCategory;
 import com.app.us_twogether.domain.category.subCategory.SubCategoryService;
 import com.app.us_twogether.domain.space.Space;
 import com.app.us_twogether.domain.user.User;
-import com.app.us_twogether.service.SpaceService;
-import com.app.us_twogether.service.UserService;
+import com.app.us_twogether.domain.space.SpaceService;
+import com.app.us_twogether.domain.user.UserService;
 import org.apache.kafka.common.errors.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -40,7 +40,7 @@ public class ReminderService {
 
     public ReminderResponseDTO createReminder(String usernameCreation, Long spaceId, ReminderRequestDTO reminder) {
         Space space = spaceService.findSpaceById(spaceId);
-        User user = userService.findByUsername(usernameCreation);
+        User user = userService.getUser(usernameCreation);
 
         Category category = categoryService.getCategory(reminder.categoryId());
         SubCategory subCategory = subCategoryService.getSubCategory(reminder.subCategoryId());

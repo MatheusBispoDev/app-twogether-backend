@@ -1,11 +1,10 @@
-package com.app.us_twogether.controller;
+package com.app.us_twogether.domain.authentication;
 
-import com.app.us_twogether.domain.user.AuthenticationDTO;
-import com.app.us_twogether.domain.user.LoginResponseDTO;
-import com.app.us_twogether.domain.user.UserDTO;
 import com.app.us_twogether.domain.user.User;
+import com.app.us_twogether.domain.user.UserRequestDTO;
+import com.app.us_twogether.domain.user.UserResponseDTO;
+import com.app.us_twogether.domain.user.UserService;
 import com.app.us_twogether.security.TokenService;
-import com.app.us_twogether.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -28,7 +27,7 @@ public class AuthenticationController {
     private TokenService tokenService;
 
     @PostMapping("/login")
-    public ResponseEntity<LoginResponseDTO> login(@RequestBody @Valid AuthenticationDTO authenticationDTO){
+    public ResponseEntity<LoginResponseDTO> login(@RequestBody @Valid AuthenticationRequestDTO authenticationDTO){
         var usernamePassword = new UsernamePasswordAuthenticationToken(authenticationDTO.username(), authenticationDTO.password());
         var auth = this.authenticationManager.authenticate(usernamePassword);
 
@@ -38,11 +37,11 @@ public class AuthenticationController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity register(@RequestBody @Valid UserDTO userDTO){
+    public ResponseEntity<UserResponseDTO> register(@RequestBody @Valid UserRequestDTO userDTO){
         User newUser = new User(userDTO.username(), userDTO.password(), userDTO.name(), userDTO.email(), userDTO.phoneNumber(), userDTO.type());
 
-        userService.saveUser(newUser);
+        UserResponseDTO user = userService.createUser(newUser);
 
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(user);
     }
 }

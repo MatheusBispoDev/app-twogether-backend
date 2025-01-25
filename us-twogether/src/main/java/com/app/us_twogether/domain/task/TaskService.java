@@ -7,9 +7,9 @@ import com.app.us_twogether.domain.category.subCategory.SubCategoryService;
 import com.app.us_twogether.domain.space.Space;
 import com.app.us_twogether.domain.user.User;
 import com.app.us_twogether.exception.DataAlreadyExistsException;
-import com.app.us_twogether.repository.UserSpaceRoleRepository;
-import com.app.us_twogether.service.SpaceService;
-import com.app.us_twogether.service.UserService;
+import com.app.us_twogether.domain.user.UserSpaceRoleRepository;
+import com.app.us_twogether.domain.space.SpaceService;
+import com.app.us_twogether.domain.user.UserService;
 import org.apache.kafka.common.errors.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -44,9 +44,9 @@ public class TaskService {
 
     public TaskResponseDTO createTask(String usernameCreation, Long spaceId, TaskRequestDTO task) {
         Space space = spaceService.findSpaceById(spaceId);
-        User user = userService.findByUsername(usernameCreation);
+        User user = userService.getUser(usernameCreation);
 
-        User userResponsible = userService.findByUsername(task.userResponsible());
+        User userResponsible = userService.getUser(task.userResponsible());
         validateUserAndSpace(userResponsible, space);
 
         Category category = categoryService.getCategory(task.categoryId());
@@ -76,7 +76,7 @@ public class TaskService {
         Task updatedTask = findTaskById(taskId);
 
         if (!updatedTask.getUserResponsible().getUsername().equals(task.userResponsible())) {
-            User userResponsible = userService.findByUsername(task.userResponsible());
+            User userResponsible = userService.getUser(task.userResponsible());
             validateUserAndSpace(userResponsible, updatedTask.getSpace());
             updatedTask.setUserResponsible(userResponsible);
         }

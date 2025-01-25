@@ -13,14 +13,13 @@ import org.springframework.stereotype.Service;
 public class TokenService {
 
     @Value("${api.security.token.secret}")
-    private String secret;
+    private String secret = "";
 
     public String generateToken(User user){
         try {
             Algorithm algorithm = Algorithm.HMAC256(secret);
-            String token = JWT.create().withIssuer("ustwogether-auth-api").withSubject(user.getUsername()).sign(algorithm);
 
-            return token;
+            return JWT.create().withIssuer("ustwogether-auth-api").withSubject(user.getUsername()).sign(algorithm);
         } catch (JWTCreationException exception) {
             throw new RuntimeException("Error while generation token", exception);
         }
