@@ -1,8 +1,5 @@
 package com.app.us_twogether.domain.task;
 
-import com.app.us_twogether.domain.category.Category;
-import com.app.us_twogether.domain.category.subCategory.SubCategory;
-
 import java.time.LocalDate;
 import java.time.LocalTime;
 
