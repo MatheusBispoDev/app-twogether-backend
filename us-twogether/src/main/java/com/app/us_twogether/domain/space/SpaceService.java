@@ -111,8 +111,8 @@ public class SpaceService {
         userSpaceRoleRepository.delete(userSpaceRole);
     }
 
-    public SpaceWithUsersDTO getSpaceWithUsers(User user) {
-        Space space = findSpaceByUser(user);
+    public SpaceWithUsersDTO getSpaceWithUsers(Long spaceId) {
+        Space space = findSpaceById(spaceId);
 
         List<UserAccessDTO> users = userSpaceRoleRepository.findUsersBySpaceId(space.getSpaceId()).orElseThrow(() -> new DataNotFoundException("Usuários não encontrados no espaço"));
 

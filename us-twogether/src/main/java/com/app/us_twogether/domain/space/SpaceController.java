@@ -73,12 +73,8 @@ public class SpaceController {
     }
 
     @GetMapping("/{spaceId}")
-    public ResponseEntity<SpaceWithUsersDTO> getSpaceUser(){
-        UsernamePasswordAuthenticationToken authentication = (org.springframework.security.authentication.UsernamePasswordAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
-
-        User user = findUserByAuthentication(authentication);
-
-        SpaceWithUsersDTO space = spaceService.getSpaceWithUsers(user);
+    public ResponseEntity<SpaceWithUsersDTO> getSpaceUser(@PathVariable Long spaceId){
+        SpaceWithUsersDTO space = spaceService.getSpaceWithUsers(spaceId);
 
         return ResponseEntity.ok(space);
     }
