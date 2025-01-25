@@ -2,6 +2,7 @@ package com.app.us_twogether.domain.authentication;
 
 import com.app.us_twogether.domain.user.User;
 import com.app.us_twogether.domain.user.UserRequestDTO;
+import com.app.us_twogether.domain.user.UserResponseDTO;
 import com.app.us_twogether.domain.user.UserService;
 import com.app.us_twogether.security.TokenService;
 import jakarta.validation.Valid;
@@ -36,11 +37,11 @@ public class AuthenticationController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<String> register(@RequestBody @Valid UserRequestDTO userDTO){
+    public ResponseEntity<UserResponseDTO> register(@RequestBody @Valid UserRequestDTO userDTO){
         User newUser = new User(userDTO.username(), userDTO.password(), userDTO.name(), userDTO.email(), userDTO.phoneNumber(), userDTO.type());
 
-        userService.createUser(newUser);
+        UserResponseDTO user = userService.createUser(newUser);
 
-        return ResponseEntity.ok("Usuário registrado com sucesso");
+        return ResponseEntity.ok(user);
     }
 }
