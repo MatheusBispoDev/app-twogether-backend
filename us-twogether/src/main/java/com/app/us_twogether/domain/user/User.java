@@ -21,16 +21,22 @@ public class User implements UserDetails {
     @Id
     @Column(nullable = false, unique = true)
     private String username;
+
     @Column(nullable = false)
     private String password;
+
     @Column(nullable = false)
     private String name;
+
     @Column(nullable = false)
     private String email;
+
     @Column(nullable = false)
     private String phoneNumber;
+
     @Column(nullable = false)
     private String type;
+
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<UserSpaceRole> userSpaceRoles = new ArrayList<>();
 
