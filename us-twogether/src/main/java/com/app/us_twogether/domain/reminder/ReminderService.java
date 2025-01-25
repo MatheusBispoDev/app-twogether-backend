@@ -30,12 +30,15 @@ public class ReminderService {
     private ReminderRepository reminderRepository;
 
     @Autowired
-    CategoryService categoryService;
+    private ReminderMapper reminderMapper;
 
     @Autowired
-    SubCategoryService subCategoryService;
+    private CategoryService categoryService;
 
-    public ReminderDTO createReminder(String usernameCreation, Long spaceId, ReminderRequestDTO reminder) {
+    @Autowired
+    private SubCategoryService subCategoryService;
+
+    public ReminderResponseDTO createReminder(String usernameCreation, Long spaceId, ReminderRequestDTO reminder) {
         Space space = spaceService.findSpaceById(spaceId);
         User user = userService.findByUsername(usernameCreation);
 
@@ -57,10 +60,10 @@ public class ReminderService {
 
         reminderRepository.save(newReminder);
 
-        return castReminderToDTO(newReminder);
+        return reminderMapper.toResponseDTO(newReminder);
     }
 
-    public ReminderDTO updateReminder(Long remindersId, ReminderRequestDTO reminder) {
+    public ReminderResponseDTO updateReminder(Long remindersId, ReminderRequestDTO reminder) {
         Reminder updatedReminder = findReminderById(remindersId);
 
         Category category = categoryService.getCategory(reminder.categoryId());
@@ -76,7 +79,7 @@ public class ReminderService {
 
         reminderRepository.save(updatedReminder);
 
-        return castReminderToDTO(updatedReminder);
+        return reminderMapper.toResponseDTO(updatedReminder);
     }
 
     public void deletedReminder(Long remindersId) {
@@ -85,18 +88,17 @@ public class ReminderService {
         reminderRepository.delete(reminder);
     }
 
-    public ReminderDTO getReminder(Long remindersId) {
+    public ReminderResponseDTO getReminder(Long remindersId) {
         Reminder reminder = findReminderById(remindersId);
 
-        return castReminderToDTO(reminder);
+        return reminderMapper.toResponseDTO(reminder);
     }
 
-    public List<ReminderDTO> getAllRemindersFromSpace(Long spaceId, LocalDate dateCompletion) {
-        Space space = spaceService.findSpaceById(spaceId);
-        return reminderRepository.findBySpaceAndDate(space, dateCompletion);
+    public List<ReminderResponseDTO> getAllRemindersFromSpace(Long spaceId, LocalDate dateCompletion) {
+        return reminderRepository.findBySpaceAndDate(spaceId, dateCompletion);
     }
 
-    public ReminderDTO completedReminder(Long remindersId) {
+    public ReminderResponseDTO completedReminder(Long remindersId) {
         //TODO Adicionar agendamento de completed e retirar requisição do controlller
         Reminder reminder = findReminderById(remindersId);
         LocalDateTime completion = reminder.getDateCompletion().atTime(reminder.getTimeCompletion());
@@ -105,19 +107,11 @@ public class ReminderService {
             reminder.setCompleted(true);
             reminderRepository.save(reminder);
         }
-        return castReminderToDTO(reminder);
+        return reminderMapper.toResponseDTO(reminder);
     }
 
     private Reminder findReminderById(Long remindersId) {
         return reminderRepository.findById(remindersId).orElseThrow(() -> new ResourceNotFoundException("Lembrete não encontrada"));
     }
 
-    private ReminderDTO castReminderToDTO(Reminder reminder) {
-        return new ReminderDTO(reminder.getRemindersId(), reminder.getSpace().getSpaceId(), reminder.getUserCreation().getUsername(),
-                reminder.getCategory().getCategoryId(), reminder.getCategory().getTitle(), reminder.getCategory().getColor(),
-                reminder.getSubCategory().getSubCategoryId(), reminder.getSubCategory().getTitle(), reminder.getSubCategory().getColor(),
-                reminder.getTitle(), reminder.getDescription(),
-                reminder.getDateCreation(), reminder.getTimeCreation(), reminder.getDateCompletion(),
-                reminder.getTimeCompletion(), reminder.isCompleted());
-    }
 }

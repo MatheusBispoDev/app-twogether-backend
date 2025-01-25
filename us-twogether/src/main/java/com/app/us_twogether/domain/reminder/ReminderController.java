@@ -19,22 +19,22 @@ public class ReminderController {
     ReminderService reminderService;
 
     @PostMapping("/{spaceId}/reminders")
-    public ResponseEntity<ReminderDTO> createReminder(@AuthenticationPrincipal UserDetails userDetails, @PathVariable Long spaceId, @RequestBody @Valid ReminderRequestDTO reminder) {
-        ReminderDTO newReminder = reminderService.createReminder(userDetails.getUsername(), spaceId, reminder);
+    public ResponseEntity<ReminderResponseDTO> createReminder(@AuthenticationPrincipal UserDetails userDetails, @PathVariable Long spaceId, @RequestBody @Valid ReminderRequestDTO reminder) {
+        ReminderResponseDTO newReminder = reminderService.createReminder(userDetails.getUsername(), spaceId, reminder);
 
         return ResponseEntity.ok(newReminder);
     }
 
     @PutMapping("/{spaceId}/reminders/{reminderId}")
-    public ResponseEntity<ReminderDTO> updateReminder(@PathVariable Long reminderId, @RequestBody @Valid ReminderRequestDTO reminder) {
-        ReminderDTO updatedReminder = reminderService.updateReminder(reminderId, reminder);
+    public ResponseEntity<ReminderResponseDTO> updateReminder(@PathVariable Long reminderId, @RequestBody @Valid ReminderRequestDTO reminder) {
+        ReminderResponseDTO updatedReminder = reminderService.updateReminder(reminderId, reminder);
 
         return ResponseEntity.ok(updatedReminder);
     }
 
     @PutMapping("/{spaceId}/reminders/{reminderId}/completed")
-    public ResponseEntity<ReminderDTO> completedReminder(@PathVariable Long reminderId) {
-        ReminderDTO reminder = reminderService.completedReminder(reminderId);
+    public ResponseEntity<ReminderResponseDTO> completedReminder(@PathVariable Long reminderId) {
+        ReminderResponseDTO reminder = reminderService.completedReminder(reminderId);
 
         return ResponseEntity.ok(reminder);
     }
@@ -47,15 +47,15 @@ public class ReminderController {
     }
 
     @GetMapping("/{spaceId}/reminders/{reminderId}")
-    public ResponseEntity<ReminderDTO> getReminder(@PathVariable Long reminderId) {
-        ReminderDTO reminder = reminderService.getReminder(reminderId);
+    public ResponseEntity<ReminderResponseDTO> getReminder(@PathVariable Long reminderId) {
+        ReminderResponseDTO reminder = reminderService.getReminder(reminderId);
 
         return ResponseEntity.ok(reminder);
     }
 
     @GetMapping("/{spaceId}/reminders")
-    public ResponseEntity<List<ReminderDTO>> getAllReminderFromSpace(@PathVariable Long spaceId, @RequestParam @DateTimeFormat LocalDate dateCompletion) {
-        List<ReminderDTO> reminders = reminderService.getAllRemindersFromSpace(spaceId, dateCompletion);
+    public ResponseEntity<List<ReminderResponseDTO>> getAllReminderFromSpace(@PathVariable Long spaceId, @RequestParam @DateTimeFormat LocalDate dateCompletion) {
+        List<ReminderResponseDTO> reminders = reminderService.getAllRemindersFromSpace(spaceId, dateCompletion);
 
         return ResponseEntity.ok(reminders);
     }
