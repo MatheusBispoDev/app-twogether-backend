@@ -20,12 +20,12 @@ public class SpaceController {
     private UserService userService;
 
     @PostMapping
-    public ResponseEntity<SpaceDTO> createSpace() {
+    public ResponseEntity<SpaceResponseDTO> createSpace() {
         UsernamePasswordAuthenticationToken authentication = (org.springframework.security.authentication.UsernamePasswordAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
 
         User user = findUserByAuthentication(authentication);
 
-        SpaceDTO newSpace = spaceService.createSpace(user);
+        SpaceResponseDTO newSpace = spaceService.createSpace(user);
 
         return ResponseEntity.ok(newSpace);
     }
@@ -52,7 +52,7 @@ public class SpaceController {
         return ResponseEntity.ok("Você foi adicionado ao espaço!");
     }
 
-    @PutMapping("/join/{usernameToUpdate}/{accessLevel}")
+    @PutMapping("/{spaceId}/join/{usernameToUpdate}/{accessLevel}")
     public ResponseEntity<String> changeSpaceUserAccessLevel(@PathVariable String usernameToUpdate, @PathVariable AccessLevel accessLevel) {
         if (accessLevel == AccessLevel.US) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Alteração de acesso para Owner só pode ser feito via compartilhamento de link.");
@@ -67,18 +67,18 @@ public class SpaceController {
         return ResponseEntity.ok("Seu nível de acesso foi alterado!");
     }
 
-    @GetMapping("/shared")
-    public ResponseEntity<SpaceDTO> getSharedLink() {
+    @GetMapping("/{spaceId}/shared")
+    public ResponseEntity<SpaceResponseDTO> getSharedLink() {
         UsernamePasswordAuthenticationToken authentication = (org.springframework.security.authentication.UsernamePasswordAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
 
         User user = findUserByAuthentication(authentication);
 
-        SpaceDTO spaceTokenShared = spaceService.getSharedLink(user);
+        SpaceResponseDTO spaceTokenShared = spaceService.getSharedLink(user);
 
         return ResponseEntity.ok(spaceTokenShared);
     }
 
-    @GetMapping()
+    @GetMapping("/{spaceId}")
     public ResponseEntity<SpaceWithUsersDTO> getSpaceUser(){
         UsernamePasswordAuthenticationToken authentication = (org.springframework.security.authentication.UsernamePasswordAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
 
@@ -89,7 +89,7 @@ public class SpaceController {
         return ResponseEntity.ok(space);
     }
 
-    @DeleteMapping("/join/{usernameToRemove}")
+    @DeleteMapping("/{spaceId}/join/{usernameToRemove}")
     public ResponseEntity<String> removeUserFromSpace(@PathVariable String usernameToRemove) {
         UsernamePasswordAuthenticationToken authentication = (org.springframework.security.authentication.UsernamePasswordAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
 
@@ -100,7 +100,7 @@ public class SpaceController {
         return ResponseEntity.ok("Usuário foi removido do espaço!");
     }
 
-    @DeleteMapping
+    @DeleteMapping("/{spaceId}")
     public ResponseEntity<String> deleteSpace() {
         UsernamePasswordAuthenticationToken authentication = (org.springframework.security.authentication.UsernamePasswordAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
 
