@@ -89,8 +89,8 @@ public class SpaceService {
         space.setName("US " + space.getName() + " " + userInvited.getName() + " - TwoGether");
     }
 
-    public void changeSpaceUserAccessLevel(User userOwner, String usernameToUpdate, AccessLevel acessLevel) {
-        Space space = findSpaceByUser(userOwner);
+    public void changeSpaceUserAccessLevel(Long spaceId, String usernameToUpdate, AccessLevel acessLevel) {
+        Space space = findSpaceById(spaceId);
 
         User userToUpdate = findUserByUsername(usernameToUpdate);
 

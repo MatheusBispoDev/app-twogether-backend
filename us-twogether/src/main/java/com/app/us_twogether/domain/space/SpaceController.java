@@ -55,18 +55,14 @@ public class SpaceController {
     }
 
     @PutMapping("/{spaceId}/join/{usernameToUpdate}/{accessLevel}")
-    public ResponseEntity<String> changeSpaceUserAccessLevel(@PathVariable String usernameToUpdate, @PathVariable AccessLevel accessLevel) {
+    public ResponseEntity<String> changeSpaceUserAccessLevel(@PathVariable Long spaceId, @PathVariable String usernameToUpdate, @PathVariable AccessLevel accessLevel) {
         if (accessLevel == AccessLevel.US) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Alteração de acesso para Owner só pode ser feito via compartilhamento de link.");
         }
 
-        UsernamePasswordAuthenticationToken authentication = (org.springframework.security.authentication.UsernamePasswordAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
+        spaceService.changeSpaceUserAccessLevel(spaceId, usernameToUpdate, accessLevel);
 
-        User userOwner = findUserByAuthentication(authentication);
-
-        spaceService.changeSpaceUserAccessLevel(userOwner, usernameToUpdate, accessLevel);
-
-        return ResponseEntity.ok("Seu nível de acesso foi alterado!");
+        return ResponseEntity.ok("Nível de acesso foi alterado!");
     }
 
     @GetMapping("/{spaceId}/shared")
