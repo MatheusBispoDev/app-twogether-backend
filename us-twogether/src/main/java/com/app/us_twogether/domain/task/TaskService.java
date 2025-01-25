@@ -121,18 +121,18 @@ public class TaskService {
     }
 
     public TaskResponseDTO completedTask(Long taskId) {
-        Task existingTask = findTaskById(taskId);
+        Task task = findTaskById(taskId);
 
         LocalDate localDate = LocalDate.now();
         LocalTime localTime = LocalTime.now();
 
-        existingTask.setDateEnd(localDate);
-        existingTask.setTimeEnd(localTime);
-        existingTask.setCompleted(true);
+        task.setDateEnd(localDate);
+        task.setTimeEnd(localTime);
+        task.setCompleted(true);
 
-        taskRepository.save(existingTask);
+        taskRepository.save(task);
 
-        return taskMapper.toResponseDTO(existingTask);
+        return taskMapper.toResponseDTO(task);
     }
 
     private void validateUserAndSpace(User user, Space space) {
