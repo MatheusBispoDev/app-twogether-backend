@@ -26,10 +26,10 @@ public class SpaceService {
     private UserService userService;
 
     @Value("${app.api.base-url}")
-    private String baseUrl = "";
+    private String baseUrl;
 
     @Value("${app.api.endpoint}")
-    private String endpoint = "";
+    private String endpoint;
 
     public SpaceResponseDTO createSpace(User creator) {
         if (validateAccessLevelUserUS(creator)) {
