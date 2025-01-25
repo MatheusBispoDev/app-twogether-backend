@@ -1,4 +1,4 @@
-package com.app.us_twogether.service;
+package com.app.us_twogether.domain.task;
 
 import com.app.us_twogether.domain.category.Category;
 import com.app.us_twogether.domain.category.CategoryService;
@@ -7,13 +7,11 @@ import com.app.us_twogether.domain.category.subCategory.SubCategoryService;
 import com.app.us_twogether.domain.space.AccessLevel;
 import com.app.us_twogether.domain.space.Space;
 import com.app.us_twogether.domain.space.UserSpaceRole;
-import com.app.us_twogether.domain.task.Task;
-import com.app.us_twogether.domain.task.TaskDTO;
-import com.app.us_twogether.domain.task.TaskRequestDTO;
 import com.app.us_twogether.domain.user.User;
 import com.app.us_twogether.exception.DataAlreadyExistsException;
-import com.app.us_twogether.repository.TaskRepository;
 import com.app.us_twogether.repository.UserSpaceRoleRepository;
+import com.app.us_twogether.service.SpaceService;
+import com.app.us_twogether.service.UserService;
 import org.apache.kafka.common.errors.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -32,18 +30,22 @@ public class TaskService {
     private SpaceService spaceService;
 
     @Autowired
-    TaskRepository taskRepository;
+    private TaskRepository taskRepository;
 
     @Autowired
-    CategoryService categoryService;
+    private TaskMapper taskMapper;
 
     @Autowired
-    SubCategoryService subCategoryService;
+    private CategoryService categoryService;
+
+    @Autowired
+    private SubCategoryService subCategoryService;
 
     @Autowired
     private UserSpaceRoleRepository userSpaceRoleRepository;
 
-    public TaskDTO createTask(String usernameCreation, Long spaceId, TaskRequestDTO taskDTO) {
+
+    public TaskResponseDTO createTask(String usernameCreation, Long spaceId, TaskRequestDTO taskDTO) {
         Space space = spaceService.findSpaceById(spaceId);
         User user = userService.findByUsername(usernameCreation);
 
@@ -70,10 +72,10 @@ public class TaskService {
 
         taskRepository.save(newTask);
 
-        return castTaskToDTO(newTask);
+        return taskMapper.toResponseDTO(newTask);
     }
 
-    public TaskDTO updateTask(Long taskId, TaskRequestDTO updatedTask) {
+    public TaskResponseDTO updateTask(Long taskId, TaskRequestDTO updatedTask) {
         Task existingTask = findTaskById(taskId);
 
         if (!existingTask.getUserResponsible().getUsername().equals(updatedTask.userResponsible())) {
@@ -98,7 +100,7 @@ public class TaskService {
 
         taskRepository.save(existingTask);
 
-        return castTaskToDTO(existingTask);
+        return taskMapper.toResponseDTO(existingTask);
     }
 
     public void deletedTask(Long taskId) {
@@ -107,18 +109,18 @@ public class TaskService {
         taskRepository.delete(existingTask);
     }
 
-    public TaskDTO getTask(Long taskId) {
+    public TaskResponseDTO getTask(Long taskId) {
         Task existingTask = findTaskById(taskId);
 
-        return castTaskToDTO(existingTask);
+        return taskMapper.toResponseDTO(existingTask);
     }
 
-    public List<TaskDTO> getAllTaskFromSpace(Long spaceId, LocalDate dateCompletion) {
+    public List<TaskResponseDTO> getAllTaskFromSpace(Long spaceId, LocalDate dateCompletion) {
         Space space = spaceService.findSpaceById(spaceId);
         return taskRepository.findBySpaceAndDate(space, dateCompletion);
     }
 
-    public TaskDTO completedTask(Long taskId) {
+    public TaskResponseDTO completedTask(Long taskId) {
         Task existingTask = findTaskById(taskId);
 
         boolean isCompleted = true;
@@ -131,16 +133,7 @@ public class TaskService {
 
         taskRepository.save(existingTask);
 
-        return castTaskToDTO(existingTask);
-    }
-
-    private TaskDTO castTaskToDTO(Task task) {
-        return new TaskDTO(task.getTaskId(), task.getUserCreation().getUsername(), task.getUserResponsible().getUsername(),
-                task.getCategory().getCategoryId(), task.getCategory().getTitle(), task.getCategory().getColor(),
-                task.getSubCategory().getSubCategoryId(), task.getSubCategory().getTitle(), task.getSubCategory().getColor(),
-                task.getTitle(), task.getDescription(), task.getObservation(),
-                task.getDateCreation(), task.getTimeCreation(), task.getDateCompletion(), task.getTimeCompletion(),
-                task.getDateEnd(), task.getTimeEnd(), task.getObservation(), task.isCompleted());
+        return taskMapper.toResponseDTO(existingTask);
     }
 
     private void validateUserAndSpace(User user, Space space) {

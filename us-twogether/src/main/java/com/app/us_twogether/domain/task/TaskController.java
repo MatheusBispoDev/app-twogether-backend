@@ -1,8 +1,5 @@
-package com.app.us_twogether.controller;
+package com.app.us_twogether.domain.task;
 
-import com.app.us_twogether.domain.task.TaskDTO;
-import com.app.us_twogether.domain.task.TaskRequestDTO;
-import com.app.us_twogether.service.TaskService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -22,22 +19,22 @@ public class TaskController {
     TaskService taskService;
 
     @PostMapping("/{spaceId}/task")
-    public ResponseEntity<TaskDTO> createTask(@AuthenticationPrincipal UserDetails userDetails, @PathVariable Long spaceId, @RequestBody @Valid TaskRequestDTO taskDTO) {
-        TaskDTO newTask = taskService.createTask(userDetails.getUsername(), spaceId, taskDTO);
+    public ResponseEntity<TaskResponseDTO> createTask(@AuthenticationPrincipal UserDetails userDetails, @PathVariable Long spaceId, @RequestBody @Valid TaskRequestDTO taskDTO) {
+        TaskResponseDTO newTask = taskService.createTask(userDetails.getUsername(), spaceId, taskDTO);
 
         return ResponseEntity.ok(newTask);
     }
 
     @PutMapping("/{spaceId}/task/{taskId}")
-    public ResponseEntity<TaskDTO> updateTask(@PathVariable Long taskId, @RequestBody @Valid TaskRequestDTO updatedtaskDTO) {
-        TaskDTO task = taskService.updateTask(taskId, updatedtaskDTO);
+    public ResponseEntity<TaskResponseDTO> updateTask(@PathVariable Long taskId, @RequestBody @Valid TaskRequestDTO updatedtaskDTO) {
+        TaskResponseDTO task = taskService.updateTask(taskId, updatedtaskDTO);
 
         return ResponseEntity.ok(task);
     }
 
     @PutMapping("/{spaceId}/task/{taskId}/completed")
-    public ResponseEntity<TaskDTO> completedTask(@PathVariable Long taskId) {
-        TaskDTO task = taskService.completedTask(taskId);
+    public ResponseEntity<TaskResponseDTO> completedTask(@PathVariable Long taskId) {
+        TaskResponseDTO task = taskService.completedTask(taskId);
 
         return ResponseEntity.ok(task);
     }
@@ -50,15 +47,15 @@ public class TaskController {
     }
 
     @GetMapping("/{spaceId}/task/{taskId}")
-    public ResponseEntity<TaskDTO> getTask(@PathVariable Long taskId) {
-        TaskDTO task = taskService.getTask(taskId);
+    public ResponseEntity<TaskResponseDTO> getTask(@PathVariable Long taskId) {
+        TaskResponseDTO task = taskService.getTask(taskId);
 
         return ResponseEntity.ok(task);
     }
 
     @GetMapping("/{spaceId}/task")
-    public ResponseEntity<List<TaskDTO>> getAllTaskFromSpace(@PathVariable Long spaceId, @RequestParam @DateTimeFormat LocalDate dateCompletion) {
-        List<TaskDTO> tasks = taskService.getAllTaskFromSpace(spaceId, dateCompletion);
+    public ResponseEntity<List<TaskResponseDTO>> getAllTaskFromSpace(@PathVariable Long spaceId, @RequestParam @DateTimeFormat LocalDate dateCompletion) {
+        List<TaskResponseDTO> tasks = taskService.getAllTaskFromSpace(spaceId, dateCompletion);
 
         return ResponseEntity.ok(tasks);
     }

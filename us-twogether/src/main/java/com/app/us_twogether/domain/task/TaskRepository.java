@@ -1,8 +1,6 @@
-package com.app.us_twogether.repository;
+package com.app.us_twogether.domain.task;
 
 import com.app.us_twogether.domain.space.Space;
-import com.app.us_twogether.domain.task.Task;
-import com.app.us_twogether.domain.task.TaskDTO;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -22,5 +20,5 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
             "LEFT JOIN task.category category " +
             "LEFT JOIN task.subCategory subCategory " +
             "WHERE task.space = :space AND task.dateCompletion = :dateCompletion")
-    List<TaskDTO> findBySpaceAndDate(@Param("space") Space space, @Param("dateCompletion") LocalDate dateCompletion);
+    List<TaskResponseDTO> findBySpaceAndDate(@Param("space") Space space, @Param("dateCompletion") LocalDate dateCompletion);
 }
