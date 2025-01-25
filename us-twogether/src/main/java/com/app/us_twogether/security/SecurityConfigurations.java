@@ -1,6 +1,5 @@
 package com.app.us_twogether.security;
 
-import com.app.us_twogether.service.CustomUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -22,8 +21,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfigurations {
     @Autowired
     SecurityFilter securityFilter;
-    @Autowired
-    CustomUserDetailsService customUserDetailsService;
 
     @Value("${app.api.base-url}")
     private String apiBaseUrl;

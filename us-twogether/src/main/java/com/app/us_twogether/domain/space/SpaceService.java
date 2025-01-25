@@ -26,10 +26,10 @@ public class SpaceService {
     private UserService userService;
 
     @Value("${app.api.base-url}")
-    private String baseUrl;
+    private String baseUrl = "";
 
     @Value("${app.api.endpoint}")
-    private String endpoint;
+    private String endpoint = "";
 
     public SpaceResponseDTO createSpace(User creator) {
         if (validateAccessLevelUserUS(creator)) {
@@ -133,10 +133,6 @@ public class SpaceService {
         Space space = findSpaceById(spaceId);
 
         spaceRepository.delete(space);
-    }
-
-    public Space findSpaceByUser(User user) {
-        return spaceRepository.findByUserOwnerSpace(user).orElseThrow(() -> new DataNotFoundException("Espaço não encontrado para o usuário fornecido"));
     }
 
     public UserSpaceRole findUserRoleByUserAndSpace(User user, Space space) {
