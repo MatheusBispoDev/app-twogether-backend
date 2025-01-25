@@ -1,7 +1,5 @@
-package com.app.us_twogether.repository;
+package com.app.us_twogether.domain.reminder;
 
-import com.app.us_twogether.domain.reminder.Reminder;
-import com.app.us_twogether.domain.reminder.ReminderDTO;
 import com.app.us_twogether.domain.space.Space;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -12,7 +10,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 @Repository
-public interface RemindersRepository extends JpaRepository<Reminder, Long> {
+public interface ReminderRepository extends JpaRepository<Reminder, Long> {
     @Query("SELECT new com.app.us_twogether.domain.reminder.ReminderDTO(" +
             "reminder.remindersId, reminder.space.spaceId, reminder.userCreation.username, " +
             "category.categoryId, category.title, category.color, " +

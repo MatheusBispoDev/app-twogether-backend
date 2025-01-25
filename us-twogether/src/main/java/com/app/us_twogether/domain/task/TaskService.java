@@ -101,9 +101,9 @@ public class TaskService {
     }
 
     public void deletedTask(Long taskId) {
-        Task existingTask = findTaskById(taskId);
+        Task task = findTaskById(taskId);
 
-        taskRepository.delete(existingTask);
+        taskRepository.delete(task);
     }
 
     public TaskResponseDTO getTask(Long taskId) {
