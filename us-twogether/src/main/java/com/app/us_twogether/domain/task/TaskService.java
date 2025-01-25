@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class TaskService {
@@ -48,7 +49,7 @@ public class TaskService {
         Space space = spaceService.findSpaceById(spaceId);
         User user = userService.findByUsername(usernameCreation);
 
-        User userResponsible = userService.findByUsername(validateUsernameResponsible(usernameCreation, task.userResponsible()));
+        User userResponsible = userService.findByUsername(task.userResponsible());
         validateUserAndSpace(userResponsible, space);
 
         Category category = categoryService.getCategory(task.categoryId());
@@ -115,20 +116,20 @@ public class TaskService {
     }
 
     public List<TaskResponseDTO> getAllTaskFromSpace(Long spaceId, LocalDate dateCompletion) {
-        Space space = spaceService.findSpaceById(spaceId);
-        return taskRepository.findBySpaceAndDate(space, dateCompletion);
+        List<Task> tasks = taskRepository.findBySpaceAndDate(spaceId, dateCompletion);
+
+        return tasks.stream().map(task -> taskMapper.toResponseDTO(task)).collect(Collectors.toList());
     }
 
     public TaskResponseDTO completedTask(Long taskId) {
         Task existingTask = findTaskById(taskId);
 
-        boolean isCompleted = true;
         LocalDate localDate = LocalDate.now();
         LocalTime localTime = LocalTime.now();
 
         existingTask.setDateEnd(localDate);
         existingTask.setTimeEnd(localTime);
-        existingTask.setCompleted(isCompleted);
+        existingTask.setCompleted(true);
 
         taskRepository.save(existingTask);
 
@@ -136,31 +137,13 @@ public class TaskService {
     }
 
     private void validateUserAndSpace(User user, Space space) {
-        //TODO Implementar validação de acesso no SpaceAccessInterceptor
         if (!userSpaceRoleRepository.existsByUserAndSpace(user, space)) {
             throw new DataAlreadyExistsException("Usuário responsável não possui acesso a esse espaço");
         }
     }
 
-    private void validateAccessLevelUser(User user, Space space) {
-        //TODO Implementar nivel de acesso
-        UserSpaceRole userSpaceRole = spaceService.findUserRoleByUserAndSpace(user, space);
-
-        if (userSpaceRole.getAccessLevel() == AccessLevel.INVITED) {
-            //TODO Melhorar Excecao e Validação de nível de acesso
-            throw new DataAlreadyExistsException("Usuário sem acesso a tal funcionalidade");
-        }
-    }
-
     private Task findTaskById(Long taskId) {
         return taskRepository.findById(taskId).orElseThrow(() -> new ResourceNotFoundException("Task não encontrada"));
-    }
-
-    private String validateUsernameResponsible(String usernameCreation, String usernameResponsible) {
-        if (!usernameCreation.equals(usernameResponsible)) {
-            return usernameResponsible;
-        }
-        return usernameCreation;
     }
 
 }

@@ -1,6 +1,5 @@
 package com.app.us_twogether.domain.task;
 
-import com.app.us_twogether.domain.space.Space;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -9,16 +8,11 @@ import java.time.LocalDate;
 import java.util.List;
 
 public interface TaskRepository extends JpaRepository<Task, Long> {
-    @Query("SELECT new com.app.us_twogether.domain.task.TaskDTO( " +
-            "task.taskId, task.userCreation.username, task.userResponsible.username, " +
-            "category.categoryId, category.title, category.color, " +
-            "subCategory.subCategoryId, subCategory.title, subCategory.color, " +
-            "task.title, task.description, task.observation, task.dateCreation, " +
-            "task.timeCreation, task.dateCompletion, task.timeCompletion, task.dateEnd, " +
-            "task.timeEnd, task.attachment, task.completed) " +
+    @Query("SELECT task " +
             "FROM Task task " +
-            "LEFT JOIN task.category category " +
-            "LEFT JOIN task.subCategory subCategory " +
-            "WHERE task.space = :space AND task.dateCompletion = :dateCompletion")
-    List<TaskResponseDTO> findBySpaceAndDate(@Param("space") Space space, @Param("dateCompletion") LocalDate dateCompletion);
+                "JOIN task.category category " +
+                "JOIN task.subCategory subCategory " +
+            "WHERE task.space.spaceId = :spaceId " +
+                "AND task.dateCompletion = :dateCompletion")
+    List<Task> findBySpaceAndDate(@Param("spaceId") Long spaceId, @Param("dateCompletion") LocalDate dateCompletion);
 }
