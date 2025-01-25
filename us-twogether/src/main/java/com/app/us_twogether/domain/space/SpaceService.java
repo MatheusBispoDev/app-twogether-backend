@@ -31,12 +31,7 @@ public class SpaceService {
     @Value("${app.api.endpoint}")
     private String endpoint;
 
-    public SpaceService(SpaceRepository spaceRepository, UserSpaceRoleRepository userSpaceRoleRepository) {
-        this.spaceRepository = spaceRepository;
-        this.userSpaceRoleRepository = userSpaceRoleRepository;
-    }
-
-    public SpaceDTO createSpace(User creator) {
+    public SpaceResponseDTO createSpace(User creator) {
         if (validateAccessLevelUserUS(creator)) {
             throw new DataAlreadyExistsException("Usuário '" + creator.getUsername() + "' já possue um Espaço criado.");
         }
@@ -55,10 +50,10 @@ public class SpaceService {
         spaceRepository.save(newSpace);
         userSpaceRoleRepository.save(role);
 
-        return new SpaceDTO(newSpace.getName(), newSpace.getSharedToken());
+        return new SpaceResponseDTO(newSpace.getName(), newSpace.getSharedToken());
     }
 
-    public SpaceDTO getSharedLink(User user) {
+    public SpaceResponseDTO getSharedLink(User user) {
         Space space = findSpaceByUser(user);
 
         if (space.getSharedToken().isEmpty()) {
@@ -69,7 +64,7 @@ public class SpaceService {
 
         String sharedToken = endpoint + baseUrl + "/spaces/join/" + space.getSharedToken();
 
-        return new SpaceDTO(space.getName(), sharedToken);
+        return new SpaceResponseDTO(space.getName(), sharedToken);
     }
 
     public void addUserToSpaceByToken(String token, User userInvited, AccessLevel acessLevel) {
