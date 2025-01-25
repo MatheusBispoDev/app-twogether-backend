@@ -6,7 +6,7 @@ import com.app.us_twogether.domain.category.subCategory.SubCategory;
 import com.app.us_twogether.domain.category.subCategory.SubCategoryService;
 import com.app.us_twogether.domain.space.Space;
 import com.app.us_twogether.domain.user.User;
-import com.app.us_twogether.service.SpaceService;
+import com.app.us_twogether.domain.space.SpaceService;
 import com.app.us_twogether.service.UserService;
 import org.apache.kafka.common.errors.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
