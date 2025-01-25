@@ -19,6 +19,7 @@ public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(spaceAccessInterceptor)
-                .addPathPatterns(apiBaseUrl + "/spaces/{spaceId}/**");
+                .addPathPatterns(apiBaseUrl + "/spaces/{spaceId}/**")
+                .excludePathPatterns(apiBaseUrl + "/spaces/join/**");
     }
 }
