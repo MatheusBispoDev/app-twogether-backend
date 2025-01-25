@@ -13,7 +13,8 @@ import java.util.List;
 
 @Repository
 public interface RemindersRepository extends JpaRepository<Reminder, Long> {
-    @Query("SELECT new com.app.us_twogether.domain.reminder.ReminderDTO(reminder.remindersId, reminder.space.spaceId, reminder.userCreation.username, " +
+    @Query("SELECT new com.app.us_twogether.domain.reminder.ReminderDTO(" +
+            "reminder.remindersId, reminder.space.spaceId, reminder.userCreation.username, " +
             "category.categoryId, category.title, category.color, " +
             "subCategory.subCategoryId, subCategory.title, subCategory.color, " +
             "reminder.title, reminder.description, reminder.dateCreation, reminder.timeCreation, " +

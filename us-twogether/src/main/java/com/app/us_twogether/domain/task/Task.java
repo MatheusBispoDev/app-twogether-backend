@@ -20,7 +20,7 @@ public class Task {
 
     @ManyToOne
     @JoinColumn(name = "space_id", nullable = false)
-    private Space spaceId;
+    private Space space;
 
     @ManyToOne
     @JoinColumn(name = "user_creation", nullable = false)

@@ -57,7 +57,7 @@ public class TaskController {
     }
 
     @GetMapping("/{spaceId}/task")
-    public ResponseEntity<List<TaskDTO>> getAllTaskFromSpace(@PathVariable Long spaceId, @RequestParam() @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dateCompletion) {
+    public ResponseEntity<List<TaskDTO>> getAllTaskFromSpace(@PathVariable Long spaceId, @RequestParam(required = true) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dateCompletion) {
         List<TaskDTO> tasks = taskService.getAllTaskFromSpace(spaceId, dateCompletion);
 
         return ResponseEntity.ok(tasks);

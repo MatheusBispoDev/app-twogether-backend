@@ -54,7 +54,7 @@ public class TaskService {
         SubCategory subCategory = subCategoryService.getSubCategory(taskDTO.subCategoryId());
 
         Task newTask = new Task();
-        newTask.setSpaceId(space);
+        newTask.setSpace(space);
         newTask.setUserCreation(user);
         newTask.setUserResponsible(userResponsible);
         newTask.setCategory(category);
@@ -78,7 +78,7 @@ public class TaskService {
 
         if (!existingTask.getUserResponsible().getUsername().equals(updatedTask.userResponsible())) {
             User userResponsible = userService.findByUsername(updatedTask.userResponsible());
-            validateUserAndSpace(userResponsible, existingTask.getSpaceId());
+            validateUserAndSpace(userResponsible, existingTask.getSpace());
             existingTask.setUserResponsible(userResponsible);
         }
 
