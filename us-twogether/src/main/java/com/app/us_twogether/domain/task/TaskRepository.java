@@ -8,7 +8,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 public interface TaskRepository extends JpaRepository<Task, Long> {
-    final String cQuery = "SELECT new com.app.us_twogether.domain.task.TaskResponseDTO( " +
+    String cQuery = "SELECT new com.app.us_twogether.domain.task.TaskResponseDTO( " +
             "task.taskId, task.userCreation.username, task.userResponsible.username, " +
             "category.categoryId, category.title, category.color, " +
             "subCategory.subCategoryId, subCategory.title, subCategory.color, " +
