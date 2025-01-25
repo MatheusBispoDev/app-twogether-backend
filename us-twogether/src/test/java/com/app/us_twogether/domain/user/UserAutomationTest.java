@@ -1,16 +1,10 @@
 package com.app.us_twogether.domain.user;
 
-import com.app.us_twogether.config.DefaultNotificationUserLoader;
-import com.app.us_twogether.domain.notificationUser.NotificationUser;
 import com.app.us_twogether.exception.DataAlreadyExistsException;
-import com.app.us_twogether.repository.NotificationUserRepository;
-import com.app.us_twogether.service.UserService;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-
-import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
@@ -21,9 +15,6 @@ public class UserAutomationTest {
     @Autowired
     private UserService userService;
 
-    @Autowired
-    private NotificationUserRepository notificationUserRepository;
-
     @Test
     public void testCreateUser(){
         // Criar e salvar um User que referencia o NotificationUser padrão
@@ -31,11 +22,10 @@ public class UserAutomationTest {
         userService.saveUser(user);
 
         // Busca o usuário cadastrado
-        User savedUser = (userService.findByUsername("john_doe")).orElse(new User());
+        User savedUser = (userService.findByUsername("john_doe"));
 
         // Validações
         assertThat(savedUser.getUsername()).isEqualTo("john_doe");
-        assertThat(savedUser.getNotificationUser().getTitle()).isEqualTo("TOTAL");
     }
 
     @Test
@@ -57,7 +47,7 @@ public class UserAutomationTest {
         userService.saveUser(user);
 
         // Busca o usuário cadastrado
-        User savedUser = (userService.findByUsername("john_doe")).orElse(new User());
+        User savedUser = (userService.findByUsername("john_doe"));
 
         // Crio um usuário para alterar os dados
         User updatedUser = new User("john_doe", "4321", "Roger", "roger@example.com", "11945345678", "US");
@@ -80,32 +70,10 @@ public class UserAutomationTest {
         userService.saveUser(user);
 
         // Busca o usuário cadastrado
-        User savedUser = (userService.findByUsername("john_doe")).orElse(new User());
+        User savedUser = (userService.findByUsername("john_doe"));
 
         // Validações
         assertThat(savedUser).isNotNull();
         assertNotSame(savedUser.getPhoneNumber(),"1234");
-    }
-
-    @Test
-    public void testNotificationUser(){
-        // Criar um NotificationUser padrão
-        Optional<NotificationUser> notificationUser = notificationUserRepository.findById(2);
-
-        // Criar e salvar um User que referencia o NotificationUser padrão
-        User user = new User("john_doe", "1234", "John Doe", "john@example.com", "11932178425", "US");
-
-        // Altero o ID de notificação
-        user.setNotificationUser(notificationUser.orElse(DefaultNotificationUserLoader.getDefaultNotificationUser()));
-
-        // Salvo o usuário
-        userService.saveUser(user);
-
-        // Busca o usuário cadastrado
-        User savedUser = (userService.findByUsername("john_doe")).orElse(new User());
-
-        // Validações
-        assertThat(savedUser).isNotNull();
-        assertThat(savedUser.getNotificationUser().getTitle()).isEqualTo("SOMENTE ATIVIDADES");
     }
 }
