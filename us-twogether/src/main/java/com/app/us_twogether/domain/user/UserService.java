@@ -1,10 +1,7 @@
-package com.app.us_twogether.service;
+package com.app.us_twogether.domain.user;
 
 import com.app.us_twogether.exception.DataAlreadyExistsException;
-import com.app.us_twogether.domain.user.User;
 import com.app.us_twogether.exception.DataNotFoundException;
-import com.app.us_twogether.repository.NotificationUserRepository;
-import com.app.us_twogether.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,9 +12,6 @@ public class UserService {
 
     @Autowired
     private UserRepository userRepository;
-
-    @Autowired
-    private NotificationUserRepository notificationUserRepository;
 
     public User findByUsername(String username) {
         return userRepository.findById(username).orElseThrow(() -> new DataNotFoundException("Usuário não encontrado"));
@@ -41,7 +35,6 @@ public class UserService {
             user.setEmail(updatedUser.getEmail());
             user.setPhoneNumber(updatedUser.getPhoneNumber());
             user.setType(updatedUser.getType());
-            user.setNotificationUser(updatedUser.getNotificationUser());
             return Optional.of(userRepository.save(user));
         }
 

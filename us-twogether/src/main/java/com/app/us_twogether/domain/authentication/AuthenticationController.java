@@ -1,11 +1,10 @@
-package com.app.us_twogether.controller;
+package com.app.us_twogether.domain.authentication;
 
-import com.app.us_twogether.domain.user.AuthenticationDTO;
 import com.app.us_twogether.domain.user.LoginResponseDTO;
-import com.app.us_twogether.domain.user.UserDTO;
 import com.app.us_twogether.domain.user.User;
+import com.app.us_twogether.domain.user.UserDTO;
+import com.app.us_twogether.domain.user.UserService;
 import com.app.us_twogether.security.TokenService;
-import com.app.us_twogether.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -38,11 +37,11 @@ public class AuthenticationController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity register(@RequestBody @Valid UserDTO userDTO){
+    public ResponseEntity<String> register(@RequestBody @Valid UserDTO userDTO){
         User newUser = new User(userDTO.username(), userDTO.password(), userDTO.name(), userDTO.email(), userDTO.phoneNumber(), userDTO.type());
 
         userService.saveUser(newUser);
 
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok("Usuário registrado com sucesso");
     }
 }

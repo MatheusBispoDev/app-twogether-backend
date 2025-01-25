@@ -1,7 +1,7 @@
-package com.app.us_twogether.service;
+package com.app.us_twogether.domain.authentication;
 
+import com.app.us_twogether.domain.user.UserRepository;
 import com.app.us_twogether.exception.DataNotFoundException;
-import com.app.us_twogether.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

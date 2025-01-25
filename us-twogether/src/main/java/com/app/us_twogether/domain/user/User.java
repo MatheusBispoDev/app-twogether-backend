@@ -1,6 +1,5 @@
 package com.app.us_twogether.domain.user;
 
-import com.app.us_twogether.config.DefaultNotificationUserLoader;
 import com.app.us_twogether.domain.notificationUser.NotificationUser;
 import com.app.us_twogether.domain.space.UserSpaceRole;
 import jakarta.persistence.*;
@@ -23,9 +22,6 @@ public class User implements UserDetails {
     @Id
     @Column(nullable = false, unique = true)
     private String username;
-    @ManyToOne
-    @JoinColumn(name = "notification_user_id")
-    private NotificationUser notificationUser;
     @Column(nullable = false)
     private String password;
     @Column(nullable = false)
@@ -61,13 +57,6 @@ public class User implements UserDetails {
 
     public void setPassword(String password) {
         this.password = new BCryptPasswordEncoder().encode(password);
-    }
-
-    @PrePersist
-    public void setDefaultNotificationUser() {
-        if (this.notificationUser == null) {
-            this.notificationUser = DefaultNotificationUserLoader.getDefaultNotificationUser();
-        }
     }
 
     @Override

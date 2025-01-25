@@ -1,4 +1,4 @@
-package com.app.us_twogether.domain.user;
+package com.app.us_twogether.domain.authentication;
 
 public record AuthenticationDTO(String username, String password) {
 }
