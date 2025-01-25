@@ -99,6 +99,6 @@ public class SpaceController {
     }
 
     private User findUserByAuthentication(UsernamePasswordAuthenticationToken authentication) {
-        return userService.findByUsername(authentication.getName());
+        return userService.getUser(authentication.getName());
     }
 }

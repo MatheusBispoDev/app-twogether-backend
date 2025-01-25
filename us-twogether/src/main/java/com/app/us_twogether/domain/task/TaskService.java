@@ -44,9 +44,9 @@ public class TaskService {
 
     public TaskResponseDTO createTask(String usernameCreation, Long spaceId, TaskRequestDTO task) {
         Space space = spaceService.findSpaceById(spaceId);
-        User user = userService.findByUsername(usernameCreation);
+        User user = userService.getUser(usernameCreation);
 
-        User userResponsible = userService.findByUsername(task.userResponsible());
+        User userResponsible = userService.getUser(task.userResponsible());
         validateUserAndSpace(userResponsible, space);
 
         Category category = categoryService.getCategory(task.categoryId());
@@ -76,7 +76,7 @@ public class TaskService {
         Task updatedTask = findTaskById(taskId);
 
         if (!updatedTask.getUserResponsible().getUsername().equals(task.userResponsible())) {
-            User userResponsible = userService.findByUsername(task.userResponsible());
+            User userResponsible = userService.getUser(task.userResponsible());
             validateUserAndSpace(userResponsible, updatedTask.getSpace());
             updatedTask.setUserResponsible(userResponsible);
         }
