@@ -19,17 +19,17 @@ public class TaskController {
     TaskService taskService;
 
     @PostMapping("/{spaceId}/task")
-    public ResponseEntity<TaskResponseDTO> createTask(@AuthenticationPrincipal UserDetails userDetails, @PathVariable Long spaceId, @RequestBody @Valid TaskRequestDTO taskDTO) {
-        TaskResponseDTO newTask = taskService.createTask(userDetails.getUsername(), spaceId, taskDTO);
+    public ResponseEntity<TaskResponseDTO> createTask(@AuthenticationPrincipal UserDetails userDetails, @PathVariable Long spaceId, @RequestBody @Valid TaskRequestDTO task) {
+        TaskResponseDTO newTask = taskService.createTask(userDetails.getUsername(), spaceId, task);
 
         return ResponseEntity.ok(newTask);
     }
 
     @PutMapping("/{spaceId}/task/{taskId}")
-    public ResponseEntity<TaskResponseDTO> updateTask(@PathVariable Long taskId, @RequestBody @Valid TaskRequestDTO updatedtaskDTO) {
-        TaskResponseDTO task = taskService.updateTask(taskId, updatedtaskDTO);
+    public ResponseEntity<TaskResponseDTO> updateTask(@PathVariable Long taskId, @RequestBody @Valid TaskRequestDTO task) {
+        TaskResponseDTO updatedTask = taskService.updateTask(taskId, task);
 
-        return ResponseEntity.ok(task);
+        return ResponseEntity.ok(updatedTask);
     }
 
     @PutMapping("/{spaceId}/task/{taskId}/completed")
@@ -43,7 +43,7 @@ public class TaskController {
     public ResponseEntity<String> deleteTask(@PathVariable Long taskId) {
         taskService.deletedTask(taskId);
 
-        return ResponseEntity.ok("Task deletada com sucesso");
+        return ResponseEntity.ok("Tarefa deletada com sucesso");
     }
 
     @GetMapping("/{spaceId}/task/{taskId}")

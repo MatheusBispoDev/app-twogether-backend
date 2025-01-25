@@ -44,16 +44,15 @@ public class TaskService {
     @Autowired
     private UserSpaceRoleRepository userSpaceRoleRepository;
 
-
-    public TaskResponseDTO createTask(String usernameCreation, Long spaceId, TaskRequestDTO taskDTO) {
+    public TaskResponseDTO createTask(String usernameCreation, Long spaceId, TaskRequestDTO task) {
         Space space = spaceService.findSpaceById(spaceId);
         User user = userService.findByUsername(usernameCreation);
 
-        User userResponsible = userService.findByUsername(validateUsernameResponsible(usernameCreation, taskDTO.userResponsible()));
+        User userResponsible = userService.findByUsername(validateUsernameResponsible(usernameCreation, task.userResponsible()));
         validateUserAndSpace(userResponsible, space);
 
-        Category category = categoryService.getCategory(taskDTO.categoryId());
-        SubCategory subCategory = subCategoryService.getSubCategory(taskDTO.subCategoryId());
+        Category category = categoryService.getCategory(task.categoryId());
+        SubCategory subCategory = subCategoryService.getSubCategory(task.subCategoryId());
 
         Task newTask = new Task();
         newTask.setSpace(space);
@@ -61,13 +60,13 @@ public class TaskService {
         newTask.setUserResponsible(userResponsible);
         newTask.setCategory(category);
         newTask.setSubCategory(subCategory);
-        newTask.setTitle(taskDTO.title());
-        newTask.setDescription(taskDTO.description());
+        newTask.setTitle(task.title());
+        newTask.setDescription(task.description());
         newTask.setDateCreation(LocalDate.now());
         newTask.setTimeCreation(LocalTime.now());
-        newTask.setDateCompletion(taskDTO.dateCompletion());
-        newTask.setTimeCompletion(taskDTO.timeCompletion());
-        newTask.setAttachment(taskDTO.attachment());
+        newTask.setDateCompletion(task.dateCompletion());
+        newTask.setTimeCompletion(task.timeCompletion());
+        newTask.setAttachment(task.attachment());
         newTask.setCompleted(false);
 
         taskRepository.save(newTask);
@@ -75,32 +74,32 @@ public class TaskService {
         return taskMapper.toResponseDTO(newTask);
     }
 
-    public TaskResponseDTO updateTask(Long taskId, TaskRequestDTO updatedTask) {
-        Task existingTask = findTaskById(taskId);
+    public TaskResponseDTO updateTask(Long taskId, TaskRequestDTO task) {
+        Task updatedTask = findTaskById(taskId);
 
-        if (!existingTask.getUserResponsible().getUsername().equals(updatedTask.userResponsible())) {
-            User userResponsible = userService.findByUsername(updatedTask.userResponsible());
-            validateUserAndSpace(userResponsible, existingTask.getSpace());
-            existingTask.setUserResponsible(userResponsible);
+        if (!updatedTask.getUserResponsible().getUsername().equals(task.userResponsible())) {
+            User userResponsible = userService.findByUsername(task.userResponsible());
+            validateUserAndSpace(userResponsible, updatedTask.getSpace());
+            updatedTask.setUserResponsible(userResponsible);
         }
 
-        Category category = categoryService.getCategory(updatedTask.categoryId());
-        SubCategory subCategory = subCategoryService.getSubCategory(updatedTask.subCategoryId());
+        Category category = categoryService.getCategory(task.categoryId());
+        SubCategory subCategory = subCategoryService.getSubCategory(task.subCategoryId());
 
-        existingTask.setCategory(category);
-        existingTask.setSubCategory(subCategory);
-        existingTask.setTitle(updatedTask.title());
-        existingTask.setDescription(updatedTask.description());
-        existingTask.setDateCompletion(updatedTask.dateCompletion());
-        existingTask.setTimeCompletion(updatedTask.timeCompletion());
-        existingTask.setAttachment(updatedTask.attachment());
-        existingTask.setDateEnd(updatedTask.dateEnd());
-        existingTask.setTimeEnd(updatedTask.timeEnd());
-        existingTask.setCompleted(updatedTask.completed());
+        updatedTask.setCategory(category);
+        updatedTask.setSubCategory(subCategory);
+        updatedTask.setTitle(task.title());
+        updatedTask.setDescription(task.description());
+        updatedTask.setDateCompletion(task.dateCompletion());
+        updatedTask.setTimeCompletion(task.timeCompletion());
+        updatedTask.setAttachment(task.attachment());
+        updatedTask.setDateEnd(task.dateEnd());
+        updatedTask.setTimeEnd(task.timeEnd());
+        updatedTask.setCompleted(task.completed());
 
-        taskRepository.save(existingTask);
+        taskRepository.save(updatedTask);
 
-        return taskMapper.toResponseDTO(existingTask);
+        return taskMapper.toResponseDTO(updatedTask);
     }
 
     public void deletedTask(Long taskId) {
