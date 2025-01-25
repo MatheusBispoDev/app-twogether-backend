@@ -1,7 +1,5 @@
-package com.app.us_twogether.controller;
+package com.app.us_twogether.domain.user;
 
-import com.app.us_twogether.domain.user.User;
-import com.app.us_twogether.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

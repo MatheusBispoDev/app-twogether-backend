@@ -1,7 +1,7 @@
 package com.app.us_twogether.domain.space;
 
 import com.app.us_twogether.domain.user.User;
-import com.app.us_twogether.service.UserService;
+import com.app.us_twogether.domain.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

@@ -1,8 +1,6 @@
-package com.app.us_twogether.service;
+package com.app.us_twogether.domain.user;
 
-import com.app.us_twogether.domain.user.User;
 import com.app.us_twogether.exception.DataNotFoundException;
-import com.app.us_twogether.repository.UserRepository;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;

@@ -1,7 +1,6 @@
 package com.app.us_twogether.domain.user;
 
 import com.app.us_twogether.security.TokenService;
-import com.app.us_twogether.service.UserService;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
