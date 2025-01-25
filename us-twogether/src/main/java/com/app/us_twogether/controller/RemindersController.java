@@ -1,6 +1,7 @@
 package com.app.us_twogether.controller;
 
 import com.app.us_twogether.domain.reminder.ReminderDTO;
+import com.app.us_twogether.domain.reminder.ReminderRequestDTO;
 import com.app.us_twogether.service.RemindersService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,14 +22,14 @@ public class RemindersController {
     RemindersService remindersService;
 
     @PostMapping("/{spaceId}/reminders")
-    public ResponseEntity<ReminderDTO> createReminders(@AuthenticationPrincipal UserDetails userDetails, @PathVariable Long spaceId, @RequestBody @Valid ReminderDTO reminderDTO) {
+    public ResponseEntity<ReminderDTO> createReminders(@AuthenticationPrincipal UserDetails userDetails, @PathVariable Long spaceId, @RequestBody @Valid ReminderRequestDTO reminderDTO) {
         ReminderDTO newReminders = remindersService.createReminders(userDetails.getUsername(), spaceId, reminderDTO);
 
         return ResponseEntity.ok(newReminders);
     }
 
     @PutMapping("/{spaceId}/reminders/{reminderId}")
-    public ResponseEntity<ReminderDTO> updateReminders(@PathVariable Long reminderId, @RequestBody @Valid ReminderDTO updatedReminderDTO) {
+    public ResponseEntity<ReminderDTO> updateReminders(@PathVariable Long reminderId, @RequestBody @Valid ReminderRequestDTO updatedReminderDTO) {
         ReminderDTO reminders = remindersService.updateReminders(reminderId, updatedReminderDTO);
 
         return ResponseEntity.ok(reminders);

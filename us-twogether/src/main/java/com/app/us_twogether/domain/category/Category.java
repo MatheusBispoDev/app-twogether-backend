@@ -1,6 +1,7 @@
 package com.app.us_twogether.domain.category;
 
 import com.app.us_twogether.domain.category.subCategory.SubCategory;
+import com.app.us_twogether.domain.reminder.Reminder;
 import com.app.us_twogether.domain.space.Space;
 import com.app.us_twogether.domain.task.Task;
 import jakarta.persistence.*;
@@ -26,6 +27,9 @@ public class Category {
 
     @OneToMany(mappedBy = "category")
     private List<Task> tasks;
+
+    @OneToMany(mappedBy = "category")
+    private List<Reminder> reminders;
 
     @Column(nullable = false)
     private String title;
