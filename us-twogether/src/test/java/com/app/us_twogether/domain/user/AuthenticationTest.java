@@ -40,7 +40,7 @@ public class AuthenticationTest {
 
         // Criação de usuário
         User userDetails = new User(username, password, "John Doe", "john@example.com", "11932178425", "US");
-        userService.saveUser(userDetails);
+        userService.createUser(userDetails);
 
         // Validação de autenticação de usuário
         var usernamePassword = new UsernamePasswordAuthenticationToken(username, password);
