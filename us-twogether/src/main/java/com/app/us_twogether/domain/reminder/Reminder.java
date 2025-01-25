@@ -39,8 +39,10 @@ public class Reminder {
 
     private String description;
 
+    @JoinColumn(nullable = false)
     private LocalDate dateCreation;
 
+    @JoinColumn(nullable = false)
     private LocalTime timeCreation;
 
     private LocalDate dateCompletion;

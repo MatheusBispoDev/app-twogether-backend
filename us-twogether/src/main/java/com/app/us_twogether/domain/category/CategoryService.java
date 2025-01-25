@@ -35,14 +35,14 @@ public class CategoryService {
     }
 
     public CategoryResponseDTO updateCategory(Long categoryId, CategoryRequestDTO category){
-        Category updatedDTO = findCategoryById(categoryId);
+        Category updatedCategory = findCategoryById(categoryId);
 
-        updatedDTO.setTitle(category.title());
-        updatedDTO.setColor(category.color());
+        updatedCategory.setTitle(category.title());
+        updatedCategory.setColor(category.color());
 
-        categoryRepository.save(updatedDTO);
+        categoryRepository.save(updatedCategory);
 
-        return categoryMapper.toResponseDTO(updatedDTO);
+        return categoryMapper.toResponseDTO(updatedCategory);
     }
 
     public void deletedCategory(Long categoryId) {
