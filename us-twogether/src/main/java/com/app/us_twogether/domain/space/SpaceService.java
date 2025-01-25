@@ -119,6 +119,16 @@ public class SpaceService {
         return new SpaceWithUsersDTO(space.getName(), space.getSharedToken(), users);
     }
 
+    public SpaceResponseDTO updatedSpace(Long spaceId, String spaceName){
+        Space space = findSpaceById(spaceId);
+
+        space.setName(spaceName);
+
+        spaceRepository.save(space);
+
+        return new SpaceResponseDTO(space.getName(), space.getSharedToken());
+    }
+
     public void deleteSpace(User user) {
         Space space = findSpaceByUser(user);
 
