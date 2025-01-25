@@ -13,10 +13,13 @@ public class Space {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long spaceId;
+
     private String name;
     @Column(unique = true)
+
     private String sharedToken;
     @OneToMany(mappedBy = "space", cascade = CascadeType.ALL)
+
     private List<UserSpaceRole> userSpaceRoles = new ArrayList<>();
 
     public Space() {}

@@ -1,10 +1,6 @@
-package com.app.us_twogether.controller;
+package com.app.us_twogether.domain.space;
 
-import com.app.us_twogether.domain.space.AccessLevel;
-import com.app.us_twogether.domain.space.SpaceDTO;
-import com.app.us_twogether.domain.space.SpaceWithUsersDTO;
 import com.app.us_twogether.domain.user.User;
-import com.app.us_twogether.service.SpaceService;
 import com.app.us_twogether.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -23,9 +19,56 @@ public class SpaceController {
     @Autowired
     private UserService userService;
 
+    @PostMapping
+    public ResponseEntity<SpaceDTO> createSpace() {
+        UsernamePasswordAuthenticationToken authentication = (org.springframework.security.authentication.UsernamePasswordAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
+
+        User user = findUserByAuthentication(authentication);
+
+        SpaceDTO newSpace = spaceService.createSpace(user);
+
+        return ResponseEntity.ok(newSpace);
+    }
+
+    @PostMapping("/join/{token}")
+    public ResponseEntity<String> joinSpace(@PathVariable String token) {
+        UsernamePasswordAuthenticationToken authentication = (org.springframework.security.authentication.UsernamePasswordAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
+
+        User user = findUserByAuthentication(authentication);
+
+        spaceService.addUserToSpaceByToken(token, user, AccessLevel.FAMILY);
+
+        return ResponseEntity.ok("Você foi adicionado ao espaço!");
+    }
+
+    @PostMapping("/join/us/{token}")
+    public ResponseEntity<String> joinUsSpace(@PathVariable String token) {
+        UsernamePasswordAuthenticationToken authentication = (org.springframework.security.authentication.UsernamePasswordAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
+
+        User user = findUserByAuthentication(authentication);
+
+        spaceService.addUserToSpaceByToken(token, user, AccessLevel.US);
+
+        return ResponseEntity.ok("Você foi adicionado ao espaço!");
+    }
+
+    @PutMapping("/join/{usernameToUpdate}/{accessLevel}")
+    public ResponseEntity<String> changeSpaceUserAccessLevel(@PathVariable String usernameToUpdate, @PathVariable AccessLevel accessLevel) {
+        if (accessLevel == AccessLevel.US) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Alteração de acesso para Owner só pode ser feito via compartilhamento de link.");
+        }
+
+        UsernamePasswordAuthenticationToken authentication = (org.springframework.security.authentication.UsernamePasswordAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
+
+        User userOwner = findUserByAuthentication(authentication);
+
+        spaceService.changeSpaceUserAccessLevel(userOwner, usernameToUpdate, accessLevel);
+
+        return ResponseEntity.ok("Seu nível de acesso foi alterado!");
+    }
+
     @GetMapping("/shared")
     public ResponseEntity<SpaceDTO> getSharedLink() {
-
         UsernamePasswordAuthenticationToken authentication = (org.springframework.security.authentication.UsernamePasswordAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
 
         User user = findUserByAuthentication(authentication);
@@ -44,52 +87,6 @@ public class SpaceController {
         SpaceWithUsersDTO space = spaceService.getSpaceWithUsers(user);
 
         return ResponseEntity.ok(space);
-    }
-
-    @PostMapping
-    public ResponseEntity<SpaceDTO> createSpace() {
-        UsernamePasswordAuthenticationToken authentication = (org.springframework.security.authentication.UsernamePasswordAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
-
-        User user = findUserByAuthentication(authentication);
-
-        SpaceDTO newSpace = spaceService.createSpace(user);
-
-        return ResponseEntity.ok(newSpace);
-    }
-
-    @PostMapping("/join/{token}")
-    public ResponseEntity<String> joinSpace(@PathVariable String token) {
-        UsernamePasswordAuthenticationToken authentication = (org.springframework.security.authentication.UsernamePasswordAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
-
-        User user = findUserByAuthentication(authentication);
-        spaceService.addUserToSpaceByToken(token, user, AccessLevel.FAMILY);
-
-        return ResponseEntity.ok("Você foi adicionado ao espaço!");
-    }
-
-    @PostMapping("/join/us/{token}")
-    public ResponseEntity<String> joinUsSpace(@PathVariable String token) {
-        UsernamePasswordAuthenticationToken authentication = (org.springframework.security.authentication.UsernamePasswordAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
-
-        User user = findUserByAuthentication(authentication);
-
-        spaceService.addUserToSpaceByToken(token, user, AccessLevel.US);
-        return ResponseEntity.ok("Você foi adicionado ao espaço!");
-    }
-
-    @PutMapping("/join/{usernameToUpdate}/{accessLevel}")
-    public ResponseEntity<String> changeSpaceUserAccessLevel(@PathVariable String usernameToUpdate, @PathVariable AccessLevel accessLevel) {
-        if (accessLevel == AccessLevel.US) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Alteração de acesso para Owner só pode ser feito via compartilhamento de link.");
-        }
-
-        UsernamePasswordAuthenticationToken authentication = (org.springframework.security.authentication.UsernamePasswordAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
-
-        User userOwner = findUserByAuthentication(authentication);
-
-        spaceService.changeSpaceUserAccessLevel(userOwner, usernameToUpdate, accessLevel);
-
-        return ResponseEntity.ok("Seu nível de acesso foi alterado!");
     }
 
     @DeleteMapping("/join/{usernameToRemove}")
