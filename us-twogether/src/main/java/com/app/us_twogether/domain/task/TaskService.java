@@ -4,9 +4,7 @@ import com.app.us_twogether.domain.category.Category;
 import com.app.us_twogether.domain.category.CategoryService;
 import com.app.us_twogether.domain.category.subCategory.SubCategory;
 import com.app.us_twogether.domain.category.subCategory.SubCategoryService;
-import com.app.us_twogether.domain.space.AccessLevel;
 import com.app.us_twogether.domain.space.Space;
-import com.app.us_twogether.domain.space.UserSpaceRole;
 import com.app.us_twogether.domain.user.User;
 import com.app.us_twogether.exception.DataAlreadyExistsException;
 import com.app.us_twogether.repository.UserSpaceRoleRepository;
@@ -19,7 +17,6 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class TaskService {
