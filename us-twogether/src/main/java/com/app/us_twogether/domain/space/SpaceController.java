@@ -1,7 +1,9 @@
 package com.app.us_twogether.domain.space;
 
+import com.app.us_twogether.domain.task.TaskRequestDTO;
 import com.app.us_twogether.domain.user.User;
 import com.app.us_twogether.service.UserService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -85,6 +87,13 @@ public class SpaceController {
         User user = findUserByAuthentication(authentication);
 
         SpaceWithUsersDTO space = spaceService.getSpaceWithUsers(user);
+
+        return ResponseEntity.ok(space);
+    }
+
+    @PutMapping("/{spaceId}")
+    public ResponseEntity<SpaceResponseDTO> updateSpace(@PathVariable Long spaceId, @RequestParam String spaceName){
+        SpaceResponseDTO space = spaceService.updatedSpace(spaceId, spaceName);
 
         return ResponseEntity.ok(space);
     }
