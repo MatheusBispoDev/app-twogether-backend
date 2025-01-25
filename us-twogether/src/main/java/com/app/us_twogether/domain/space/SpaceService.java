@@ -20,6 +20,9 @@ public class SpaceService {
     private SpaceRepository spaceRepository;
 
     @Autowired
+    private SpaceMapper spaceMapper;
+
+    @Autowired
     private UserSpaceRoleRepository userSpaceRoleRepository;
 
     @Autowired
@@ -50,7 +53,7 @@ public class SpaceService {
         spaceRepository.save(newSpace);
         userSpaceRoleRepository.save(role);
 
-        return new SpaceResponseDTO(newSpace.getName(), newSpace.getSharedToken());
+        return spaceMapper.toResponseDTO(newSpace);
     }
 
     public SpaceResponseDTO getSharedLink(Long spaceId) {
@@ -64,7 +67,7 @@ public class SpaceService {
 
         String sharedToken = endpoint + baseUrl + "/spaces/join/" + space.getSharedToken();
 
-        return new SpaceResponseDTO(space.getName(), sharedToken);
+        return spaceMapper.toResponseDTO(space);
     }
 
     public void addUserToSpaceByToken(String token, User userInvited, AccessLevel acessLevel) {
@@ -86,7 +89,6 @@ public class SpaceService {
         userSpaceRole.setAccessLevel(acessLevel);
 
         userSpaceRoleRepository.save(userSpaceRole);
-        space.setName("US " + space.getName() + " " + userInvited.getName() + " - TwoGether");
     }
 
     public void changeSpaceUserAccessLevel(Long spaceId, String usernameToUpdate, AccessLevel acessLevel) {
@@ -116,7 +118,7 @@ public class SpaceService {
 
         List<UserAccessDTO> users = userSpaceRoleRepository.findUsersBySpaceId(space.getSpaceId()).orElseThrow(() -> new DataNotFoundException("Usuários não encontrados no espaço"));
 
-        return new SpaceWithUsersDTO(space.getName(), space.getSharedToken(), users);
+        return spaceMapper.toSpaceWithUsersDTO(space, users);
     }
 
     public SpaceResponseDTO updatedSpace(Long spaceId, String spaceName){
@@ -126,7 +128,7 @@ public class SpaceService {
 
         spaceRepository.save(space);
 
-        return new SpaceResponseDTO(space.getName(), space.getSharedToken());
+        return spaceMapper.toResponseDTO(space);
     }
 
     public void deleteSpace(Long spaceId) {
