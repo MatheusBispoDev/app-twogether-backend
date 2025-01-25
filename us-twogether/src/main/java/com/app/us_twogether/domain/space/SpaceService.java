@@ -53,8 +53,8 @@ public class SpaceService {
         return new SpaceResponseDTO(newSpace.getName(), newSpace.getSharedToken());
     }
 
-    public SpaceResponseDTO getSharedLink(User user) {
-        Space space = findSpaceByUser(user);
+    public SpaceResponseDTO getSharedLink(Long spaceId) {
+        Space space = findSpaceById(spaceId);
 
         if (space.getSharedToken().isEmpty()) {
             String token = generateSharedSpaceToken();

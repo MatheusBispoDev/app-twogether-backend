@@ -70,12 +70,8 @@ public class SpaceController {
     }
 
     @GetMapping("/{spaceId}/shared")
-    public ResponseEntity<SpaceResponseDTO> getSharedLink() {
-        UsernamePasswordAuthenticationToken authentication = (org.springframework.security.authentication.UsernamePasswordAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
-
-        User user = findUserByAuthentication(authentication);
-
-        SpaceResponseDTO spaceTokenShared = spaceService.getSharedLink(user);
+    public ResponseEntity<SpaceResponseDTO> getSharedLink(@PathVariable Long spaceId) {
+        SpaceResponseDTO spaceTokenShared = spaceService.getSharedLink(spaceId);
 
         return ResponseEntity.ok(spaceTokenShared);
     }
