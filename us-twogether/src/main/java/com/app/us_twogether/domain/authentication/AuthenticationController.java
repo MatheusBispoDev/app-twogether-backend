@@ -1,6 +1,5 @@
 package com.app.us_twogether.domain.authentication;
 
-import com.app.us_twogether.domain.user.LoginResponseDTO;
 import com.app.us_twogether.domain.user.User;
 import com.app.us_twogether.domain.user.UserDTO;
 import com.app.us_twogether.domain.user.UserService;

@@ -17,7 +17,6 @@ public class UserController {
 
     @GetMapping
     public ResponseEntity<User> findByUsername() {
-
         UsernamePasswordAuthenticationToken authentication =
                 (UsernamePasswordAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
 
@@ -26,7 +25,7 @@ public class UserController {
         return ResponseEntity.ok(user);
     }
 
-    @PutMapping()
+    @PutMapping
     public ResponseEntity<User> updateUser(
             @RequestBody User updatedUser) {
 
