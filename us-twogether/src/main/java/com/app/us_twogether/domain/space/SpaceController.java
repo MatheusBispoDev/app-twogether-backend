@@ -87,23 +87,15 @@ public class SpaceController {
     }
 
     @DeleteMapping("/{spaceId}/join/{usernameToRemove}")
-    public ResponseEntity<String> removeUserFromSpace(@PathVariable String usernameToRemove) {
-        UsernamePasswordAuthenticationToken authentication = (org.springframework.security.authentication.UsernamePasswordAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
-
-        User userOwner = findUserByAuthentication(authentication);
-
-        spaceService.removeUserFromSpace(userOwner, usernameToRemove);
+    public ResponseEntity<String> removeUserFromSpace(@PathVariable Long spaceId, @PathVariable String usernameToRemove) {
+        spaceService.removeUserFromSpace(spaceId, usernameToRemove);
 
         return ResponseEntity.ok("Usuário foi removido do espaço!");
     }
 
     @DeleteMapping("/{spaceId}")
-    public ResponseEntity<String> deleteSpace() {
-        UsernamePasswordAuthenticationToken authentication = (org.springframework.security.authentication.UsernamePasswordAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
-
-        User user = findUserByAuthentication(authentication);
-
-        spaceService.deleteSpace(user);
+    public ResponseEntity<String> deleteSpace(@PathVariable Long spaceId) {
+        spaceService.deleteSpace(spaceId);
 
         return ResponseEntity.ok("Espaço deletado com sucesso!");
     }

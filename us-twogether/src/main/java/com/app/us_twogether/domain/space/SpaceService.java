@@ -101,8 +101,8 @@ public class SpaceService {
         userSpaceRoleRepository.save(userSpaceRole);
     }
 
-    public void removeUserFromSpace(User userOwner, String usernameToRemove) {
-        Space space = findSpaceByUser(userOwner);
+    public void removeUserFromSpace(Long spaceId, String usernameToRemove) {
+        Space space = findSpaceById(spaceId);
 
         User userToRemove = findUserByUsername(usernameToRemove);
 
@@ -129,8 +129,8 @@ public class SpaceService {
         return new SpaceResponseDTO(space.getName(), space.getSharedToken());
     }
 
-    public void deleteSpace(User user) {
-        Space space = findSpaceByUser(user);
+    public void deleteSpace(Long spaceId) {
+        Space space = findSpaceById(spaceId);
 
         spaceRepository.delete(space);
     }
