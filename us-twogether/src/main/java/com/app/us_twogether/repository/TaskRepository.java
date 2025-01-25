@@ -11,10 +11,16 @@ import java.time.LocalDate;
 import java.util.List;
 
 public interface TaskRepository extends JpaRepository<Task, Long> {
-    @Query("SELECT new com.app.us_twogether.domain.task.TaskDTO(task.taskId, task.userCreation.username, task.userResponsible.username, task.title, " +
-            "task.description, task.observation, task.dateCreation, task.timeCreation, task.dateCompletion, task.timeCompletion, " +
-            "task.dateEnd, task.timeEnd, task.attachment, task.completed) " +
+    @Query("SELECT new com.app.us_twogether.domain.task.TaskDTO( " +
+            "task.taskId, task.userCreation.username, task.userResponsible.username, " +
+            "category.categoryId, category.title, category.color, " +
+            "subCategory.subCategoryId, subCategory.title, subCategory.color, " +
+            "task.title, task.description, task.observation, task.dateCreation, " +
+            "task.timeCreation, task.dateCompletion, task.timeCompletion, task.dateEnd, " +
+            "task.timeEnd, task.attachment, task.completed) " +
             "FROM Task task " +
-            "WHERE task.spaceId = :space AND task.dateCompletion = :dateCompletion")
+            "LEFT JOIN task.category category " +
+            "LEFT JOIN task.subCategory subCategory " +
+            "WHERE task.space = :space AND task.dateCompletion = :dateCompletion")
     List<TaskDTO> findBySpaceAndDate(@Param("space") Space space, @Param("dateCompletion") LocalDate dateCompletion);
 }

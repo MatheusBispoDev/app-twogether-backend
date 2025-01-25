@@ -1,10 +1,15 @@
 package com.app.us_twogether.service;
 
+import com.app.us_twogether.domain.category.Category;
+import com.app.us_twogether.domain.category.CategoryService;
+import com.app.us_twogether.domain.category.subCategory.SubCategory;
+import com.app.us_twogether.domain.category.subCategory.SubCategoryService;
 import com.app.us_twogether.domain.space.AccessLevel;
 import com.app.us_twogether.domain.space.Space;
 import com.app.us_twogether.domain.space.UserSpaceRole;
 import com.app.us_twogether.domain.task.Task;
 import com.app.us_twogether.domain.task.TaskDTO;
+import com.app.us_twogether.domain.task.TaskRequestDTO;
 import com.app.us_twogether.domain.user.User;
 import com.app.us_twogether.exception.DataAlreadyExistsException;
 import com.app.us_twogether.repository.TaskRepository;
@@ -30,23 +35,34 @@ public class TaskService {
     TaskRepository taskRepository;
 
     @Autowired
+    CategoryService categoryService;
+
+    @Autowired
+    SubCategoryService subCategoryService;
+
+    @Autowired
     private UserSpaceRoleRepository userSpaceRoleRepository;
 
-    public TaskDTO createTask(String usernameCreation, Long spaceId, TaskDTO taskDTO) {
+    public TaskDTO createTask(String usernameCreation, Long spaceId, TaskRequestDTO taskDTO) {
         Space space = spaceService.findSpaceById(spaceId);
         User user = userService.findByUsername(usernameCreation);
 
         User userResponsible = userService.findByUsername(validateUsernameResponsible(usernameCreation, taskDTO.userResponsible()));
         validateUserAndSpace(userResponsible, space);
 
+        Category category = categoryService.getCategory(taskDTO.categoryId());
+        SubCategory subCategory = subCategoryService.getSubCategory(taskDTO.subCategoryId());
+
         Task newTask = new Task();
-        newTask.setSpaceId(space);
+        newTask.setSpace(space);
         newTask.setUserCreation(user);
         newTask.setUserResponsible(userResponsible);
+        newTask.setCategory(category);
+        newTask.setSubCategory(subCategory);
         newTask.setTitle(taskDTO.title());
         newTask.setDescription(taskDTO.description());
-        newTask.setDateCreation(taskDTO.dateCreation());
-        newTask.setTimeCreation(taskDTO.timeCreation());
+        newTask.setDateCreation(LocalDate.now());
+        newTask.setTimeCreation(LocalTime.now());
         newTask.setDateCompletion(taskDTO.dateCompletion());
         newTask.setTimeCompletion(taskDTO.timeCompletion());
         newTask.setAttachment(taskDTO.attachment());
@@ -57,15 +73,20 @@ public class TaskService {
         return castTaskToDTO(newTask);
     }
 
-    public TaskDTO updateTask(Long taskId, TaskDTO updatedTask) {
+    public TaskDTO updateTask(Long taskId, TaskRequestDTO updatedTask) {
         Task existingTask = findTaskById(taskId);
 
         if (!existingTask.getUserResponsible().getUsername().equals(updatedTask.userResponsible())) {
             User userResponsible = userService.findByUsername(updatedTask.userResponsible());
-            validateUserAndSpace(userResponsible, existingTask.getSpaceId());
+            validateUserAndSpace(userResponsible, existingTask.getSpace());
             existingTask.setUserResponsible(userResponsible);
         }
 
+        Category category = categoryService.getCategory(updatedTask.categoryId());
+        SubCategory subCategory = subCategoryService.getSubCategory(updatedTask.subCategoryId());
+
+        existingTask.setCategory(category);
+        existingTask.setSubCategory(subCategory);
         existingTask.setTitle(updatedTask.title());
         existingTask.setDescription(updatedTask.description());
         existingTask.setDateCompletion(updatedTask.dateCompletion());
@@ -115,8 +136,10 @@ public class TaskService {
 
     private TaskDTO castTaskToDTO(Task task) {
         return new TaskDTO(task.getTaskId(), task.getUserCreation().getUsername(), task.getUserResponsible().getUsername(),
-                task.getTitle(), task.getDescription(), task.getObservation(), task.getDateCreation(),
-                task.getTimeCreation(), task.getDateCompletion(), task.getTimeCompletion(),
+                task.getCategory().getCategoryId(), task.getCategory().getTitle(), task.getCategory().getColor(),
+                task.getSubCategory().getSubCategoryId(), task.getSubCategory().getTitle(), task.getSubCategory().getColor(),
+                task.getTitle(), task.getDescription(), task.getObservation(),
+                task.getDateCreation(), task.getTimeCreation(), task.getDateCompletion(), task.getTimeCompletion(),
                 task.getDateEnd(), task.getTimeEnd(), task.getObservation(), task.isCompleted());
     }
 

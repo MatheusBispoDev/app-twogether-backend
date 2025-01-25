@@ -1,7 +1,12 @@
 package com.app.us_twogether.service;
 
+import com.app.us_twogether.domain.category.Category;
+import com.app.us_twogether.domain.category.CategoryService;
+import com.app.us_twogether.domain.category.subCategory.SubCategory;
+import com.app.us_twogether.domain.category.subCategory.SubCategoryService;
 import com.app.us_twogether.domain.reminder.Reminder;
 import com.app.us_twogether.domain.reminder.ReminderDTO;
+import com.app.us_twogether.domain.reminder.ReminderRequestDTO;
 import com.app.us_twogether.domain.space.Space;
 import com.app.us_twogether.domain.user.User;
 import com.app.us_twogether.repository.RemindersRepository;
@@ -26,13 +31,24 @@ public class RemindersService {
     @Autowired
     private RemindersRepository remindersRepository;
 
-    public ReminderDTO createReminders(String usernameCreation, Long spaceId, ReminderDTO reminderDTO) {
+    @Autowired
+    CategoryService categoryService;
+
+    @Autowired
+    SubCategoryService subCategoryService;
+
+    public ReminderDTO createReminders(String usernameCreation, Long spaceId, ReminderRequestDTO reminderDTO) {
         Space space = spaceService.findSpaceById(spaceId);
         User user = userService.findByUsername(usernameCreation);
+
+        Category category = categoryService.getCategory(reminderDTO.categoryId());
+        SubCategory subCategory = subCategoryService.getSubCategory(reminderDTO.subCategoryId());
 
         Reminder newReminder = new Reminder();
         newReminder.setSpace(space);
         newReminder.setUserCreation(user);
+        newReminder.setCategory(category);
+        newReminder.setSubCategory(subCategory);
         newReminder.setTitle(reminderDTO.title());
         newReminder.setDescription(reminderDTO.description());
         newReminder.setDateCreation(LocalDate.now());
@@ -46,9 +62,14 @@ public class RemindersService {
         return castRemindersToDTO(newReminder);
     }
 
-    public ReminderDTO updateReminders(Long remindersId, ReminderDTO reminderDTO) {
+    public ReminderDTO updateReminders(Long remindersId, ReminderRequestDTO reminderDTO) {
         Reminder existingReminder = findRemindersById(remindersId);
 
+        Category category = categoryService.getCategory(reminderDTO.categoryId());
+        SubCategory subCategory = subCategoryService.getSubCategory(reminderDTO.subCategoryId());
+
+        existingReminder.setCategory(category);
+        existingReminder.setSubCategory(subCategory);
         existingReminder.setTitle(reminderDTO.title());
         existingReminder.setDescription(reminderDTO.description());
         existingReminder.setDateCompletion(reminderDTO.dateCompletion());
@@ -94,6 +115,11 @@ public class RemindersService {
     }
 
     private ReminderDTO castRemindersToDTO(Reminder reminder) {
-        return new ReminderDTO(reminder.getRemindersId(), reminder.getSpace().getSpaceId(), reminder.getUserCreation().getUsername(), reminder.getTitle(), reminder.getDescription(), reminder.getDateCreation(), reminder.getTimeCreation(), reminder.getDateCompletion(), reminder.getTimeCompletion(), reminder.isCompleted());
+        return new ReminderDTO(reminder.getRemindersId(), reminder.getSpace().getSpaceId(), reminder.getUserCreation().getUsername(),
+                reminder.getCategory().getCategoryId(), reminder.getCategory().getTitle(), reminder.getCategory().getColor(),
+                reminder.getSubCategory().getSubCategoryId(), reminder.getSubCategory().getTitle(), reminder.getSubCategory().getColor(),
+                reminder.getTitle(), reminder.getDescription(),
+                reminder.getDateCreation(), reminder.getTimeCreation(), reminder.getDateCompletion(),
+                reminder.getTimeCompletion(), reminder.isCompleted());
     }
 }
