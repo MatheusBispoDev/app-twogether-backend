@@ -21,7 +21,7 @@ public class UserService {
         return userMapper.toResponseDTO(user);
     }
 
-    public User getUser(String username) {
+    public User getUserByUsername(String username) {
         return userRepository.findById(username).orElseThrow(() -> new DataNotFoundException("Usuário não encontrado"));
     }
 
@@ -45,6 +45,10 @@ public class UserService {
         updatedUser.setType(user.type());
 
         return userMapper.toResponseDTO(userRepository.save(updatedUser));
+    }
+
+    public void logout(){
+
     }
 
 }

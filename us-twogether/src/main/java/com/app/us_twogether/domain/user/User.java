@@ -1,5 +1,6 @@
 package com.app.us_twogether.domain.user;
 
+import com.app.us_twogether.domain.authentication.token.RefreshToken;
 import com.app.us_twogether.domain.space.UserSpaceRole;
 import jakarta.persistence.*;
 import lombok.Data;
@@ -39,6 +40,9 @@ public class User implements UserDetails {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<UserSpaceRole> userSpaceRoles = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<RefreshToken> refreshTokens = new ArrayList<>();
 
     public User() {}
 
@@ -88,4 +92,5 @@ public class User implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
+
 }
