@@ -3,6 +3,7 @@ package com.app.us_twogether.domain.authentication.token;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 @Service
@@ -19,6 +20,6 @@ public class TokenBlacklistService {
     }
 
     public boolean isTokenBlacklisted(String token) {
-        return redisTemplate.hasKey(token);
+        return Objects.requireNonNull(redisTemplate.hasKey(token));
     }
 }

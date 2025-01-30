@@ -28,6 +28,7 @@ public class RedisConfig {
 
         return RedisCacheManager.builder(redisConnectionFactory)
                 .cacheDefaults(config)
+                .withInitialCacheConfigurations(cacheConfigurations)
                 .build();
     }
 }
