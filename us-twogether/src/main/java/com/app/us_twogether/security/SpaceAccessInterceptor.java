@@ -1,4 +1,4 @@
-package com.app.us_twogether.config;
+package com.app.us_twogether.security;
 
 import com.app.us_twogether.domain.space.Space;
 import com.app.us_twogether.domain.user.User;
@@ -28,7 +28,6 @@ public class SpaceAccessInterceptor implements HandlerInterceptor {
 
     @Autowired
     SpaceService spaceService;
-
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {

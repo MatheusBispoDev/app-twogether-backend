@@ -1,4 +1,4 @@
-package com.app.us_twogether.config;
+package com.app.us_twogether.security;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
