@@ -4,8 +4,10 @@ import com.app.us_twogether.domain.authentication.AuthenticationMapper;
 import com.app.us_twogether.domain.authentication.LoginResponseDTO;
 import com.app.us_twogether.domain.user.User;
 import com.auth0.jwt.JWT;
+import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
+import com.auth0.jwt.exceptions.JWTDecodeException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.exceptions.TokenExpiredException;
 import org.apache.kafka.common.errors.ResourceNotFoundException;
@@ -27,6 +29,9 @@ public class TokenService {
 
     @Autowired
     private AuthenticationMapper authenticationMapper;
+
+    @Autowired
+    private TokenBlacklistService tokenBlacklistService;
 
     private final long refreshTokenValidity = 30L * 24 * 60 * 60;
 
@@ -50,9 +55,10 @@ public class TokenService {
         }
     }
 
-    public void logout(String refreshToken) {
-        RefreshToken token = findByToken(refreshToken);
-        refreshTokenRepository.delete(token);
+    public void logout(String accessToken, String refreshToken) {
+        RefreshToken existingRefreshToken = findByToken(refreshToken);
+        refreshTokenRepository.delete(existingRefreshToken);
+        tokenBlacklistService.addToBlacklist(accessToken, JWT.decode(accessToken).getExpiresAt().getTime());
     }
 
     public RefreshToken findByToken(String token){

@@ -35,4 +35,11 @@ public class GlobalExceptionHandler {
                 .status(HttpStatus.BAD_REQUEST) // 400 Bad Request
                 .body(ex.getMessage());
     }
+
+    @ExceptionHandler(TokenBlacklistedException.class)
+    public ResponseEntity<String> handleTokenBlacklistedException(TokenBlacklistedException ex){
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST) // 409 Conflict
+                .body(ex.getMessage());
+    }
 }
