@@ -1,7 +1,10 @@
 package com.app.us_twogether.security;
 
+import com.app.us_twogether.domain.authentication.token.TokenBlacklistService;
+import com.app.us_twogether.domain.authentication.token.TokenService;
 import com.app.us_twogether.exception.DataNotFoundException;
 import com.app.us_twogether.domain.user.UserRepository;
+import com.app.us_twogether.exception.TokenBlacklistedException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -20,8 +23,12 @@ public class SecurityFilter extends OncePerRequestFilter {
 
     @Autowired
     TokenService tokenService;
+
     @Autowired
     UserRepository userRepository;
+
+    @Autowired
+    TokenBlacklistService tokenBlacklistService;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
@@ -29,13 +36,16 @@ public class SecurityFilter extends OncePerRequestFilter {
 
         if (token != null) {
             var username = tokenService.validateToken(token);
+
+            if (tokenBlacklistService.isTokenBlacklisted(token)){
+                throw new TokenBlacklistedException("Token inválido, faça login novamente.");
+            }
+
             UserDetails user = userRepository.findByUsername(username).orElseThrow(() -> new DataNotFoundException("Usuário com token não foi encontrado"));
 
-            //faz a verificacoes das permissoes do usuario (token ativo)
             var authentication = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
-            //salva a autenticacao do usuario na requisicao para ser usada em outros contextos
-            SecurityContextHolder.getContext().setAuthentication(authentication);
 
+            SecurityContextHolder.getContext().setAuthentication(authentication);
         }
         //vai para o proximo filtro, pois já finalizamos a validação do token
         filterChain.doFilter(request, response);

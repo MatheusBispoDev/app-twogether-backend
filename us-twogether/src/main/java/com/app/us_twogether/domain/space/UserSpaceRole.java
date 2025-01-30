@@ -13,11 +13,11 @@ public class UserSpaceRole {
     private Long userSpaceRoleId;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
     @ManyToOne
-    @JoinColumn(name = "space_id")
+    @JoinColumn(name = "space_id", nullable = false)
     private Space space;
 
     @Enumerated(EnumType.STRING)

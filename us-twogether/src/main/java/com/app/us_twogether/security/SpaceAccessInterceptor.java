@@ -1,4 +1,4 @@
-package com.app.us_twogether.config;
+package com.app.us_twogether.security;
 
 import com.app.us_twogether.domain.space.Space;
 import com.app.us_twogether.domain.user.User;
@@ -29,7 +29,6 @@ public class SpaceAccessInterceptor implements HandlerInterceptor {
     @Autowired
     SpaceService spaceService;
 
-
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         @SuppressWarnings("unchecked")
@@ -52,7 +51,7 @@ public class SpaceAccessInterceptor implements HandlerInterceptor {
     }
 
     private boolean isAuthorized(String authUsername, Long spaceId) {
-        User user = userService.getUser(authUsername);
+        User user = userService.getUserByUsername(authUsername);
         Space space = spaceService.findSpaceById(spaceId);
         return userSpaceRoleRepository.existsByUserAndSpace(user, space);
     }

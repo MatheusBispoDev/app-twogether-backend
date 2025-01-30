@@ -1,6 +1,6 @@
 package com.app.us_twogether.domain.user;
 
-import com.app.us_twogether.security.TokenService;
+import com.app.us_twogether.domain.authentication.token.TokenService;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,7 +46,7 @@ public class AuthenticationTest {
         var usernamePassword = new UsernamePasswordAuthenticationToken(username, password);
         var auth = this.authenticationManager.authenticate(usernamePassword);
 
-        var token = tokenService.generateToken((User) auth.getPrincipal());
+        //var token = tokenService.generateToken((User) auth.getPrincipal());
 
         // Faz o JSON para simular a requisição de Login
         // JSON de entrada

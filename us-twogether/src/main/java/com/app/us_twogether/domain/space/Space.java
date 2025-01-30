@@ -18,8 +18,8 @@ public class Space {
     @Column(unique = true)
 
     private String sharedToken;
-    @OneToMany(mappedBy = "space", cascade = CascadeType.ALL)
 
+    @OneToMany(mappedBy = "space", cascade = CascadeType.ALL)
     private List<UserSpaceRole> userSpaceRoles = new ArrayList<>();
 
     public Space() {}
