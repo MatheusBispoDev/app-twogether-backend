@@ -34,7 +34,8 @@ public class TokenService {
     private final long refreshTokenValidity = 30L * 24 * 60 * 60;
 
     public LoginResponseDTO login(User user){
-        String accessToken = generateToken(user.getUsername());
+        //TODO mudar metodos de login e logout para o AuthenticationService
+        String accessToken = generateAccessToken(user.getUsername());
         RefreshToken refreshToken = createRefreshToken(user);
 
         return authenticationMapper.toLoginResponseDTO(user, accessToken, refreshToken);
@@ -67,7 +68,7 @@ public class TokenService {
         return token.getExpiryDate().isBefore(Instant.now());
     }
 
-    private String generateToken(String username){
+    public String generateAccessToken(String username){
         try {
             Algorithm algorithm = Algorithm.HMAC256(secret);
             // 15 minutos
@@ -82,7 +83,7 @@ public class TokenService {
         }
     }
 
-    private String generateRefreshToken(String username){
+    public String generateRefreshToken(String username){
         try {
             Algorithm algorithm = Algorithm.HMAC256(secret);
             // 30 dias
