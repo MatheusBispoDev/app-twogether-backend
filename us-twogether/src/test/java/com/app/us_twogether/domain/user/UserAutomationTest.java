@@ -22,7 +22,7 @@ public class UserAutomationTest {
         userService.createUser(user);
 
         // Busca o usuário cadastrado
-        User savedUser = (userService.getUser("john_doe"));
+        User savedUser = (userService.getUserByUsername("john_doe"));
 
         // Validações
         assertThat(savedUser.getUsername()).isEqualTo("john_doe");
@@ -47,7 +47,7 @@ public class UserAutomationTest {
         userService.createUser(user);
 
         // Busca o usuário cadastrado
-        User savedUser = (userService.getUser("john_doe"));
+        User savedUser = (userService.getUserByUsername("john_doe"));
 
         // Crio um usuário para alterar os dados
         UserRequestDTO updatedUser = new UserRequestDTO("john_doe", "4321", "Roger", "roger@example.com", "11945345678", "US");
@@ -70,7 +70,7 @@ public class UserAutomationTest {
         userService.createUser(user);
 
         // Busca o usuário cadastrado
-        User savedUser = (userService.getUser("john_doe"));
+        User savedUser = (userService.getUserByUsername("john_doe"));
 
         // Validações
         assertThat(savedUser).isNotNull();
