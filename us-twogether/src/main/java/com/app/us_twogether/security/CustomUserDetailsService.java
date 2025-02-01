@@ -1,10 +1,14 @@
-package com.app.us_twogether.domain.user;
+package com.app.us_twogether.security;
 
+import com.app.us_twogether.domain.user.User;
+import com.app.us_twogether.domain.user.UserRepository;
 import com.app.us_twogether.exception.DataNotFoundException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
 
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
