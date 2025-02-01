@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -33,9 +34,10 @@ public class AuthenticationController {
     @PostMapping("/login")
     public ResponseEntity<LoginResponseDTO> login(@RequestBody @Valid AuthenticationRequestDTO authenticationDTO) {
         var username = new UsernamePasswordAuthenticationToken(authenticationDTO.username(), authenticationDTO.password());
-        this.authenticationManager.authenticate(username);
 
-        User user = userService.getUserByUsername(username.getName());
+        Authentication auth = this.authenticationManager.authenticate(username);
+
+        User user = (User) auth.getPrincipal();
 
         LoginResponseDTO loginResponseDTO = tokenService.login(user);
 
