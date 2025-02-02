@@ -17,14 +17,11 @@ public class UserAutomationTest {
 
     @Test
     public void shouldCreateUser_whenCredentialsAreValid(){
-        // Criar e salvar um User que referencia o NotificationUser padrão
         User user = new User("john_doe", "1234", "John Doe", "john@example.com", "11932178425", "US");
         userService.createUser(user);
 
-        // Busca o usuário cadastrado
         User savedUser = (userService.getUserByUsername("john_doe"));
 
-        // Validações
         assertThat(savedUser.getUsername()).isEqualTo("john_doe");
     }
 
@@ -40,39 +37,32 @@ public class UserAutomationTest {
 
     @Test
     public void shouldUpdateUser_whenCredentialsAreValid(){
-        // Criar e salvar um User que referencia o NotificationUser padrão
         User user = new User("john_doe", "1234", "John Doe", "john@example.com", "11932178425", "US");
 
-        // Salvo o usuário
         userService.createUser(user);
 
-        // Busca o usuário cadastrado
-        User savedUser = (userService.getUserByUsername("john_doe"));
-
-        // Crio um usuário para alterar os dados
-        UserRequestDTO updatedUser = new UserRequestDTO("john_doe", "4321", "Roger", "roger@example.com", "11945345678", "US");
+        UserRequestDTO updatedUser = new UserRequestDTO("john_doe", "4321", "Roger", "roger@example.com", "11945345678", "TST");
 
         userService.updateUser("john_doe", updatedUser);
 
-        // Validações
+        User savedUser = (userService.getUserByUsername("john_doe"));
+
         assertThat(savedUser).isNotNull();
+        assertThat(savedUser.getName()).isNotEqualTo("4321");
         assertThat(savedUser.getName()).isEqualTo("Roger");
         assertThat(savedUser.getEmail()).isEqualTo("roger@example.com");
         assertThat(savedUser.getPhoneNumber()).isEqualTo("11945345678");
+        assertThat(savedUser.getType()).isEqualTo("TST");
     }
 
     @Test
     public void shouldGetPasswordUser_whenPasswordEncoder(){
-        // Criar e salvar um User que referencia o NotificationUser padrão
         User user = new User("john_doe", "1234", "John Doe", "john@example.com", "11932178425", "US");
 
-        // Salvo o usuário
         userService.createUser(user);
 
-        // Busca o usuário cadastrado
         User savedUser = (userService.getUserByUsername("john_doe"));
 
-        // Validações
         assertThat(savedUser).isNotNull();
         assertNotSame(savedUser.getPassword(),"1234");
     }
