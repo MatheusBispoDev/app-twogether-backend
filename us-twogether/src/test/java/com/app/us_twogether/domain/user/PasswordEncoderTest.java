@@ -10,7 +10,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class PasswordEncoderTest {
 
     @Test
-    public void testPasswordEncoding() {
+    public void shouldEncodePassword_whenKeysAreMatches() {
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
         String rawPassword = "mySecretPassword";
@@ -25,13 +25,11 @@ public class PasswordEncoderTest {
     }
 
     @Test
-    public void testPasswordMatches() {
+    public void shouldEncodePassword_whenKeysDoNotMatches() {
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
         String rawPassword = "mySecretPassword";
         String encodedPassword = passwordEncoder.encode(rawPassword);
-
-        assertTrue(passwordEncoder.matches(rawPassword, encodedPassword));
 
         String wrongPassword = "wrongPassword";
         assertFalse(passwordEncoder.matches(wrongPassword, encodedPassword));

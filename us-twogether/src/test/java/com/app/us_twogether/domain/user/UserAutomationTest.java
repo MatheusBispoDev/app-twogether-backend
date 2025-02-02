@@ -16,7 +16,7 @@ public class UserAutomationTest {
     private UserService userService;
 
     @Test
-    public void testCreateUser(){
+    public void shouldCreateUser_whenCredentialsAreValid(){
         // Criar e salvar um User que referencia o NotificationUser padrão
         User user = new User("john_doe", "1234", "John Doe", "john@example.com", "11932178425", "US");
         userService.createUser(user);
@@ -29,7 +29,7 @@ public class UserAutomationTest {
     }
 
     @Test
-    public void testCreateDuplicateUser(){
+    public void shouldCreateUser_whenUserAlreadyExists(){
         // Criar e salvar um User que referencia o NotificationUser padrão
         User user = new User("john_doe", "1234", "John Doe", "john@example.com", "11932178425", "US");
         userService.createUser(user);
@@ -39,7 +39,7 @@ public class UserAutomationTest {
     }
 
     @Test
-    public void testUpdateUser(){
+    public void shouldUpdateUser_whenCredentialsAreValid(){
         // Criar e salvar um User que referencia o NotificationUser padrão
         User user = new User("john_doe", "1234", "John Doe", "john@example.com", "11932178425", "US");
 
@@ -62,7 +62,7 @@ public class UserAutomationTest {
     }
 
     @Test
-    public void testPasswordEncoderUser(){
+    public void shouldGetPasswordUser_whenPasswordEncoder(){
         // Criar e salvar um User que referencia o NotificationUser padrão
         User user = new User("john_doe", "1234", "John Doe", "john@example.com", "11932178425", "US");
 
@@ -74,6 +74,6 @@ public class UserAutomationTest {
 
         // Validações
         assertThat(savedUser).isNotNull();
-        assertNotSame(savedUser.getPhoneNumber(),"1234");
+        assertNotSame(savedUser.getPassword(),"1234");
     }
 }

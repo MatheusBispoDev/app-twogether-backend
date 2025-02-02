@@ -35,7 +35,7 @@ public class AuthenticationLoginTest {
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     @Test
-    public void AuthenticationLoginUserSuccessfullyTest() throws Exception {
+    public void shouldAuthenticateLogin_whenCredentialsAreValid() throws Exception {
         User user = new User("john_doe", "1234");
 
         userService.createUser(user);
@@ -53,7 +53,7 @@ public class AuthenticationLoginTest {
     }
 
     @Test
-    public void AuthenticationLoginUserFailedTest() throws Exception {
+    public void shouldAuthenticateLogin_whenCredentialsIsInvalid() throws Exception {
         User user = new User("john_doe", "1234");
 
         userService.createUser(user);

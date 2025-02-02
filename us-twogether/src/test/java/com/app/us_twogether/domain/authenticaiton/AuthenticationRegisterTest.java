@@ -41,7 +41,7 @@ public class AuthenticationRegisterTest {
     private final UserResponseDTO userResponseDTO = new UserResponseDTO("john_doe", "John Doe", "john@example.com", "11932178425", "US");
 
     @Test
-    public void testRegisterUserSuccessfully() throws Exception {
+    public void shouldAuthenticateRegisterUser_whenCredentialsAreValid() throws Exception {
         when(userService.createUser(Mockito.any(User.class))).thenReturn(userResponseDTO);
 
         mockMvc.perform(post(apiBaseUrl + "/auth/register")
@@ -58,7 +58,7 @@ public class AuthenticationRegisterTest {
     }
 
     @Test
-    public void testErrorWhenUserAlreadyExists() throws Exception {
+    public void shouldAuthenticateRegisterUser_whenUserAlreadyExists() throws Exception {
         when(userService.createUser(Mockito.any(User.class)))
                 .thenThrow(new DataAlreadyExistsException("Usuário 'john_doe' já está cadastrado."));
 
