@@ -7,7 +7,6 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -48,11 +47,11 @@ public class User implements UserDetails {
 
     public User(String username, String password, String name, String email, String phoneNumber, String type){
         this.username = username;
+        this.password = password;
         this.name = name;
         this.email = email;
         this.phoneNumber = phoneNumber;
         this.type = type;
-        this.setPassword(password);
     }
 
     public User(String username, String password){
@@ -62,10 +61,6 @@ public class User implements UserDetails {
         this.email = "";
         this.phoneNumber = "";
         this.type = "";
-    }
-
-    public void setPassword(String password) {
-        this.password = new BCryptPasswordEncoder().encode(password);
     }
 
     @Override

@@ -4,6 +4,7 @@ import com.app.us_twogether.exception.DataAlreadyExistsException;
 import com.app.us_twogether.exception.DataNotFoundException;
 import org.apache.kafka.common.errors.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -29,6 +30,8 @@ public class UserService {
         if (userRepository.existsById(newUser.getUsername())) {
             throw new DataAlreadyExistsException("Usuário '" + newUser.getUsername() + "' já está cadastrado.");
         }
+
+        newUser.setPassword(new BCryptPasswordEncoder().encode(newUser.getPassword()));
 
         User user = userRepository.save(newUser);
 
