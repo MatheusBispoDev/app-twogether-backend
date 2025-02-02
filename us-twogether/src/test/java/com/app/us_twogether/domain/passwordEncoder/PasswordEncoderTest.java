@@ -1,4 +1,4 @@
-package com.app.us_twogether.domain.user;
+package com.app.us_twogether.domain.passwordEncoder;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
