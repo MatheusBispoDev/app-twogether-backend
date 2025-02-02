@@ -38,7 +38,7 @@ public class TokenService {
         String accessToken = generateAccessToken(user.getUsername());
         RefreshToken refreshToken = createRefreshToken(user);
 
-        return authenticationMapper.toLoginResponseDTO(user, accessToken, refreshToken);
+        return authenticationMapper.toLoginResponseDTO(user.getUsername(), accessToken, refreshToken);
     }
 
     public String validateToken(String token){
