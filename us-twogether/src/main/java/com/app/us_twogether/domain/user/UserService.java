@@ -31,7 +31,7 @@ public class UserService {
             throw new DataAlreadyExistsException("Usuário '" + newUser.getUsername() + "' já está cadastrado.");
         }
 
-        newUser.setPassword(new BCryptPasswordEncoder().encode(newUser.getPassword()));
+        newUser.setPassword(cryptPassword(newUser.getPassword()));
 
         User user = userRepository.save(newUser);
 
@@ -41,7 +41,7 @@ public class UserService {
     public UserResponseDTO updateUser(String username, UserRequestDTO user) {
         User updatedUser = userRepository.findById(username).orElseThrow(() -> new ResourceNotFoundException("Usuário não encontrado"));
 
-        updatedUser.setPassword(user.password());
+        updatedUser.setPassword(cryptPassword(user.password()));
         updatedUser.setName(user.name());
         updatedUser.setEmail(user.email());
         updatedUser.setPhoneNumber(user.phoneNumber());
@@ -50,8 +50,8 @@ public class UserService {
         return userMapper.toResponseDTO(userRepository.save(updatedUser));
     }
 
-    public void logout(){
-
+    public String cryptPassword(String password){
+        return new BCryptPasswordEncoder().encode(password);
     }
 
 }
