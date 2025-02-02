@@ -1,7 +1,6 @@
 package com.app.us_twogether.domain.authentication;
 
 import com.app.us_twogether.domain.authentication.token.RefreshToken;
-import com.app.us_twogether.domain.user.User;
 import org.springframework.stereotype.Component;
 
 @Component
