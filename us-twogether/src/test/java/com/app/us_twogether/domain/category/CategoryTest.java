@@ -1,6 +1,5 @@
 package com.app.us_twogether.domain.category;
 
-import com.app.us_twogether.domain.space.SpaceService;
 import jakarta.transaction.Transactional;
 import org.apache.kafka.common.errors.ResourceNotFoundException;
 import org.junit.jupiter.api.Test;
