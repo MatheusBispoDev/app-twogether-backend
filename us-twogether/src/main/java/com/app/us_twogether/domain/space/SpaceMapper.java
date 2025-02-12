@@ -8,7 +8,7 @@ import java.util.List;
 public class SpaceMapper {
 
     public SpaceResponseDTO toResponseDTO(Space space){
-        return new SpaceResponseDTO(space.getName(), space.getSharedToken());
+        return new SpaceResponseDTO(space.getSpaceId(), space.getName(), space.getSharedToken());
     }
 
     public SpaceWithUsersDTO toSpaceWithUsersDTO(Space space, List<UserAccessDTO> users){
