@@ -43,11 +43,13 @@ public class CategoryTest {
 
         CategoryResponseDTO response = categoryService.createCategory(spaceId, categoryDTO);
 
-        assertNotNull(response);
-        assertNotNull(response.categoryId());
-        assertEquals("Work", response.title());
-        assertEquals("#FF5733", response.color());
-        assertEquals(CategoryType.EXPENSE, response.categoryType());
+        Category category = categoryService.getCategory(response.categoryId());
+
+        assertNotNull(category);
+        assertNotNull(category.getCategoryId());
+        assertEquals("Work", category.getTitle());
+        assertEquals("#FF5733", category.getColor());
+        assertEquals(CategoryType.EXPENSE, category.getCategoryType());
     }
 
     @Test
