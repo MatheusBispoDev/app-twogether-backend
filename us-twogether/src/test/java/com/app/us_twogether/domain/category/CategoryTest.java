@@ -92,6 +92,7 @@ public class CategoryTest {
 
         assertNotNull(categories, "A lista de categorias não deveria ser nula");
         assertEquals(5, categories.size(), "O número de categorias deveria ser 5");
+
         List<String> actualTitles = categories.stream()
                 .map(CategoryResponseDTO::title)
                 .toList();
@@ -99,6 +100,5 @@ public class CategoryTest {
         List<String> expectedTitles = List.of("Work", "Home", "Shopping", "Hospital", "Family");
 
         assertTrue(actualTitles.containsAll(expectedTitles), "A lista de categorias deve conter os títulos esperados");
-
     }
 }

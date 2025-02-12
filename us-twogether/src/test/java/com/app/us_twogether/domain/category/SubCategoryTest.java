@@ -8,13 +8,15 @@ import com.app.us_twogether.domain.space.SpaceService;
 import com.app.us_twogether.domain.user.User;
 import com.app.us_twogether.domain.user.UserService;
 import jakarta.transaction.Transactional;
+import org.apache.kafka.common.errors.ResourceNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @Transactional
@@ -82,22 +84,34 @@ public class SubCategoryTest {
 
         SubCategoryResponseDTO response = subCategoryService.createSubCategory(categoryId, subCategoryDTO);
 
-        assertNotNull(response);
-        assertNotNull(response.subCategoryId());
-        assertEquals("Equipments", response.title());
-        assertEquals("#FF5733", response.color());
+        subCategoryService.deletedSubCategory(response.subCategoryId());
+
+        assertThrows(ResourceNotFoundException.class, () -> subCategoryService.getSubCategory(response.subCategoryId()));
     }
 
     @Test
     public void shouldGetAllSubCategoryFromCategory() {
-        SubCategoryRequestDTO subCategoryDTO = new SubCategoryRequestDTO("Equipments", "#FF5733");
+        List<SubCategoryRequestDTO> subCategoriesToCreate = List.of(
+                new SubCategoryRequestDTO("Internet", "#FF5733"),
+                new SubCategoryRequestDTO("Equipments", "#FF5733"),
+                new SubCategoryRequestDTO("Tasks", "#FF5733"),
+                new SubCategoryRequestDTO("Reunion", "#FF5733")
+        );
 
-        SubCategoryResponseDTO response = subCategoryService.createSubCategory(categoryId, subCategoryDTO);
+        subCategoriesToCreate.forEach(subCategory -> subCategoryService.createSubCategory(categoryId, subCategory));
 
-        assertNotNull(response);
-        assertNotNull(response.subCategoryId());
-        assertEquals("Equipments", response.title());
-        assertEquals("#FF5733", response.color());
+        List<SubCategoryResponseDTO> subCategories = subCategoryService.getAllSubCategoriesFromCategory(categoryId);
+
+        assertNotNull(subCategories, "A lista de SubCategorias não deveria ser nula");
+        assertEquals(4, subCategories.size(), "O número de SubCategorias deveria ser 4");
+
+        List<String> actualTitles = subCategories.stream()
+                .map(SubCategoryResponseDTO::title)
+                .toList();
+
+        List<String> expectedTitles = List.of("Internet", "Equipments", "Tasks", "Reunion");
+
+        assertTrue(actualTitles.containsAll(expectedTitles), "A lista de SubCategorias deve conter os títulos esperados");
     }
 
 }
