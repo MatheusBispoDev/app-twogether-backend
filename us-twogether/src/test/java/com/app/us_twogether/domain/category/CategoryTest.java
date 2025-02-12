@@ -1,7 +1,11 @@
 package com.app.us_twogether.domain.category;
 
+import com.app.us_twogether.domain.space.SpaceService;
+import com.app.us_twogether.domain.user.User;
+import com.app.us_twogether.domain.user.UserService;
 import jakarta.transaction.Transactional;
 import org.apache.kafka.common.errors.ResourceNotFoundException;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -17,11 +21,27 @@ public class CategoryTest {
     @Autowired
     private CategoryService categoryService;
 
+    @Autowired
+    private SpaceService spaceService;
+
+    @Autowired
+    private UserService userService;
+
+    private Long spaceId;
+
+    @BeforeEach
+    public void setup(){
+        User user = new User("john_doe", "1234", "John Doe", "john@example.com", "11932178425", "US");
+        this.userService.createUser(user);
+
+        this.spaceId = this.spaceService.createSpace(user).spaceId();
+    }
+
     @Test
     public void shouldCreateCategory_whenCredentialsAreValid() {
         CategoryRequestDTO categoryDTO = new CategoryRequestDTO("Work", "#FF5733", CategoryType.EXPENSE);
 
-        CategoryResponseDTO response = categoryService.createCategory(1L, categoryDTO);
+        CategoryResponseDTO response = categoryService.createCategory(spaceId, categoryDTO);
 
         assertNotNull(response);
         assertNotNull(response.categoryId());
@@ -32,7 +52,7 @@ public class CategoryTest {
 
     @Test
     public void shouldUpdateCategory_whenCredentialsAreValid(){
-        CategoryResponseDTO response = categoryService.createCategory(1L, new CategoryRequestDTO("Work", "#FF5733", CategoryType.EXPENSE));
+        CategoryResponseDTO response = categoryService.createCategory(spaceId, new CategoryRequestDTO("Work", "#FF5733", CategoryType.EXPENSE));
 
         categoryService.updateCategory(response.categoryId(), new CategoryRequestDTO("Home", "#FF5734", CategoryType.ACTIVITY));
 
@@ -47,7 +67,7 @@ public class CategoryTest {
 
     @Test
     public void shouldDeleteCategory_whenCredentialsAreValid(){
-        CategoryResponseDTO response = categoryService.createCategory(1L, new CategoryRequestDTO("Work", "#FF5733", CategoryType.EXPENSE));
+        CategoryResponseDTO response = categoryService.createCategory(spaceId, new CategoryRequestDTO("Work", "#FF5733", CategoryType.EXPENSE));
 
         categoryService.deletedCategory(response.categoryId());
 
@@ -64,9 +84,9 @@ public class CategoryTest {
                 new CategoryRequestDTO("Family", "#FF5733", CategoryType.EXPENSE)
         );
 
-        categoriesToCreate.forEach(category -> categoryService.createCategory(1L, category));
+        categoriesToCreate.forEach(category -> categoryService.createCategory(spaceId, category));
 
-        List<CategoryResponseDTO> categories = categoryService.getAllCategoriesFromSpace(1L);
+        List<CategoryResponseDTO> categories = categoryService.getAllCategoriesFromSpace(spaceId);
 
         assertNotNull(categories, "A lista de categorias não deveria ser nula");
         assertEquals(5, categories.size(), "O número de categorias deveria ser 5");
