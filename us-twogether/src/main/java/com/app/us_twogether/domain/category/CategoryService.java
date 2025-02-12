@@ -39,6 +39,7 @@ public class CategoryService {
 
         updatedCategory.setTitle(category.title());
         updatedCategory.setColor(category.color());
+        updatedCategory.setCategoryType(category.categoryType());
 
         categoryRepository.save(updatedCategory);
 
