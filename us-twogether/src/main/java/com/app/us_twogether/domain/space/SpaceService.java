@@ -68,7 +68,7 @@ public class SpaceService {
         return spaceMapper.toResponseDTO(space);
     }
 
-    public void addUserToSpaceByToken(String token, User userInvited, AccessLevel acessLevel) {
+    public void addUserToSpaceByToken(String token, User userInvited, AccessLevel accessLevel) {
         Space space = spaceRepository.findBySharedToken(token).orElseThrow(() -> new ResourceNotFoundException("Espaço não encontrado para o Token fornecido"));
 
         if (userSpaceRoleRepository.existsByUserAndSpace(userInvited, space)) {
@@ -77,26 +77,26 @@ public class SpaceService {
 
         Integer usersWithAcessUs = userSpaceRoleRepository.countUsersBySpaceAndRole(space.getSpaceId(), AccessLevel.US);
 
-        if (acessLevel == AccessLevel.US && usersWithAcessUs >= 2) {
+        if (accessLevel == AccessLevel.US && usersWithAcessUs >= 2) {
             throw new DataAlreadyExistsException("O limite de usuários como Owner já foi atingido");
         }
 
         UserSpaceRole userSpaceRole = new UserSpaceRole();
         userSpaceRole.setUser(userInvited);
         userSpaceRole.setSpace(space);
-        userSpaceRole.setAccessLevel(acessLevel);
+        userSpaceRole.setAccessLevel(accessLevel);
 
         userSpaceRoleRepository.save(userSpaceRole);
     }
 
-    public void changeSpaceUserAccessLevel(Long spaceId, String usernameToUpdate, AccessLevel acessLevel) {
+    public void changeSpaceUserAccessLevel(Long spaceId, String usernameToUpdate, AccessLevel accessLevel) {
         Space space = findSpaceById(spaceId);
 
         User userToUpdate = findUserByUsername(usernameToUpdate);
 
         UserSpaceRole userSpaceRole = findUserRoleByUserAndSpace(userToUpdate, space);
 
-        userSpaceRole.setAccessLevel(acessLevel);
+        userSpaceRole.setAccessLevel(accessLevel);
 
         userSpaceRoleRepository.save(userSpaceRole);
     }
