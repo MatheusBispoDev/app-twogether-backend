@@ -60,6 +60,7 @@ public class TaskService {
         newTask.setSubCategory(subCategory);
         newTask.setTitle(task.title());
         newTask.setDescription(task.description());
+        newTask.setObservation(task.observation());
         newTask.setDateCreation(LocalDate.now());
         newTask.setTimeCreation(LocalTime.now());
         newTask.setDateCompletion(task.dateCompletion());
