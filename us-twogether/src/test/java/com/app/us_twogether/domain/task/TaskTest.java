@@ -7,6 +7,7 @@ import com.app.us_twogether.domain.space.SpaceService;
 import com.app.us_twogether.domain.user.User;
 import com.app.us_twogether.domain.user.UserService;
 import jakarta.transaction.Transactional;
+import org.apache.kafka.common.errors.ResourceNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -162,7 +163,7 @@ public class TaskTest {
     }
 
     @Test
-    public void shouldCompetedTask() {
+    public void shouldCompetedTask_whenIsIncompleted() {
         when(clock.instant()).thenReturn(fixedClock.instant());
         when(clock.getZone()).thenReturn(fixedClock.getZone());
 
@@ -179,7 +180,7 @@ public class TaskTest {
     }
 
     @Test
-    public void shouldCompetedTask_whenTaskIsAlreadyCompleted() {
+    public void shouldCompetedTask_whenIsAlreadyCompleted() {
         when(clock.instant()).thenReturn(fixedClock.instant());
         when(clock.getZone()).thenReturn(fixedClock.getZone());
 
@@ -194,6 +195,15 @@ public class TaskTest {
         assertNotNull(task.taskId());
         assertEquals(LocalDate.now(), task.dateEnd());
         assertTrue(task.completed());
+    }
+
+    @Test
+    public void shouldDeleteTask_whenCredentialsAreValid(){
+        TaskResponseDTO task = taskService.createTask("john_doe", spaceId, taskDTO);
+
+        taskService.deletedTask(task.categoryId());
+
+        assertThrows(ResourceNotFoundException.class, () -> taskService.getTask(task.categoryId()));
     }
 
     @Test
