@@ -8,7 +8,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 public interface TaskRepository extends JpaRepository<Task, Long> {
-    String cQuery = "SELECT new com.app.us_twogether.domain.task.TaskResponseDTO( " +
+    String Query = "SELECT new com.app.us_twogether.domain.task.TaskResponseDTO( " +
             "task.taskId, task.userCreation.username, task.userResponsible.username, " +
             "category.categoryId, category.title, category.color, " +
             "subCategory.subCategoryId, subCategory.title, subCategory.color, " +
@@ -20,9 +20,9 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
             "JOIN task.subCategory subCategory " +
             "WHERE task.space.spaceId = :spaceId ";
 
-    @Query(cQuery)
+    @Query(Query)
     List<TaskResponseDTO> findBySpace(@Param("spaceId") Long spaceId);
 
-    @Query(cQuery + "AND task.dateCompletion = :dateCompletion")
+    @Query(Query + "AND task.dateCompletion = :dateCompletion")
     List<TaskResponseDTO> findBySpaceAndDate(@Param("spaceId") Long spaceId, @Param("dateCompletion") LocalDate dateCompletion);
 }
