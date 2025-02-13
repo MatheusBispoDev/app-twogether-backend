@@ -63,8 +63,8 @@ public class ReminderService {
         return reminderMapper.toResponseDTO(newReminder);
     }
 
-    public ReminderResponseDTO updateReminder(Long remindersId, ReminderRequestDTO reminder) {
-        Reminder updatedReminder = findReminderById(remindersId);
+    public ReminderResponseDTO updateReminder(Long reminderId, ReminderRequestDTO reminder) {
+        Reminder updatedReminder = findReminderById(reminderId);
 
         Category category = categoryService.getCategory(reminder.categoryId());
         SubCategory subCategory = subCategoryService.getSubCategory(reminder.subCategoryId());
@@ -82,25 +82,29 @@ public class ReminderService {
         return reminderMapper.toResponseDTO(updatedReminder);
     }
 
-    public void deletedReminder(Long remindersId) {
-        Reminder reminder = findReminderById(remindersId);
+    public void deletedReminder(Long reminderId) {
+        Reminder reminder = findReminderById(reminderId);
 
         reminderRepository.delete(reminder);
     }
 
-    public ReminderResponseDTO getReminder(Long remindersId) {
-        Reminder reminder = findReminderById(remindersId);
+    public ReminderResponseDTO getReminder(Long reminderId) {
+        Reminder reminder = findReminderById(reminderId);
 
         return reminderMapper.toResponseDTO(reminder);
     }
 
-    public List<ReminderResponseDTO> getAllRemindersFromSpace(Long spaceId, LocalDate dateCompletion) {
+    public List<ReminderResponseDTO> getAllRemindersFromSpace(Long spaceId) {
+        return reminderRepository.findBySpace(spaceId);
+    }
+
+    public List<ReminderResponseDTO> getAllRemindersFromSpaceAndDate(Long spaceId, LocalDate dateCompletion) {
         return reminderRepository.findBySpaceAndDate(spaceId, dateCompletion);
     }
 
-    public ReminderResponseDTO completedReminder(Long remindersId) {
+    public ReminderResponseDTO completedReminder(Long reminderId) {
         //TODO Adicionar agendamento de completed e retirar requisição do controlller
-        Reminder reminder = findReminderById(remindersId);
+        Reminder reminder = findReminderById(reminderId);
         LocalDateTime completion = reminder.getDateCompletion().atTime(reminder.getTimeCompletion());
 
         if (completion.isBefore(LocalDateTime.now())) {
@@ -110,8 +114,8 @@ public class ReminderService {
         return reminderMapper.toResponseDTO(reminder);
     }
 
-    private Reminder findReminderById(Long remindersId) {
-        return reminderRepository.findById(remindersId).orElseThrow(() -> new ResourceNotFoundException("Lembrete não encontrada"));
+    private Reminder findReminderById(Long reminderId) {
+        return reminderRepository.findById(reminderId).orElseThrow(() -> new ResourceNotFoundException("Lembrete não encontrada"));
     }
 
 }

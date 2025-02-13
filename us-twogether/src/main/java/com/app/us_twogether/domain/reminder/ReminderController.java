@@ -55,7 +55,13 @@ public class ReminderController {
 
     @GetMapping("/{spaceId}/reminders")
     public ResponseEntity<List<ReminderResponseDTO>> getAllReminderFromSpace(@PathVariable Long spaceId, @RequestParam @DateTimeFormat LocalDate dateCompletion) {
-        List<ReminderResponseDTO> reminders = reminderService.getAllRemindersFromSpace(spaceId, dateCompletion);
+        List<ReminderResponseDTO> reminders;
+
+        if (dateCompletion != null){
+            reminders = reminderService.getAllRemindersFromSpaceAndDate(spaceId, dateCompletion);
+        }else {
+            reminders = reminderService.getAllRemindersFromSpace(spaceId);
+        }
 
         return ResponseEntity.ok(reminders);
     }
