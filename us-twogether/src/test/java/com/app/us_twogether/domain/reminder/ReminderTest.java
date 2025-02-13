@@ -6,7 +6,6 @@ import com.app.us_twogether.domain.category.CategoryType;
 import com.app.us_twogether.domain.category.subCategory.SubCategoryRequestDTO;
 import com.app.us_twogether.domain.category.subCategory.SubCategoryService;
 import com.app.us_twogether.domain.space.SpaceService;
-import com.app.us_twogether.domain.task.TaskResponseDTO;
 import com.app.us_twogether.domain.user.User;
 import com.app.us_twogether.domain.user.UserService;
 import jakarta.transaction.Transactional;
