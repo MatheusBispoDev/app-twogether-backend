@@ -11,7 +11,7 @@ public class TaskMapper {
                 task.getSubCategory().getSubCategoryId(), task.getSubCategory().getTitle(), task.getSubCategory().getColor(),
                 task.getTitle(), task.getDescription(), task.getObservation(),
                 task.getDateCreation(), task.getTimeCreation(), task.getDateCompletion(), task.getTimeCompletion(),
-                task.getDateEnd(), task.getTimeEnd(), task.getObservation(), task.isCompleted());
+                task.getDateEnd(), task.getTimeEnd(), task.getAttachment(), task.isCompleted());
     }
 
 }
