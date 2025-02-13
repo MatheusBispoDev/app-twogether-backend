@@ -260,7 +260,7 @@ public class TaskTest {
         assertTrue(actualTitles.containsAll(expectedTitles), "A lista de tarefas deve conter os títulos esperados");
     }
 
-    public TaskResponseDTO updateTask(Long taskId, boolean completed){
+    private TaskResponseDTO updateTask(Long taskId, boolean completed){
         Long workCategoryId = categoryService.createCategory(spaceId,
                 new CategoryRequestDTO("Work", "#FF5733", CategoryType.ACTIVITY)).categoryId();
 

@@ -239,7 +239,7 @@ public class ReminderTest {
         assertTrue(actualTitles.containsAll(expectedTitles), "A lista de tarefas deve conter os títulos esperados");
     }
 
-    public ReminderResponseDTO updateReminder(Long reminderId, boolean completed) {
+    private ReminderResponseDTO updateReminder(Long reminderId, boolean completed) {
         Long workCategoryId = categoryService.createCategory(spaceId,
                 new CategoryRequestDTO("Work", "#FF5733", CategoryType.ACTIVITY)).categoryId();
 
