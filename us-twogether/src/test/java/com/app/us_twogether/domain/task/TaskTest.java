@@ -163,7 +163,7 @@ public class TaskTest {
     }
 
     @Test
-    public void shouldCompetedTask_whenIsIncompleted() {
+    public void shouldCompetedTask_whenIsIncomplete() {
         when(clock.instant()).thenReturn(fixedClock.instant());
         when(clock.getZone()).thenReturn(fixedClock.getZone());
 
