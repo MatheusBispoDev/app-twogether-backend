@@ -89,12 +89,16 @@ public class TaskService {
         updatedTask.setSubCategory(subCategory);
         updatedTask.setTitle(task.title());
         updatedTask.setDescription(task.description());
+        updatedTask.setObservation(task.observation());
         updatedTask.setDateCompletion(task.dateCompletion());
         updatedTask.setTimeCompletion(task.timeCompletion());
         updatedTask.setAttachment(task.attachment());
-        updatedTask.setDateEnd(task.dateEnd());
-        updatedTask.setTimeEnd(task.timeEnd());
-        updatedTask.setCompleted(task.completed());
+
+        if (task.completed()){
+            updatedTask.setDateEnd(task.dateEnd());
+            updatedTask.setTimeEnd(task.timeEnd());
+            updatedTask.setCompleted(true);
+        }
 
         taskRepository.save(updatedTask);
 
