@@ -16,7 +16,7 @@ import java.time.LocalTime;
 public class Reminder {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long remindersId;
+    private Long reminderId;
 
     @ManyToOne
     @JoinColumn(name = "space_id", nullable = false)
