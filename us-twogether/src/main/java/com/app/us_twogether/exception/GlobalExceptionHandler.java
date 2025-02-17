@@ -42,4 +42,11 @@ public class GlobalExceptionHandler {
                 .status(HttpStatus.BAD_REQUEST) // 409 Conflict
                 .body(ex.getMessage());
     }
+
+    @ExceptionHandler(TokenInvalidException.class)
+    public ResponseEntity<String> handleTokenInvalidException(TokenInvalidException ex){
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST) // 409 Conflict
+                .body(ex.getMessage());
+    }
 }
