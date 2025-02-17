@@ -6,6 +6,7 @@ import com.app.us_twogether.domain.user.UserRequestDTO;
 import com.app.us_twogether.domain.user.UserResponseDTO;
 import com.app.us_twogether.domain.user.UserService;
 import com.app.us_twogether.domain.authentication.token.TokenService;
+import com.app.us_twogether.exception.TokenInvalidException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,7 +61,7 @@ public class AuthenticationController {
         RefreshToken refreshToken = tokenService.findByToken(token);
 
         if (tokenService.isTokenExpired(refreshToken)) {
-            throw new RuntimeException("Invalid or expired refresh token");
+            throw new TokenInvalidException("Refresh Token inválido ou expirado");
         }
 
         LoginResponseDTO loginResponseDTO = tokenService.login(refreshToken.getUser());

@@ -3,12 +3,12 @@ package com.app.us_twogether.domain.authentication.token;
 import com.app.us_twogether.domain.authentication.AuthenticationMapper;
 import com.app.us_twogether.domain.authentication.LoginResponseDTO;
 import com.app.us_twogether.domain.user.User;
+import com.app.us_twogether.exception.TokenInvalidException;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.exceptions.TokenExpiredException;
-import org.apache.kafka.common.errors.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -61,7 +61,7 @@ public class TokenService {
     }
 
     public RefreshToken findByToken(String token){
-        return refreshTokenRepository.findByToken(token).orElseThrow(() -> new ResourceNotFoundException("Token não encontrado no Refresh"));
+        return refreshTokenRepository.findByToken(token).orElseThrow(() -> new TokenInvalidException("Refresh Token inválido ou expirado."));
     }
 
     public boolean isTokenExpired(RefreshToken token) {
