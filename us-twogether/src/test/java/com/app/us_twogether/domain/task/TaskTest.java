@@ -201,7 +201,7 @@ public class TaskTest {
     public void shouldDeleteTask_whenCredentialsAreValid(){
         TaskResponseDTO task = taskService.createTask("john_doe", spaceId, taskDTO);
 
-        taskService.deletedTask(task.categoryId());
+        taskService.deletedTask(task.taskId());
 
         assertThrows(ResourceNotFoundException.class, () -> taskService.getTask(task.categoryId()));
     }
