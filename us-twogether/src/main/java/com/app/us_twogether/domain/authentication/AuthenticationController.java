@@ -3,8 +3,6 @@ package com.app.us_twogether.domain.authentication;
 import com.app.us_twogether.domain.authentication.token.RefreshToken;
 import com.app.us_twogether.domain.user.User;
 import com.app.us_twogether.domain.user.UserRequestDTO;
-import com.app.us_twogether.domain.user.UserResponseDTO;
-import com.app.us_twogether.domain.user.UserService;
 import com.app.us_twogether.domain.authentication.token.TokenService;
 import com.app.us_twogether.exception.TokenInvalidException;
 import jakarta.servlet.http.HttpServletRequest;
