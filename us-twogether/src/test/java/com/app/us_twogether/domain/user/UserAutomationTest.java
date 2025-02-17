@@ -27,11 +27,9 @@ public class UserAutomationTest {
 
     @Test
     public void shouldCreateUser_whenUserAlreadyExists(){
-        // Criar e salvar um User que referencia o NotificationUser padrão
         User user = new User("john_doe", "1234", "John Doe", "john@example.com", "11932178425", "US");
         userService.createUser(user);
 
-        // Testar se o sistema lança uma exceção ao criar outro usuário com o mesmo username
         assertThrows(DataAlreadyExistsException.class, () -> userService.createUser(user));
     }
 
