@@ -27,7 +27,7 @@ public class AuthenticationController {
     private AuthenticationManager authenticationManager;
 
     @Autowired
-    private UserService userService;
+    private AuthenticationService authenticationService;
 
     @Autowired
     private TokenService tokenService;
@@ -40,18 +40,16 @@ public class AuthenticationController {
 
         User user = (User) auth.getPrincipal();
 
-        LoginResponseDTO loginResponseDTO = tokenService.login(user);
+        LoginResponseDTO loginResponseDTO = authenticationService.login(user);
 
         return ResponseEntity.ok(loginResponseDTO);
     }
 
     @PostMapping("/register")
-    public ResponseEntity<UserResponseDTO> register(@RequestBody @Valid UserRequestDTO userDTO) {
-        User newUser = new User(userDTO.username(), userDTO.password(), userDTO.name(), userDTO.email(), userDTO.phoneNumber(), userDTO.type());
+    public ResponseEntity<String> register(@RequestBody @Valid UserRequestDTO userDTO) {
+        String username = authenticationService.register(userDTO);
 
-        UserResponseDTO user = userService.createUser(newUser);
-
-        return ResponseEntity.ok(user);
+        return ResponseEntity.ok(username);
     }
 
     @PostMapping("/refresh")
@@ -64,7 +62,7 @@ public class AuthenticationController {
             throw new TokenInvalidException("Refresh Token inválido ou expirado");
         }
 
-        LoginResponseDTO loginResponseDTO = tokenService.login(refreshToken.getUser());
+        LoginResponseDTO loginResponseDTO = authenticationService.login(refreshToken.getUser());
 
         return ResponseEntity.ok(loginResponseDTO);
     }
@@ -74,7 +72,7 @@ public class AuthenticationController {
         String token = request.getHeader("Authorization");
         String refreshToken = request.getHeader("refreshToken");
 
-        tokenService.logout(token, refreshToken);
+        authenticationService.logout(token, refreshToken);
 
         return ResponseEntity.ok("Logout realizado com sucesso");
     }

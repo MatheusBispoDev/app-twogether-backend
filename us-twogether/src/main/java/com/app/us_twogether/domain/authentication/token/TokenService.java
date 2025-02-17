@@ -1,7 +1,5 @@
 package com.app.us_twogether.domain.authentication.token;
 
-import com.app.us_twogether.domain.authentication.AuthenticationMapper;
-import com.app.us_twogether.domain.authentication.LoginResponseDTO;
 import com.app.us_twogether.domain.user.User;
 import com.app.us_twogether.exception.TokenInvalidException;
 import com.auth0.jwt.JWT;
@@ -26,47 +24,9 @@ public class TokenService {
     private RefreshTokenRepository refreshTokenRepository;
 
     @Autowired
-    private AuthenticationMapper authenticationMapper;
-
-    @Autowired
     private TokenBlacklistService tokenBlacklistService;
 
     private final long refreshTokenValidity = 30L * 24 * 60 * 60;
-
-    public LoginResponseDTO login(User user){
-        //TODO mudar metodos de login e logout para o AuthenticationService
-        String accessToken = generateAccessToken(user.getUsername());
-        RefreshToken refreshToken = createRefreshToken(user);
-
-        return authenticationMapper.toLoginResponseDTO(user.getUsername(), accessToken, refreshToken);
-    }
-
-    public String validateToken(String token){
-        try {
-            Algorithm algorithm = Algorithm.HMAC256(secret);
-            return JWT.require(algorithm).withIssuer("ustwogether-auth-api").build().verify(token).getSubject();
-        } catch (TokenExpiredException exception) {
-            return "O token expirou. Por favor, faça login novamente. " + exception.getMessage();
-        } catch (JWTVerificationException exception) {
-            return "Erro na validação do token: " + exception.getMessage();
-        } catch (JWTCreationException exception) {
-            return "";
-        }
-    }
-
-    public void logout(String accessToken, String refreshToken) {
-        RefreshToken existingRefreshToken = findByToken(refreshToken);
-        refreshTokenRepository.delete(existingRefreshToken);
-        tokenBlacklistService.addToBlacklist(accessToken, JWT.decode(accessToken).getExpiresAt().getTime());
-    }
-
-    public RefreshToken findByToken(String token){
-        return refreshTokenRepository.findByToken(token).orElseThrow(() -> new TokenInvalidException("Refresh Token inválido ou expirado."));
-    }
-
-    public boolean isTokenExpired(RefreshToken token) {
-        return token.getExpiryDate().isBefore(Instant.now());
-    }
 
     public String generateAccessToken(String username){
         try {
@@ -81,6 +41,14 @@ public class TokenService {
         } catch (JWTCreationException exception) {
             throw new RuntimeException("Error while generation token", exception);
         }
+    }
+
+    public RefreshToken createRefreshToken(User user){
+        RefreshToken refreshToken = new RefreshToken();
+        refreshToken.setToken(generateRefreshToken(user.getUsername()));
+        refreshToken.setExpiryDate(Instant.now().plusSeconds(refreshTokenValidity)); // 30 dias
+        refreshToken.setUser(user);
+        return refreshTokenRepository.save(refreshToken);
     }
 
     public String generateRefreshToken(String username){
@@ -98,12 +66,31 @@ public class TokenService {
         }
     }
 
-    private RefreshToken createRefreshToken(User user){
-        RefreshToken refreshToken = new RefreshToken();
-        refreshToken.setToken(generateRefreshToken(user.getUsername()));
-        refreshToken.setExpiryDate(Instant.now().plusSeconds(refreshTokenValidity)); // 30 dias
-        refreshToken.setUser(user);
-        return refreshTokenRepository.save(refreshToken);
+    public String validateToken(String token){
+        try {
+            Algorithm algorithm = Algorithm.HMAC256(secret);
+            return JWT.require(algorithm).withIssuer("ustwogether-auth-api").build().verify(token).getSubject();
+        } catch (TokenExpiredException exception) {
+            return "O token expirou. Por favor, faça login novamente. " + exception.getMessage();
+        } catch (JWTVerificationException exception) {
+            return "Erro na validação do token: " + exception.getMessage();
+        } catch (JWTCreationException exception) {
+            return "";
+        }
+    }
+
+    public void deleteToken(String accessToken, String refreshToken) {
+        RefreshToken existingRefreshToken = findByToken(refreshToken);
+        refreshTokenRepository.delete(existingRefreshToken);
+        tokenBlacklistService.addToBlacklist(accessToken, JWT.decode(accessToken).getExpiresAt().getTime());
+    }
+
+    public RefreshToken findByToken(String token){
+        return refreshTokenRepository.findByToken(token).orElseThrow(() -> new TokenInvalidException("Refresh Token inválido ou expirado."));
+    }
+
+    public boolean isTokenExpired(RefreshToken token) {
+        return token.getExpiryDate().isBefore(Instant.now());
     }
 
 }
