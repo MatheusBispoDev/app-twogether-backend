@@ -47,7 +47,7 @@ public class SecurityFilter extends OncePerRequestFilter {
 
             SecurityContextHolder.getContext().setAuthentication(authentication);
         }
-        //vai para o proximo filtro, pois já finalizamos a validação do token
+
         filterChain.doFilter(request, response);
     }
 
@@ -56,7 +56,7 @@ public class SecurityFilter extends OncePerRequestFilter {
 
         if (authHeader == null)
             return null;
-        //substitui o codigo padrao "Bearer" para vazio, para pegar somente o token
+
         return authHeader.replace("Bearer ",  "");
     }
 }
