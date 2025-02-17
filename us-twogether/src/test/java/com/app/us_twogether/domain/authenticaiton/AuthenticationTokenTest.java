@@ -1,5 +1,6 @@
 package com.app.us_twogether.domain.authenticaiton;
 
+import com.app.us_twogether.domain.authentication.AuthenticationService;
 import com.app.us_twogether.domain.authentication.LoginResponseDTO;
 import com.app.us_twogether.domain.authentication.token.RefreshToken;
 import com.app.us_twogether.domain.authentication.token.TokenService;
@@ -33,6 +34,9 @@ public class AuthenticationTokenTest {
     private MockMvc mockMvc;
 
     @MockBean
+    private AuthenticationService authenticationService;
+
+    @MockBean
     private TokenService tokenService;
 
     @Value("${app.api.base-url}")
@@ -59,7 +63,7 @@ public class AuthenticationTokenTest {
 
         when(tokenService.findByToken(refreshTokenValue)).thenReturn(refreshToken);
         when(tokenService.isTokenExpired(any())).thenReturn(false);
-        when(tokenService.login(any())).thenReturn(loginResponseDTO);
+        when(authenticationService.login(any())).thenReturn(loginResponseDTO);
 
         mockMvc.perform(post(apiBaseUrl + "/auth/refresh")
                         .header("refreshToken", refreshTokenValue)
@@ -72,7 +76,7 @@ public class AuthenticationTokenTest {
 
         verify(tokenService, times(1)).findByToken(refreshTokenValue);
         verify(tokenService, times(1)).isTokenExpired(refreshToken);
-        verify(tokenService, times(1)).login(refreshToken.getUser());
+        verify(authenticationService, times(1)).login(refreshToken.getUser());
     }
 
     @Test
@@ -93,6 +97,6 @@ public class AuthenticationTokenTest {
 
         verify(tokenService, times(1)).findByToken(refreshTokenValue);
         verify(tokenService, times(1)).isTokenExpired(refreshToken);
-        verify(tokenService, times(0)).login(refreshToken.getUser());
+        verify(authenticationService, times(0)).login(refreshToken.getUser());
     }
 }

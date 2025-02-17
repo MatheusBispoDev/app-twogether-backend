@@ -48,11 +48,7 @@ public class AuthenticationRegisterTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(userRequestDTO)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.username").value("john_doe"))
-                .andExpect(jsonPath("$.name").value("John Doe"))
-                .andExpect(jsonPath("$.email").value("john@example.com"))
-                .andExpect(jsonPath("$.phoneNumber").value("11932178425"))
-                .andExpect(jsonPath("$.type").value("US"));
+                .andExpect(content().string("john_doe"));
 
         Mockito.verify(userService, times(1)).createUser(Mockito.any(User.class));
     }
