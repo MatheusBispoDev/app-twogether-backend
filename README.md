@@ -33,25 +33,25 @@ Criar um sistema simples e funcional que ajude casais a:
 ## ⚙️ Arquitetura do Sistema
 
 ```plaintext
-                                                             ┌──────────────┐
-                                                             │   Frontend   │ (mobile app)
-                                                             └─────┬────────┘
-                                                                   ↓
-                                                             ┌───────────────┐
-                                                             │  API Gateway  │
-                                                             └──────┬────────┘
-                                                                    ↓
-                                                             ┌───────────────┐
-                                                             │ Load Balancer │
-                                                             └──────┬────────┘
-                                                         ┌──────────┴──────────┐
-                                                         ↓                     ↓
-                                                ┌─────────────────┐   ┌─────────────────────┐
-                                                │Java Microservice│   │   Go Notification   │
-                                                │(Tarefas e CRUD) │   │   (Notificações)    │
-                                                └────────┬────────┘   └──────────┬──────────┘
-                                                         ↓                       ↑
-                                                     PostgreSQL         RabbitMQ ⇄ MongoDB
+                     ┌──────────────┐
+                     │   Frontend   │ (mobile app)
+                     └─────┬────────┘
+                           ↓
+                     ┌───────────────┐
+                     │  API Gateway  │
+                     └──────┬────────┘
+                            ↓
+                     ┌───────────────┐
+                     │ Load Balancer │
+                     └──────┬────────┘
+                 ┌──────────┴──────────┐
+                 ↓                     ↓
+        ┌─────────────────┐   ┌─────────────────────┐
+        │Java Microservice│   │   Go Notification   │
+        │(Tarefas e CRUD) │   │   (Notificações)    │
+        └────────┬────────┘   └──────────┬──────────┘
+                 ↓                       ↑
+             PostgreSQL         RabbitMQ ⇄ MongoDB
 ```
 
 ## ✨ Diferenciais Técnicos
